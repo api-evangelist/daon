@@ -1,0 +1,4300 @@
+openapi: 3.2.0
+info:
+  title: Daon User Passkey Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged User Passkey Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: User Passkey Management
+paths:
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}/ext:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Create a passkey credential creation request for an existing user identified by…
+      description: 'The credential creation request returned from the server must be supplied to the user agent on the device to initiate a passkey registration. The response from the user agent is returned to the server to complete registration and store the generated paskey in the server.
+
+
+        Session data is shared between the registration request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the registration is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the registration is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUserByExtId`'
+      operationId: createPasskeyRegistrationForUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey registration configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: regPolicyName
+        in: path
+        description: The name of the passkey registration policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional registration parameters. May be empty.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedRegistrationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey credential creation request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegOptionResponseHolder'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **1120**: The user is not in a state to allow passkey registration
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **233**: Passkey registration policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUserByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/registrations/sessions/{sessionId}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Complete a passkey credential creation request for an internally managed session
+      description: 'This API is used to complete a passkey registration where the passkey configuration `sessionManagementExternal` parameter is set to `false` which means that a session ID of an internally managed session was returned when the registration was requested and must be provided back to the server along with the response from the client.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSessionId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSessionId`'
+      operationId: completePasskeyRegistrationWithSessionId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The session ID returned by the server when the registration was requested
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user agent registration response message and session data object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCredential'
+        required: true
+      responses:
+        '200':
+          description: Passkey registration completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterCredentialResult'
+        '400':
+          description: 'An error occurred either on the server or the client. Not all the error codes are listed here as there are many and a lot of them are unlikely to occur when integrating with a valid user agent. Some of the more likely errors are:
+
+            - **352**: The supplied client response message is not a registration, it''s an authentication
+
+            - **353**: The provided challenge is not the same as the challenge signed in the assertion
+
+            - **354**: The origin in the client response is not in the restricted origins list
+
+            - **356**: Token binding in the client response does not match the expected value
+
+            - **356**: Token binding status missing from client response
+
+            - **382**: The origin in the client response does not start with https
+
+            - **383**: The origin in the client response does not match the relying party ID
+
+            - **388**: Session data was provided but session management for this registration is configured as internal
+
+            - **389**: Maximum number of passkeys exceeded for this user
+
+            - **395**: Operation success/failure response data not provided
+
+            - **396**: Passkey registration failed on the client
+
+            - **399**: Passkey registration was cancelled on the client
+
+            - **401**: The supplied user handle does not match the existing user handle for this user.
+
+            - **402**: Passkey registration timed out on the client
+
+            - **501**: When registration was requested neither a user object nor an external user ID was supplied therefore a user can''t be found or created to associate with this passkey registration
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **235**: Passkey relying party ID not found
+
+            - **233**: Passkey registration policy not found
+
+            '
+          headers:
+            Uaf-Status-Code:
+              description: A server status code indicating success or failure to be returned to the client to finalise registration.
+              style: simple
+              explode: false
+              schema:
+                example: 1200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSessionId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/{id}/ext:
+    get:
+      tags:
+      - User Passkey Management
+      summary: Get a passkey for a user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasskeyByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasskeyByExtUserId`'
+      operationId: getUserPasskeyByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasskeyByExtUserId
+    delete:
+      tags:
+      - User Passkey Management
+      summary: Delete a user passkey by external user ID and internal passkey ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserPasskeyByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserPasskeyByExtUserId`'
+      operationId: deleteUserPasskeyByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserPasskeyByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/{id}/registrationAudit/ext:
+    get:
+      tags:
+      - User Passkey Management
+      summary: Get a user passkey registration record for a user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecordByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecordByExtUserId`'
+      operationId: getUserPasskeyRegistrationRecordByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey registration record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationAuditDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **392**: Failed to decompress and deserialize audit record
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **390**: Passkey not found
+
+            - **391**: Passkey registration not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecordByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}:
+    get:
+      tags:
+      - User Passkey Management
+      summary: Get a passkey for a user identified by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasskey` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasskey`'
+      operationId: getUserPasskey
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasskey
+    post:
+      tags:
+      - User Passkey Management
+      summary: Update an existing passkey's name and/or status by internal user ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserPasskeyStatus` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserPasskeyStatus`'
+      operationId: updateUserPasskeyStatus
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user passkey update information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasskeyUpdateHolder'
+        required: true
+      responses:
+        '200':
+          description: User passkey updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **393**: No update information provided
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserPasskeyStatus
+    delete:
+      tags:
+      - User Passkey Management
+      summary: Delete a user passkey by internal user ID and passkey ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserPasskey` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserPasskey`'
+      operationId: deleteUserPasskey
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserPasskey
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passkeys:
+    get:
+      tags:
+      - User Passkey Management
+      summary: List registered passkeys for a user (identified by internal ID)
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPasskeys` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPasskeys`'
+      operationId: listUserPasskeys
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkeys retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPasskeys
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/ext:
+    get:
+      tags:
+      - User Passkey Management
+      summary: List registered passkeys for a user (identified by external ID)
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPasskeysByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPasskeysByExtUserId`'
+      operationId: listUserPasskeysByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkeys retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPasskeysByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Create a passkey credential creation request and generate a user identified by…
+      description: 'The API request body contains the users''s external ID and other details, for example display name, of the user for whom the registration will be created.
+
+
+        The registration request returned from the server must be supplied to the client on the device to initiate a user passkey registration. The response from the client is returned to the server to complete registration and store the generated passkey in the server.
+
+
+        Session data is shared between the registration request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the registration is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the registration is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyRegistration` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyRegistration`'
+      operationId: createPasskeyRegistration
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey registration configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: regPolicyName
+        in: path
+        description: The name of the passkey registration policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional registration parameters. The registration parameters must contain the external ID of the user to whom the passkey will be registered.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedRegistrationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey credential creation request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegOptionResponseHolder'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **1120**: The user is not in a state to allow passkey registration
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **233**: Passkey registration policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyRegistration
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/{id}/ext:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Update an existing passkey's name and/or status by external user ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserPasskeyStatusByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserPasskeyStatusByExtId`'
+      operationId: updateUserPasskeyStatusByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user passkey update information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasskeyUpdateHolder'
+        required: true
+      responses:
+        '200':
+          description: User passkey updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasskey'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **393**: No update information provided
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **390**: Passkey not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserPasskeyStatusByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Create a passkey authentication request for a known user identified by internal…
+      description: 'The authentication request returned from the server must be supplied to the user agent to initiate a user passkey authentication. The response from the user agent is returned to the server to complete server authentication.
+
+
+        Session data is shared between the authentication request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the authentication is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the authentication is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUser`'
+      operationId: createPasskeyAuthenticationForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey authentication configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: authPolicyName
+        in: path
+        description: The name of the passkey authentication policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional authentication parameters. May be empty.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedAuthenticationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey authentication request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthOptionResponseHolder'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **234**: Passkey authentication policy not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **2100**: The user is locked. Authentication cannot proceed.
+
+            - **2101**: The user passkey modality is locked. Authentication cannot proceed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/authentications:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Complete a passkey authentication for an externally managed session
+      description: 'This API is used to complete a passkey authentication where the passkey configuration `sessionManagementExternal` parameter is set to `true` which means that the session data object was returned when the authentication was requested and must be provided back to the server along with the response from the client.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSession` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSession`'
+      operationId: completePasskeyAuthenticationWithSession
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      requestBody:
+        description: The client authentication response and session data object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCredentialHolder'
+        required: true
+      responses:
+        '200':
+          description: Passkey authentication completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyCredentialResult'
+        '400':
+          description: 'An error occurred either on the server or the client. Not all the error codes are listed here as there are many and a lot of them are unlikely to occur when integrating a validated passkey client.
+
+
+            **NOTE** For convenience the updated user object is returned when there is an authentication error because it may contain updated information about the user lock state.
+
+
+            Some of the more likely errors are:
+
+            - **348**: The passkey matching the supplied credential ID is not active
+
+            - **352**: The supplied client response message is not an authentication, it''s a registration
+
+            - **353**: The provided challenge is not the same as the challenge signed in the assertion
+
+            - **354**: The origin in the client response is not in the restricted origins list
+
+            - **356**: Token binding in the client response does not match the expected value
+
+            - **356**: Token binding status missing from client response
+
+            - **362**: No passkey was found matching the supplied credential ID
+
+            - **363**: The passkey matching the supplied credential ID does not match the expected user
+
+            - **364**: The authentication credential is not in the allowed credentials list
+
+            - **364**: There is not user handle for this passkey and relying party ID found for the user
+
+            - **365**: The user handle in the assertion does not match the expected user handle
+
+            - **372**: Possible cloned authenticator. The signature counter is out of synch.
+
+            - **382**: The origin in the client response does not start with https
+
+            - **383**: The origin in the client response does not match the relying party ID
+
+            - **384**: Session data not provided
+
+            - **386**: Session data is missing the challenge
+
+            - **387**: Session data is missing the relying party ID
+
+            - **394**: Session data is missing authentication policy name
+
+            - **395**: Operation success/failure response data not provided
+
+            - **397**: Passkey authentication failed on the client
+
+            - **398**: Passkey authentication was cancelled on the client
+
+            - **403**: Passkey authentication timed out on the client
+
+            - **502**: The user associated with this authentication is not active- **2100**: The user is locked. Authentication cannot proceed.
+
+            - **2101**: The user passkey modality is locked. Authentication cannot proceed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+              example:
+                code: '401'
+                message: Authentication failed
+                user:
+                  id: EEWOIHIJ3CJYXAKIRGAMEIUJGU
+                  status: ACTIVE
+                  extId: '12345678'
+                  locale:
+                    language: en
+                    country: US
+                  timezone: Europe/London
+                  firstName: John
+                  lastName: Does
+                  email: jd@mail.com
+                  dateOfBirth: {}
+                  nationalities:
+                  - US
+                  locks:
+                    lockCounter: 1
+                  createdDtm: {}
+                  lastUpdatedDtm: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **234**: Passkey authentication policy not found
+
+            - **235**: Passkey relying party ID not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSession
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Create a passkey credential creation request for an existing user identified by…
+      description: 'The credential creation request returned from the server must be supplied to the user agent on the device to initiate a passkey registration. The response from the user agent is returned to the server to complete registration and store the generated paskey in the server.
+
+
+        Session data is shared between the registration request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the registration is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the registration is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUser`'
+      operationId: createPasskeyRegistrationForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey registration configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: regPolicyName
+        in: path
+        description: The name of the passkey registration policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional registration parameters. May be empty.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedRegistrationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey credential creation request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegOptionResponseHolder'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **1120**: The user is not in a state to allow passkey registration
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **233**: Passkey registration policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyRegistrationForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}/registrationAudit:
+    get:
+      tags:
+      - User Passkey Management
+      summary: Get a user passkey registration record for a user identified by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecord` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecord`'
+      operationId: getUserPasskeyRegistrationRecord
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passkey
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passkey registration record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationAuditDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **392**: Failed to decompress and deserialize audit record
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **390**: Passkey not found
+
+            - **391**: Passkey registration not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasskeyRegistrationRecord
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/registrations:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Complete a passkey credential creation request for an externally managed session
+      description: 'This API is used to complete a passkey registration where the passkey configuration `sessionManagementExternal` parameter is set to `true` which means that the session data object was returned when the registration was requested and must be provided back to the server along with the response from the client.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSession` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSession`'
+      operationId: completePasskeyRegistrationWithSession
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      requestBody:
+        description: The user agent registration response message and session data object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCredentialHolder'
+        required: true
+      responses:
+        '200':
+          description: Passkey registration completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterCredentialResult'
+        '400':
+          description: 'An error occurred either on the server or the client. Not all the error codes are listed here as there are many and a lot of them are unlikely to occur when integrating with a valid user agent. Some of the more likely errors are:
+
+            - **352**: The supplied client response message is not a registration, it''s an authentication
+
+            - **353**: The provided challenge is not the same as the challenge signed in the assertion
+
+            - **354**: The origin in the client response is not in the restricted origins list
+
+            - **356**: Token binding in the client response does not match the expected value
+
+            - **356**: Token binding status missing from client response
+
+            - **382**: The origin in the client response does not start with https
+
+            - **383**: The origin in the client response does not match the relying party ID
+
+            - **384**: Session data not provided
+
+            - **385**: Session data is missing registration policy name
+
+            - **386**: Session data is missing the challenge
+
+            - **387**: Session data is missing the relying party ID
+
+            - **389**: Maximum number of passkeys exceeded for this user
+
+            - **395**: Operation success/failure response data not provided
+
+            - **396**: Passkey registration failed on the client
+
+            - **399**: Passkey registration was cancelled on the client
+
+            - **401**: The supplied user handle does not match the existing user handle for this user.
+
+            - **402**: Passkey registration timed out on the client
+
+            - **501**: When registration was requested neither a user object nor an external user ID was supplied therefore a user can''t be found or created to associate with this passkey registration
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **235**: Passkey relying party ID not found
+
+            - **233**: Passkey registration policy not found
+
+            '
+          headers:
+            Uaf-Status-Code:
+              description: A server status code indicating success or failure to be returned to the client to finalise registration.
+              style: simple
+              explode: false
+              schema:
+                example: 1200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasskeyRegistrationWithSession
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/authentications/sessions/{sessionId}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Complete a passkey authentication for an internally managed session
+      description: 'This API is used to complete a passkey authentication where the passkey configuration `sessionManagementExternal` parameter is set to `false` which means that a session ID of an internally managed session was returned when the authentication was requested and must be provided back to the server along with the response from the client.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSessionId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSessionId`'
+      operationId: completePasskeyAuthenticationWithSessionId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The session ID returned by the server when the authentication was requested
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The client authentication response and session data object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCredential'
+        required: true
+      responses:
+        '200':
+          description: Passkey authentication completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyCredentialResult'
+        '400':
+          description: 'An error occurred either on the server or the client. Not all the error codes are listed here as there are many and a lot of them are unlikely to occur when integrating a validated passkey client.
+
+
+            **NOTE** For convenience the updated user object is returned when there is an authentication error because it may contain updated information about the user lock state.
+
+
+            Some of the more likely errors are:
+
+            - **348**: The passkey matching the supplied credential ID is not active
+
+            - **352**: The supplied client response message is not an authentication, it''s a registration
+
+            - **353**: The provided challenge is not the same as the challenge signed in the assertion
+
+            - **354**: The origin in the client response is not in the restricted origins list
+
+            - **356**: Token binding in the client response does not match the expected value
+
+            - **356**: Token binding status missing from client response
+
+            - **362**: No passkey was found matching the supplied credential ID
+
+            - **363**: The passkey matching the supplied credential ID does not match the expected user
+
+            - **364**: The authentication credential is not in the allowed credentials list
+
+            - **364**: There is not user handle for this passkey and relying party ID found for the user
+
+            - **365**: The user handle in the assertion does not match the expected user handle
+
+            - **372**: Possible cloned authenticator. The signature counter is out of synch.
+
+            - **382**: The origin in the client response does not start with https
+
+            - **383**: The origin in the client response does not match the relying party ID
+
+            - **388**: Session data was provided but session management for this authentication is configured as internal
+
+            - **395**: Operation success/failure response data not provided
+
+            - **397**: Passkey authentication failed on the client
+
+            - **398**: Passkey authentication was cancelled on the client
+
+            - **403**: Passkey authentication timed out on the client
+
+            - **502**: The user associated with this authentication is not active- **2100**: The user is locked. Authentication cannot proceed.
+
+            - **2101**: The user passkey modality is locked. Authentication cannot proceed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+              example:
+                code: '401'
+                message: Authentication failed
+                user:
+                  id: EEWOIHIJ3CJYXAKIRGAMEIUJGU
+                  status: ACTIVE
+                  extId: '12345678'
+                  locale:
+                    language: en
+                    country: US
+                  timezone: Europe/London
+                  firstName: John
+                  lastName: Does
+                  email: jd@mail.com
+                  dateOfBirth: {}
+                  nationalities:
+                  - US
+                  locks:
+                    lockCounter: 1
+                  createdDtm: {}
+                  lastUpdatedDtm: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **234**: Passkey authentication policy not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **378**: Session data for the specified session ID not found.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasskeyAuthenticationWithSessionId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  ? /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}/ext
+  : post:
+      tags:
+      - User Passkey Management
+      summary: Create a passkey authentication request for a known user identified by external…
+      description: 'The authentication request returned from the server must be supplied to the user agent to initiate a user passkey authentication. The response from the user agent is returned to the server to complete server authentication.
+
+
+        Session data is shared between the authentication request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the authentication is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the authentication is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUserByExtId`'
+      operationId: createPasskeyAuthenticationForUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey authentication configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: authPolicyName
+        in: path
+        description: The name of the passkey authentication policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional authentication parameters. May be empty.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedAuthenticationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey authentication request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthOptionResponseHolder'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **234**: Passkey authentication policy not found
+
+            - **235**: Passkey relying party ID not found
+
+            - **2100**: The user is locked. Authentication cannot proceed.
+
+            - **2101**: The user passkey modality is locked. Authentication cannot proceed.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyAuthenticationForUserByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}:
+    post:
+      tags:
+      - User Passkey Management
+      summary: Create an anonymous passkey authentication request (where a user is not…
+      description: 'The authentication request returned from the server must be supplied to the user agent to initiate a user passkey authentication. The response from the user agent is returned to the server to complete server authentication.
+
+
+        Session data is shared between the authentication request and completion API calls. If in the passkey configuration `sessionManagementExternal` is set to `false` then these session data are managed internally by the server and a session ID is returned by this API which must be provided when the authentication is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is returned by the API and must be provided when the authentication is completed. If session data is managed internally it is stored temporarily for the duration configured as `sessionDuration`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasskeyAuthentication` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasskeyAuthentication`'
+      operationId: createPasskeyAuthentication
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose passkey authentication configuration will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: authPolicyName
+        in: path
+        description: The name of the passkey authentication policy for the relying party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Additional authentication parameters. May be empty.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedAuthenticationParameters'
+        required: true
+      responses:
+        '201':
+          description: Passkey authentication request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthOptionResponseHolder'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **234**: Passkey authentication policy not found
+
+            - **235**: Passkey relying party ID not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasskeyAuthentication
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    DisplayPNGCharacteristicsDescriptor:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+        bitDepth:
+          type: integer
+          format: int32
+        colorType:
+          type: integer
+          format: int32
+        compression:
+          type: integer
+          format: int32
+        filter:
+          type: integer
+          format: int32
+        interlace:
+          type: integer
+          format: int32
+        plte:
+          type: array
+          items:
+            $ref: '#/components/schemas/RgbPaletteEntry'
+    PasscodeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        policyName:
+          type: string
+          description: Identifies the identity store passcode policy.
+        status:
+          type: string
+          description: The status of the user passcode.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastRenewedDtm:
+          type: string
+          format: date-time
+          description: The last time the passcode was renewed. Only present if a renewal has occurred.
+        expirationDate:
+          type: string
+          format: date
+          description: Expiration date for a passcode. Only required if regular renewals are enforced.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passcode has not been used for authentication then this field is not present.
+    PasscodeAuditDisplayDto:
+      type: object
+      description: A Passcode audit DTO, 1 to 1 mapped to what should be shown in UI for passcode authentication audit.
+      properties:
+        policyName:
+          type: string
+        algorithm:
+          type: string
+          enum:
+          - SRP
+        algorithmVariant:
+          type: string
+        registrationDtm:
+          type: string
+          format: date-time
+        authenticationDtm:
+          type: string
+          format: date-time
+    FIDORegistrationResponse:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/OperationHeader'
+        fcParams:
+          type: string
+        assertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorRegistrationAssertion'
+    RegisterCredentialHolder:
+      type: object
+      description: 'Request to the API which completes passkey registration when session management is external. Contains the user agent response and session data object
+
+
+        In this case the passkey configuration `sessionManagementExternal` is set to `true` so the session data is returned by the server when passkey registration is requested an must be provided back the server when the registration is completed.
+
+
+        '
+      properties:
+        clientResponse:
+          $ref: '#/components/schemas/RegisterCredential'
+          description: Passkey registration information returned from the user agent.
+        session:
+          $ref: '#/components/schemas/PasskeySessionData'
+          description: The session data created when the passkey registration was requested.
+    ServerAuthenticatorAttestationResponse:
+      type: object
+      properties:
+        clientDataJSON:
+          type: string
+          minLength: 1
+        attestationObject:
+          type: string
+          minLength: 1
+        transports:
+          type: array
+          items:
+            type: string
+            enum:
+            - usb
+            - nfc
+            - ble
+            - hybrid
+            - internal
+    DeviceSummary:
+      type: object
+      description: 'Summary information about a device containing keys registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: 'A unique identifier of the device on which the keys are installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        rpId:
+          type: string
+          description: The relying party ID.
+        os:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        name:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        keys:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/AppkeySummary'
+          description: 'A map of appkey types to list of key summary information where the key types are:
+
+            - **DEVICE**: A device appkey which authenticates the device without user input.
+
+            - **BIOMETRIC**: A biometric appkey which authenticates the user using a biometric.
+
+            List is here to support "more than one app keys of the same type" concept, but in most cases we expect the size of it will be one.'
+    AuthenticationExtensionsClientOutputs:
+      type: object
+      properties:
+        appid:
+          type: boolean
+        txAuthSimple:
+          type: string
+        txAuthGeneric:
+          type: string
+        authnSel:
+          type: boolean
+        exts:
+          type: array
+          items:
+            type: string
+        uvi:
+          type: string
+        loc:
+          $ref: '#/components/schemas/Coordinates'
+        biometricPerfBounds:
+          type: boolean
+        credProps:
+          $ref: '#/components/schemas/CredentialPropertiesOutput'
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    RegistrationPasskeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the passkey in the database.
+        rpId:
+          type: string
+          description: The relying party ID.
+        regPolicyName:
+          type: string
+          description: The registration policy defined for the relying party.
+        registerCredential:
+          $ref: '#/components/schemas/RegisterCredential'
+          description: Protocol-specific information related to the registration.
+        registerPasskeyRequest:
+          $ref: '#/components/schemas/RegOptionResponse'
+          description: The public key credential creation options to be supplied to the user agent to create and register a new passkey credential.
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata about the client.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context data about the client.
+    LocationByIpInfo:
+      type: object
+      description: Location metadata
+      properties:
+        ipAddress:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+    ServerPublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - public-key
+        id:
+          type: string
+        transports:
+          type: array
+          items:
+            type: string
+            enum:
+            - usb
+            - nfc
+            - ble
+            - hybrid
+            - internal
+    AuthenticationExtensionsClientInputs:
+      type: object
+      properties:
+        appid:
+          type: string
+        txAuthSimple:
+          type: string
+        txAuthGeneric:
+          $ref: '#/components/schemas/TxAuthGenericAlg'
+        authnSel:
+          type: array
+          items:
+            type: string
+        line_authnSel:
+          type: array
+          items:
+            type: string
+        exts:
+          type: boolean
+        uvi:
+          type: boolean
+        loc:
+          type: boolean
+        biometricPerfBounds:
+          $ref: '#/components/schemas/AuthenticatorBiometricPerfBounds'
+        credProps:
+          type: boolean
+        credentialProtectionPolicy:
+          type: string
+          description: 'Defines the credential protection policy. Recommended value: **userVerificationOptional**'
+          enum:
+          - userVerificationOptional
+          - userVerificationOptionalWithCredentialIDList
+          - userVerificationRequired
+        enforceCredentialProtectionPolicy:
+          type: boolean
+    FIDOExtensionEvaluationGroup:
+      type: object
+      properties:
+        evaluationType:
+          type: string
+          enum:
+          - ANY_MATCH
+          - ALL_MATCH
+          - FAIL_IF_ANY
+          - FAIL_IF_ALL
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOExtensionEvaluation'
+    OperationHeader:
+      type: object
+      properties:
+        upv:
+          $ref: '#/components/schemas/Version'
+        op:
+          type: string
+        appID:
+          type: string
+        serverData:
+          type: string
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    PassiveVoiceAuditDisplayDto:
+      type: object
+      description: An authentication audit dto containing extra details required by the UI for a passive voice authentication audit.
+      properties:
+        contentType:
+          type: string
+          description: The mime type of the enrolled audio. For example `audio/wav`.
+        enrolledAudio:
+          type: string
+          format: byte
+          description: The enrolled audio data in the format described by `contentType`.
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        altitude:
+          type: number
+          format: double
+        accuracy:
+          type: number
+          format: double
+        altitudeAccuracy:
+          type: number
+          format: double
+        heading:
+          type: number
+          format: double
+        speed:
+          type: number
+          format: double
+    UserDto:
+      type: object
+      description: A user in an identity store.
+      properties:
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+        type:
+          type: string
+          description: A user type supplied by the customer.
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+        lastName:
+          type: string
+          description: The user's last name.
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\n\nOne attribute, which is set **internally** by the server on a user during passkey registration, is `passkeyUsers`. A specific user handle may be provided via the passkey registration request, if not it is set to a random ID when the first passkey is created for the user. The attribute value looks like this:.\n\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserDtoSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    BiometricAuditDisplayDto:
+      type: object
+      description: An authentication audit dto containing extra details required by the UI for a face authentication audit.
+      properties:
+        referencedImage:
+          type: string
+          format: byte
+    ServerPublicKeyCredentialUserEntity:
+      type: object
+      description: Passkey-specific user details
+      properties:
+        name:
+          type: string
+          description: A human-palatable name for the entity.
+        icon:
+          type: string
+          description: An optional icon for the entity.
+        id:
+          type: string
+          description: The user handle of the user account entity. A user handle is an opaque byte sequence with a maximum size of 64 bytes, and is not meant to be displayed to the user.
+        displayName:
+          type: string
+          description: A human-palatable name for the user account, intended only for display.
+      required:
+      - id
+    PasskeySessionData:
+      type: object
+      description: Session data specific to a passkey operation in progress.
+      properties:
+        rpId:
+          type: string
+          description: The relying party ID.
+        extUserId:
+          type: string
+          description: The external user ID.
+        userId:
+          type: string
+          description: The internal database user ID.
+        userStatus:
+          type: string
+          description: The user status.
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        passkeyUser:
+          $ref: '#/components/schemas/ServerPublicKeyCredentialUserEntity'
+          description: Passkey-specific user details.
+        excludedCredentials:
+          type: array
+          description: 'A list of excluded credentials.
+
+
+            During registration, this list contains credentials registered to the user.'
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        allowedCredentials:
+          type: array
+          description: 'A list of allowed credentials.
+
+
+            During authentication, this list contains credentials registered to the user.'
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        served:
+          type: boolean
+        challenge:
+          type: string
+          description: The registration or authentication challenge
+        regPolicyName:
+          type: string
+          description: The policy name for a registration operation
+        authPolicyName:
+          type: string
+          description: The policy name for an authentication operation
+        registerPasskeyRequest:
+          $ref: '#/components/schemas/RegOptionResponse'
+          description: The public key credential creation options to be supplied to the user agent to create and register a new passkey credential.
+        authPasskeyRequest:
+          $ref: '#/components/schemas/AuthOptionResponse'
+          description: The passkey assertion generation options used as a request to the user agent.
+    ExtendedAuthenticationParameters:
+      type: object
+      description: Additional passkey authentication request parameters
+      properties:
+        challenge:
+          type: string
+          description: The authentication challenge. If `externalChallengeAllowed` is configured to `true` for the passkey authentication policy then the challenge supplied here will be used when performing the authentication.
+    RegisterCredential:
+      type: object
+      description: 'Information provided from the user agent on a successful passkey registration.
+
+
+        If the registration is successful the `serverPublicKeyCredential` must be provided and an optional `tokenBinding`. If the registration failed on the client then the `clientError` must be provided. In both cases it is recommended to supply `metadata` with as many fields populated as possible.'
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        serverPublicKeyCredential:
+          $ref: '#/components/schemas/ServerRegPublicKeyCredential'
+          description: The public key credential information containing the authenticator attestation response described in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2/#iface-pkcredential).
+        tokenBinding:
+          $ref: '#/components/schemas/TokenBinding'
+          description: Optional token binding which is compared against the collected client data as defined in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2).
+        clientError:
+          $ref: '#/components/schemas/PasskeyClientError'
+          description: Client error information
+    CredentialPropertiesOutput:
+      type: object
+      properties:
+        rk:
+          type: boolean
+    ServerAuthenticatorAssertionResponse:
+      type: object
+      properties:
+        clientDataJSON:
+          type: string
+          minLength: 1
+        authenticatorData:
+          type: string
+          minLength: 1
+        signature:
+          type: string
+          minLength: 1
+        userHandle:
+          type: string
+    TxAuthGenericAlg:
+      type: object
+      properties:
+        contentType:
+          type: string
+        content:
+          type: string
+    RegisterCredentialResult:
+      type: object
+      description: Passkey registration complete response.
+      properties:
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        credentialId:
+          type: string
+          description: The ID of the passkey credential generated by the client authenticator.
+        authenticatorAttachment:
+          type: string
+          description: How the authenticator is attached to the platform.
+          enum:
+          - platform
+          - cross-platform
+        attestationType:
+          type: string
+          description: How the authenticator was attested as being valid.
+          enum:
+          - BASIC
+          - SELF
+          - ATTESTATION_CA
+          - ANON_CA
+          - NONE
+        authenticatorTransports:
+          type: array
+          description: A list of communication mechanisms implemented by the passkey authenticator.
+          items:
+            type: string
+            enum:
+            - usb
+            - nfc
+            - ble
+            - hybrid
+            - internal
+        userVerified:
+          type: boolean
+          description: Whether the user was verified during the registration
+        backupEligible:
+          type: boolean
+          description: Whether this key can be backed-up
+        backupState:
+          type: boolean
+          description: Whether this key is a back-up
+        rk:
+          type: boolean
+          description: Whether this is a *resident key* meaning a key which is discoverable by the client without a user ID being provided.
+        credProtect:
+          type: integer
+          format: int32
+          description: The protection level of the passkey.
+        user:
+          $ref: '#/components/schemas/UserDto'
+          description: The user to whom the passkey was registered.
+    TokenBinding:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - present
+          - supported
+          - not-supported
+        id:
+          type: string
+    TrustXLocale:
+      type: object
+      description: Locale information. Exposes the language, country and variant locale components, for example `en_US_UNIX` contains these components as `en`, `US` and `UNIX` respectively.
+      properties:
+        language:
+          type: string
+          description: The mandatory locale language component
+        country:
+          type: string
+          description: The optional locale country component
+        variant:
+          type: string
+          description: The optional locale variant component
+    UserLocks:
+      type: object
+      description: 'User lock information.
+
+
+        Describes locks at the user level and modality level. A user can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this user.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the user is *permanently* locked then this is the time at which the lock came into effect.
+        userModalityLocks:
+          type: array
+          description: 'Locking information related to particular authentication modalities.
+
+
+            **Not supported in this release**'
+          items:
+            $ref: '#/components/schemas/UserModalityLock'
+    ExtendedRegistrationParameters:
+      type: object
+      description: Additional passkey registration request parameters
+      properties:
+        extUserId:
+          type: string
+          description: The external ID of the user. When a user is created as the result of a registration, its external ID will be set to this value.
+        userHandle:
+          type: string
+          description: A user handle used when a user is created as a result of a registration. If not supplied then a random user handle will be generated.
+        userName:
+          type: string
+          description: A user name which the user agent UI can use to display to the user during registration to distinguish accounts for the same user. This might contain the user's email address for example.
+        userDisplayName:
+          type: string
+          description: A display name which identifies the user which the user agent UI can use to display during registration. This might contain the user's full name for example.
+        challenge:
+          type: string
+          description: The registration challenge. If `externalChallengeAllowed` is configured to `true` for the passkey registration policy then the challenge supplied here will be used when performing the registration.
+    AuthOptionResponseHolder:
+      type: object
+      description: 'Response from the APIs which create a passkey authentication request. Contains the information required by the user agent to generate an authenticator assertion and the session information
+
+
+        If in the passkey configuration `sessionManagementExternal` is set to `false` then session data are managed internally by the server and this object will contain a session ID which must be provided when the authentication is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is included in this object and must be provided when the authentication is completed.
+
+
+        '
+      properties:
+        clientRequest:
+          $ref: '#/components/schemas/AuthOptionResponse'
+          description: The passkey assertion generation options to send to the user agent.
+        sessionId:
+          type: string
+          description: The session ID if the session is managed internally.
+        session:
+          $ref: '#/components/schemas/PasskeySessionData'
+          description: The session data if the session is managed externally.
+    UserPasskeyUpdateHolder:
+      type: object
+      description: Passkey update information. Only fields which are supplied will be updated.
+      properties:
+        status:
+          type: string
+          description: The updated passkey status
+          enum:
+          - ACTIVE
+          - DISABLED
+        name:
+          type: string
+          description: The updated passkey name
+          maxLength: 64
+          minLength: 0
+    PassKeyAuditDisplayDto:
+      type: object
+      description: An authentication audit dto, 1 to 1 mapped to what should be shown in UI for pass key authentication audit.
+      properties:
+        registrationDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+        friendlyName:
+          type: string
+        authenticationDtm:
+          type: string
+          format: date-time
+        os:
+          type: string
+        deviceType:
+          type: string
+        rpId:
+          type: string
+        policyName:
+          type: string
+        clientResponse:
+          type: string
+        clientRequest:
+          type: string
+        publicKey:
+          type: string
+          format: byte
+        userAgent:
+          type: string
+    PublicKeyCredentialRpEntity:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A human-palatable name for the entity.
+        icon:
+          type: string
+          description: An optional icon for the entity.
+        id:
+          type: string
+    FIDOExtensionEvaluation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - REGEX
+          - CONTAINS
+          - MATCH
+          - SN_CTS_PROFILE_MATCH
+          - SN_BASIC_INTEGRITY
+          - IA_DEVICE_INTEGRITY
+          - IA_APP_LICENSING
+          - IA_APP_RECOGNITION
+        evaluationRule:
+          type: string
+    AuthOptionResponse:
+      type: object
+      description: The public key assertion generation options to be supplied to the user agent to generate an authentication assertion for a passkey credential. See the [webauthn specification](https://www.w3.org/TR/webauthn-2/) for details
+      properties:
+        challenge:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        userVerification:
+          type: string
+          description: "Whether user verification is required on the authenticator. Possible values: \n- **required**: The relying party requires user verification. Fail if user verification is not supported.\n- **preferred**: The relying party prefers user verification. Don't fail if it is not supported. RECOMMENDED VALUE.\n- **discouraged**: The relying does not want user verification."
+          enum:
+          - required
+          - preferred
+          - discouraged
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during authentication. Hints are ordered by decreasing preference and are not requirements.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientInputs'
+    Version:
+      type: object
+      properties:
+        major:
+          type: integer
+          format: int32
+        minor:
+          type: integer
+          format: int32
+    FIDOMatchCriteria:
+      type: object
+      properties:
+        aaid:
+          type: array
+          items:
+            type: string
+        vendorID:
+          type: array
+          items:
+            type: string
+        keyIDs:
+          type: array
+          items:
+            type: string
+        userVerification:
+          type: integer
+          format: int64
+        keyProtection:
+          type: integer
+          format: int32
+        matcherProtection:
+          type: integer
+          format: int32
+        attachmentHint:
+          type: integer
+          format: int64
+        tcDisplay:
+          type: integer
+          format: int64
+        authenticationAlgorithms:
+          type: array
+          items:
+            type: integer
+            format: int32
+        assertionSchemes:
+          type: array
+          items:
+            type: string
+        attestationTypes:
+          type: array
+          items:
+            type: integer
+            format: int32
+        authenticatorVersion:
+          type: integer
+          format: int32
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    Extension:
+      type: object
+      properties:
+        id:
+          type: string
+        data:
+          type: string
+        fail_if_unknown:
+          type: boolean
+    AppKeyAuditDisplayDto:
+      type: object
+      description: An authentication audit dto, 1 to 1 mapped to what should be shown in UI for app key authentication audit.
+      properties:
+        registrationDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+        friendlyName:
+          type: string
+        authenticationDtm:
+          type: string
+          format: date-time
+        os:
+          type: string
+        deviceType:
+          type: string
+        rpId:
+          type: string
+        policyName:
+          type: string
+        clientResponse:
+          type: string
+        clientRequest:
+          type: string
+        publicKey:
+          type: string
+          format: byte
+        deviceId:
+          type: string
+    FIDORegistrationRequest:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/OperationHeader'
+        challenge:
+          type: string
+        username:
+          type: string
+        policy:
+          $ref: '#/components/schemas/FIDOPolicy'
+    FIDOPolicy:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/FIDOMatchCriteria'
+        disallowed:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        registrationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticatorsAllowedUnlocking:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        additionalInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        passcodeCriteria:
+          $ref: '#/components/schemas/PasscodeCriteria'
+        authenticatorsRequiringVerificationOnReEnrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsRequiringDataReplacement:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsAllowedReenrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+    PublicKeyCredentialParameters:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - public-key
+        alg:
+          type: string
+          enum:
+          - '-7'
+          - '-257'
+          - '-35'
+          - '-36'
+          - '-37'
+          - '-38'
+          - '-39'
+          - '-258'
+          - '-259'
+    AuthenticatorBiometricPerfBounds:
+      type: object
+      properties:
+        far:
+          type: number
+          format: float
+        frr:
+          type: number
+          format: float
+    RegistrationAppkeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the appkey in the database.
+        rpId:
+          type: string
+          description: The relying party ID.
+        regPolicyName:
+          type: string
+          description: The registration policy defined for the relying party.
+        registrationResponse:
+          $ref: '#/components/schemas/FIDORegistrationResponse'
+          description: The appkey registration response returned by the device as defined [here](https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html#registrationresponse-dictionary).
+        registrationRequest:
+          $ref: '#/components/schemas/FIDORegistrationRequest'
+          description: The appkey registration request with headers and challenge, built based on the params to send to SDK for registration
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata about the client.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context data about the client.
+    ServerAuthPublicKeyCredential:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - public-key
+        response:
+          $ref: '#/components/schemas/ServerAuthenticatorAssertionResponse'
+        clientExtensionResults:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientOutputs'
+      required:
+      - response
+      - type
+    TOTPAuditDisplayDto:
+      type: object
+      description: A TOTP audit dto, 1 to 1 mapped to what should be shown in UI for TOTP authentication audit.
+      properties:
+        policyName:
+          type: string
+        algorithm:
+          type: string
+        registrationCreatedDtm:
+          type: string
+          format: date-time
+        registrationActivatedDtm:
+          type: string
+          format: date-time
+        authenticationDtm:
+          type: string
+          format: date-time
+    AuditDisplayDto:
+      type: object
+      description: An authentication audit dto, containing structures for app keys, pass keys, biometrics and TOTPs.
+      properties:
+        errorMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        result:
+          type: string
+          description: "The result of an authentication. Possible values: \n- **SUCCESS**: The authentication succeeded.\n- **FAILED**: The authentication failed. The `errorMessage` and `errorCode` fields should be populated.\n"
+          enum:
+          - SUCCESS
+          - FAILED
+        appkeyAuditInfo:
+          $ref: '#/components/schemas/AppKeyAuditDisplayDto'
+        passkeyAuditInfo:
+          $ref: '#/components/schemas/PassKeyAuditDisplayDto'
+        biometricAuditInfo:
+          $ref: '#/components/schemas/BiometricAuditDisplayDto'
+        totpAuditInfo:
+          $ref: '#/components/schemas/TOTPAuditDisplayDto'
+        passcodeAuditInfo:
+          $ref: '#/components/schemas/PasscodeAuditDisplayDto'
+        voiceBiometricAuditInfo:
+          $ref: '#/components/schemas/PassiveVoiceAuditDisplayDto'
+    ClientDataRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        evaluationRules:
+          $ref: '#/components/schemas/FIDOExtensionEvaluationGroup'
+    RegistrationTOTPInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the TOTP in the database.
+        policyName:
+          type: string
+          description: The TOTP policy defined.
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code
+        registrationCreatedDtm:
+          type: string
+          format: date-time
+          description: The TOTP's registration date/time.
+        registrationActivatedDtm:
+          type: string
+          format: date-time
+          description: The TOTP's activation date/time (registration completion date/time).
+    RgbPaletteEntry:
+      type: object
+      properties:
+        r:
+          type: integer
+          format: int32
+        g:
+          type: integer
+          format: int32
+        b:
+          type: integer
+          format: int32
+    VerifyCredential:
+      type: object
+      description: 'Information provided from the user agent on a successful passkey authentication.
+
+
+        If the authentication is successful the `serverPublicKeyCredential` must be provided and an optional `tokenBinding`. If the authentication failed on the client then the `clientError` must be provided. In both cases it is recommended to supply `metadata` with as many fields populated as possible.'
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        serverPublicKeyCredential:
+          $ref: '#/components/schemas/ServerAuthPublicKeyCredential'
+          description: The public key credential information containing the authenticator assertion response described in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2/#iface-pkcredential).
+        tokenBinding:
+          $ref: '#/components/schemas/TokenBinding'
+          description: Optional token binding which is compared against the collected client data as defined in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2).
+        clientError:
+          $ref: '#/components/schemas/PasskeyClientError'
+          description: Client error information
+    RegistrationAuditDto:
+      type: object
+      description: A registration audit dto, structure returned from getRegistrationAudit call. Contains what is stored on s3 + UI aligned structure.
+      properties:
+        regAuditRecord:
+          $ref: '#/components/schemas/RegistrationAudit'
+        regAuditDisplayInfo:
+          $ref: '#/components/schemas/AuditDisplayDto'
+    ServerRegPublicKeyCredential:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - public-key
+        authenticatorAttachment:
+          type: string
+          description: "How the authenticator is tied to the platform. Possible values: \n- **platform**: An authenticator built in to the platform. RECOMMENDED VALUE\n- **cross-platform**: A *roaming* authenticator which can move between platforms."
+          enum:
+          - platform
+          - cross-platform
+        response:
+          $ref: '#/components/schemas/ServerAuthenticatorAttestationResponse'
+        clientExtensionResults:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientOutputs'
+      required:
+      - response
+      - type
+    AuthenticatorSelectionCriteria:
+      type: object
+      description: Defines what sort of authenticators may be selected for registration.**See field descriptions for recommended values.**
+      properties:
+        authenticatorAttachment:
+          type: string
+          description: 'How the authenticator is tied to the platform
+
+
+            **For ease of use this should be set to `platform`**'
+          enum:
+          - platform
+          - cross-platform
+        residentKey:
+          type: string
+          description: 'Specifies the extent to which the Relying Party desires to create a client-side discoverable credential.
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - discouraged
+          - preferred
+          - required
+        requireResidentKey:
+          type: boolean
+          description: 'Whether the key is resident within the authenticator
+
+
+            **For ease of use this should be set to `false`**'
+        userVerification:
+          type: string
+          description: 'Whether user verification is required
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - required
+          - preferred
+          - discouraged
+      required:
+      - authenticatorAttachment
+      - residentKey
+      - userVerification
+    AuthenticationError:
+      type: object
+      properties:
+        message:
+          type: string
+        extraDetail:
+          type: string
+        code:
+          type: integer
+          format: int32
+        user:
+          $ref: '#/components/schemas/UserDto'
+        biometricSourceReference:
+          $ref: '#/components/schemas/UserBiometricVersionId'
+        score:
+          type: number
+          format: double
+        threshold:
+          type: number
+          format: double
+    DeviceInfo:
+      type: object
+      description: Information extracted from the device where the appkey resides
+      properties:
+        appId:
+          type: string
+          description: Identifies the device app which owns the appkey
+        deviceId:
+          type: string
+          description: 'Identifies the device on which the app resides
+
+
+            **NOTE** This identifier is not trustworthy and is not used. The `appId` is used throughout the system as the proxy device ID because it is always available.'
+        make:
+          type: string
+          description: The device make
+        model:
+          type: string
+          description: The device model
+        osVersion:
+          type: string
+          description: The device OS version
+        osType:
+          type: string
+          description: The device OS type, for example `android`
+        sdkVersion:
+          type: string
+          description: The device client SDK version
+        name:
+          type: string
+          description: The device friendly name
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        healthCheckPassed:
+          type: boolean
+          description: 'Whether the device health check passed
+
+            Only available if the `HEALTH_CHECK` extension is enabled in the appkey registration policy'
+        environmentCheckResult:
+          type: string
+          description: 'The device environment. Possibly values:
+
+            - **Passed**: App cannot be debugged and is not running in an emulator.
+
+            - **Emulator**: App is running in an emulator.
+
+            - **Debugger**: App can be debugged.
+
+            Only available if the `ENVIRONMENT_CHECK` extension is enabled in the appkey registration policy'
+    BiometricSummary:
+      type: object
+      description: Summary information about a biometric registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+          description: The biometric type, for example `Face`
+        subtype:
+          type: string
+          description: The biometric subtype, for example an algorithm identifier like `DFV6E`
+        status:
+          type: string
+          description: The biometric status
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this biometric has not been used for authentication then this field is not present.
+    RegularExpression:
+      type: object
+      properties:
+        regularExpression:
+          type: string
+        tag:
+          type: string
+    UserAgentInfo:
+      type: object
+      description: User agent metadata
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+    UserPasskey:
+      type: object
+      description: A passkey which is registered to a user.
+      properties:
+        permittedOperations:
+          type: array
+          items:
+            type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeId:
+          type: string
+          description: Unique 26-character database store ID.
+        userId:
+          type: string
+          description: Unique 26-character database user ID.
+        relyingPartyId:
+          type: string
+          description: The relying party ID.
+        regPolicyName:
+          type: string
+          description: The relying party's registration policy name.
+        credentialId:
+          type: string
+          description: The ID of the passkey credential generated by the client authenticator.
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        status:
+          type: string
+          description: 'The passkey status: ACTIVE or DISABLED.'
+          enum:
+          - ACTIVE
+          - DISABLED
+        algorithm:
+          type: string
+          description: The passkey signing algorithm
+          enum:
+          - RS1
+          - RS256
+          - RS384
+          - RS512
+          - PS256
+          - PS384
+          - PS512
+          - EDDSA
+          - ES256
+          - ES384
+          - ES512
+          - ES256K
+        signCounter:
+          type: integer
+          format: int64
+          description: The passkey signature counter. How many authentications have been performed by the authenticator.
+        residentKey:
+          type: boolean
+          description: Whether this is a *resident key* meaning a key which is discoverable by the client without a user ID being provided.
+        attestationType:
+          type: string
+          description: The passkey attestation type
+          enum:
+          - BASIC
+          - SELF
+          - ATTESTATION_CA
+          - ANON_CA
+          - NONE
+        backupEligible:
+          type: boolean
+          description: Whether this key can be backed up.
+        backupState:
+          type: boolean
+          description: Whether this key is a back-up.
+        transports:
+          type: array
+          description: A list of communication mechanisms with the client impemented by an authenticator.
+          items:
+            type: string
+            enum:
+            - usb
+            - nfc
+            - ble
+            - hybrid
+            - internal
+        credProtect:
+          type: integer
+          format: int32
+          description: The protection level of the passkey.
+        internalId:
+          type: string
+        publicKey:
+          type: object
+          description: The public key associated with the authenticator. Used to verify authenticator assertions.
+          properties:
+            params:
+              type: object
+            algorithm:
+              type: string
+            format:
+              type: string
+            encoded:
+              type: string
+              format: byte
+        friendlyName:
+          type: string
+          description: Passkey friendly name.
+        os:
+          type: string
+          description: User agent operating system.
+        osVersion:
+          type: string
+        userAgentName:
+          type: string
+          description: User agent name, for example Chrome.
+        userAgentVersion:
+          type: string
+          description: User agent version.
+        deviceMake:
+          type: string
+        deviceModel:
+          type: string
+        lastUsedDtm:
+          type: string
+          format: date-time
+          description: If the key has been used for authentication this field indicates the last time this occurred
+      required:
+      - algorithm
+      - attestationType
+      - credentialId
+      - id
+      - publicKey
+      - regPolicyName
+      - relyingPartyId
+      - signCounter
+      - status
+      - storeId
+      - userId
+    PasscodeCriteria:
+      type: object
+      properties:
+        passcodeHistory:
+          type: integer
+          format: int32
+        requiredSymbolCount:
+          type: integer
+          format: int32
+        requiredUpperCaseCount:
+          type: integer
+          format: int32
+        requiredLowerCaseCount:
+          type: integer
+          format: int32
+        requiredDigitCount:
+          type: integer
+          format: int32
+        characterVariety:
+          type: integer
+          format: int32
+        disallowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        requiredRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        allowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+    TrustWebClientMetadata:
+      type: object
+      description: Metadata supplied with from a trust web client
+      properties:
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+        locationByIp:
+          $ref: '#/components/schemas/LocationByIpInfo'
+        userAgent:
+          $ref: '#/components/schemas/UserAgentInfo'
+    AppkeySummary:
+      type: object
+      description: 'Summary information about an appkey registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        deviceId:
+          type: string
+          description: 'A unique identifier of the device on which the appkey is installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        deviceOs:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device make and model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceName:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        rpId:
+          type: string
+          description: The relying party ID.
+        aaid:
+          type: string
+          description: A unique identifier of the appkey type.
+        keyId:
+          type: string
+          description: A unique identifier of the particular appkey credential.
+        status:
+          type: string
+          description: The status of the appkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this appkey has not been used for authentication then this field is not present.
+    RegistrationAudit:
+      type: object
+      description: 'A registration audit record
+
+        An registration record contains common fields such as the type and references to the tenant, store and user and specific information depending on the type: appkey/passkey.'
+      properties:
+        version:
+          type: integer
+          format: int32
+          description: The version of the audit structure
+        type:
+          type: string
+          description: The type of audit, for example `Face`
+          enum:
+          - Passkey
+          - Appkey
+          - Face
+          - VoiceActive
+          - VoicePassive
+          - TOTP
+          - Passcode
+        id:
+          type: string
+          description: A unique audit ID
+        createdDtm:
+          type: string
+          format: date-time
+        tenantId:
+          type: string
+          description: The tenant ID
+        storeId:
+          type: string
+          description: The database store ID
+        storeName:
+          type: string
+          description: The store name
+        userId:
+          type: string
+          description: The database user ID
+        extUserId:
+          type: string
+          description: The external user ID provided by the customer
+        appkeyInfo:
+          $ref: '#/components/schemas/RegistrationAppkeyInfo'
+          description: For appkey registrations this field contains information specific to appkey registration
+        passkeyInfo:
+          $ref: '#/components/schemas/RegistrationPasskeyInfo'
+          description: For passkey registrations this field contains information specific to passkey registration
+        totpInfo:
+          $ref: '#/components/schemas/RegistrationTOTPInfo'
+          description: For TOTP registrations this field contains information specific to TOTP registration
+    UserDtoSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, device keys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSummary'
+        totps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    UserModalityLock:
+      type: object
+      description: 'Modality lock information.
+
+
+        Describes locks at the modality level. A modality can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this modality.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *permanently* locked then this is the time at which the lock came into effect.
+        type:
+          type: string
+          description: The modality type, for example `Face`.
+    UserBiometricVersionId:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        versionId:
+          type: string
+    VerifyCredentialHolder:
+      type: object
+      description: 'Request to the API which completes passkey authentication when session management is external. Contains the client response message and session data object
+
+
+        In this case the passkey configuration `sessionManagementExternal` is set to `true` so the session data is returned by the server when passkey authentication is requested an must be provided back the server when the registration is completed.
+
+
+        '
+      properties:
+        clientResponse:
+          $ref: '#/components/schemas/VerifyCredential'
+          description: Client response information for a passkey authentication
+        session:
+          $ref: '#/components/schemas/PasskeySessionData'
+          description: The session data created when the passkey authentication was requested.
+    RegOptionResponseHolder:
+      type: object
+      description: 'Response from the APIs which create an passkey credential creation request. Contains the request message for the user agent and session information
+
+
+        If in the appkey configuration `sessionManagementExternal` is set to `false` then session data are managed internally by the server and this object will contain a session ID which must be provided when the registration is completed. Otherwise if `sessionManagementExternal` is `true` the session data itself is included in this object and must be provided when the registration is completed.
+
+
+        '
+      properties:
+        clientRequest:
+          $ref: '#/components/schemas/RegOptionResponse'
+          description: The passkey credential creation options to send to the user agent.
+        sessionId:
+          type: string
+          description: The session ID if the session is managed internally.
+        session:
+          $ref: '#/components/schemas/PasskeySessionData'
+          description: The session data if the session is managed externally.
+    TOTPSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: The status of the user TOTP.
+          enum:
+          - ACTIVE
+          - PENDING
+          - DISABLED
+        issuer:
+          type: string
+          description: The issuer of the user TOTP.
+        username:
+          type: string
+          description: The user name label used for registering TOTP.
+        policyName:
+          type: string
+          description: TOTP Policy name
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code.
+        activatedDtm:
+          type: string
+          format: date-time
+          description: Date and time of the TOTP activation - this is time when first auth with TOTP happened and marked TOTP as active.
+        expirationDtm:
+          type: string
+          format: date-time
+          description: Expiration dtm for the pending TOTPs - this is time before which is possible to activate pending TOTP.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this TOTP has not been used for authentication then this field is not present.
+    VerifyCredentialResult:
+      type: object
+      description: Passkey authentication complete response.
+      properties:
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        user:
+          $ref: '#/components/schemas/UserDto'
+          description: The user who was authenticated.
+        userVerified:
+          type: boolean
+          description: Whether the user's identity was verified biometrically as part of the authentication.
+        userPresent:
+          type: boolean
+          description: Whether a user's presence was detected as part of the authentication.
+    RegOptionResponse:
+      type: object
+      description: The public key credential creation options to be supplied to the user agent to create and register a new passkey credential. See the [webauthn specification](https://www.w3.org/TR/webauthn-2/) for details
+      properties:
+        rp:
+          $ref: '#/components/schemas/PublicKeyCredentialRpEntity'
+        user:
+          $ref: '#/components/schemas/ServerPublicKeyCredentialUserEntity'
+        challenge:
+          type: string
+        pubKeyCredParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialParameters'
+        timeout:
+          type: integer
+          format: int64
+        excludeCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        authenticatorSelection:
+          $ref: '#/components/schemas/AuthenticatorSelectionCriteria'
+        attestation:
+          type: string
+          description: "Defines whether or how the client conveys the registration attestation object. Possible values: \n- **none**: The relying party does is not interesetd in authenticator attestation. RECOMMENDED VALUE\n- **indirect**: The relying party prefers an attestation conveyance yielding verifiable attestation statements, but allows the client to decide how to obtain such attestation statements.\n- **direct**: The relying party wants to receive the attestation statement as generated by the authenticator."
+          enum:
+          - none
+          - indirect
+          - direct
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during registration. Hints are ordered by decreasing preference and are not requirements.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientInputs'
+      required:
+      - attestation
+    PasskeySummary:
+      type: object
+      description: Summary information about a passkey registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        credentialId:
+          type: string
+          description: A unique identifier of the particular passkey credential.
+        status:
+          type: string
+          description: The status of the passkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passkey has not been used for authentication then this field is not present.
+        name:
+          type: string
+          description: The name of the passkey supplied when the passkey was registered.
+    PasskeyClientError:
+      type: object
+      description: Information about a passkey error which happened on the client.
+      properties:
+        errorType:
+          type: string
+          description: 'Describes the type of error.- **CONFIGURATION_ERROR**: An unexpected passkey operation request was received from the identity store server.
+
+            - **CREATE_ERROR**: The credential could not be created during passkey registration.
+
+            - **GET_ERROR**: The credential assertion could not be obtained during passkey authentication.
+
+            - **USER_CANCELED**: The user cancelled the passkey operation.
+
+            - **CLIENT_TIMEOUT** The user did not respond and the passkey operation timed-out.'
+        errorMessage:
+          type: string
+          description: Error message associated with the client failure if available.
+    AuthenticatorRegistrationAssertion:
+      type: object
+      properties:
+        assertionScheme:
+          type: string
+        assertion:
+          type: string
+        tcDisplayPNGCharacteristics:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisplayPNGCharacteristicsDescriptor'
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

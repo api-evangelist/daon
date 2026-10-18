@@ -1,0 +1,346 @@
+openapi: 3.2.0
+info:
+  title: Daon Tenant Key Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Tenant Key Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Tenant Key Management
+paths:
+  /api/identity-store/keys/rotate:
+    post:
+      tags:
+      - Tenant Key Management
+      summary: Force a key rotation for one or more keys belonging to a tenant
+      description: 'Returns a list of the current tenant keys after the rotation is complete.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:rotateTenantKey` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:rotateTenantKey`'
+      operationId: rotateTenantKey
+      parameters: []
+      requestBody:
+        description: Details of the keys to rotate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RotateRequest'
+            example:
+              dbEncKeyRotation:
+                keyLifetime: P180D
+              caKeyRotation:
+                keyLifetime: P7305D
+                keyLeniency: P3D
+              kekRotation:
+                keyLifetime: P180D
+                keyLeniency: P3D
+        required: true
+      responses:
+        '200':
+          description: List of tenant keys after rotation
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/TenantKey'
+              example:
+              - id: DDXBZYNLAS27YVFRPRBURXR6KE
+                tenantId: air
+                keyType: AES_256
+                keyUse: DB_ENCRYPTION
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+              - id: WZH77YQY5NQE7CATTTJ3ZTVMJU
+                tenantId: air
+                keyType: RSA_3072
+                keyUse: ROOT_CA
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+              - id: WMV6PNK4IQZM6K6KHMJAOSFWXY
+                tenantId: air
+                keyType: RSA_2048
+                keyUse: KEY_ENCRYPTION
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **211**: A rotation request is missing the key lifetime field
+
+            - **212**: A rotation request is missing the key leniency field
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: The tenant was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:rotateTenantKey
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/keys:
+    get:
+      tags:
+      - Tenant Key Management
+      summary: List a tenant's keys
+      description: 'Return a list of the keys belonging to a specified tenant.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listTenantKeys` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listTenantKeys`'
+      operationId: listTenantKeys
+      parameters: []
+      responses:
+        '200':
+          description: Tenant keys retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/TenantKey'
+              example:
+              - id: DDXBZYNLAS27YVFRPRBURXR6KE
+                tenantId: air
+                keyType: AES_256
+                keyUse: DB_ENCRYPTION
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+              - id: WZH77YQY5NQE7CATTTJ3ZTVMJU
+                tenantId: air
+                keyType: RSA_3072
+                keyUse: ROOT_CA
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+              - id: WMV6PNK4IQZM6K6KHMJAOSFWXY
+                tenantId: air
+                keyType: RSA_2048
+                keyUse: KEY_ENCRYPTION
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                current: true
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: The tenant was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listTenantKeys
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    KeyRotation:
+      type: object
+      description: 'Data required to generate a new key during key rotation.
+
+
+        For CA and KEK keys a key lifetime and key leniency must be supplied, for the data encryption key only the key lifetime is required.'
+      properties:
+        keyLifetime:
+          type: string
+          description: How long until the key expires and is automatically rotated.
+          example: P180D
+        keyLeniency:
+          type: string
+          description: How much time before the key expiry rotation happens for the CA and Key Encryption Keys.
+          example: P3D
+      required:
+      - keyLifetime
+    RotateRequest:
+      type: object
+      description: 'A key rotation request. An entry is required for each key to be rotated.
+
+
+        For the CA and KEK keys a key lifetime and key leniency must be supplied, for the data encryption key only the key lifetime is required.'
+      properties:
+        dbEncKeyRotation:
+          $ref: '#/components/schemas/KeyRotation'
+          description: Providing this field will force a rotation of the Data Encryption Key
+        caKeyRotation:
+          $ref: '#/components/schemas/KeyRotation'
+          description: Providing this field will force a rotation of the CA Root Key
+        kekRotation:
+          $ref: '#/components/schemas/KeyRotation'
+          description: Providing this field will force a rotation of the Key Encryption Key
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    TenantKey:
+      type: object
+      description: A key belonging to a tenant.
+      properties:
+        permittedOperations:
+          type: array
+          items:
+            type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        tenantId:
+          type: string
+          description: Unique 26-character database tenant ID.
+        keyType:
+          type: string
+          description: The type of key, for example AES, RSA, elliptic curve.
+          enum:
+          - AES_256
+          - EC_SECP256R1
+          - RSA_2048
+          - RSA_3072
+        keyUse:
+          type: string
+          description: The key usage, for example database encryption, key encryption.
+          enum:
+          - DB_ENCRYPTION
+          - SYSTEM_SIGNING
+          - ROOT_CA
+          - KEY_ENCRYPTION
+        expiringDtm:
+          type: string
+          format: date-time
+          description: 'The key expiry. The key will be rolled over automatically either on or shortly before this date.
+
+            Some keys have a key leniency which defines how long before this date they will be rolled over.'
+        current:
+          type: boolean
+          description: This is `false` if the key has expired, otherwise `true`.
+      required:
+      - expiringDtm
+      - id
+      - keyType
+      - keyUse
+      - tenantId
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

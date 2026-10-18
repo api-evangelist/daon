@@ -1,0 +1,5138 @@
+openapi: 3.2.0
+info:
+  title: Daon User Biometric Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged User Biometric Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: User Biometric Management
+paths:
+  /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/ext:
+    get:
+      tags:
+      - User Biometric Management
+      summary: List biometric verisons for a user identified by external ID, the type and…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserBiometricVersionsByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserBiometricsByExtUserId`'
+      operationId: listUserBiometricVersionsByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: The type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: The subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric versions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserBiometricsByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/ext:
+    get:
+      tags:
+      - User Biometric Management
+      summary: List biometrics for a user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserBiometricsByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserBiometricsByExtUserId`'
+      operationId: listUserBiometricsByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserBiometricsByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions:
+    get:
+      tags:
+      - User Biometric Management
+      summary: List biometric versions for a user identified by internal ID and the type and…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserBiometricVersions` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserBiometricVersions`'
+      operationId: listUserBiometricVersions
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: The type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: The subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric versions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserBiometricVersions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/biometrics/authentications/voice/{sessionId}:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Continue a voice authentication session with additional audio data
+      description: 'Continues a voice authentication session by providing additional audio data. The session must have been created using the `authenticateVoice` API.
+
+
+        On successful completion, the voice authentication result is returned containing the user, score, threshold and result. The session is completed and deleted.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:continueAuthenticateVoice` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:continueAuthenticateVoice`'
+      operationId: continueAuthenticateVoice
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The voice authentication session ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about the continuation of voice authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceAuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: Voice authentication completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceAuthenticationResponse'
+        '400':
+          description: 'An error occurred.
+
+
+            Possible error codes:
+
+            - `2012` - The biometric type is missing.
+
+            - `2022` - The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - `2023` - A chunk reference is not in the expected format.
+
+            - `2024` - A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - `2025` - A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - `2026` - A chunk reference has a call ID that does not match the current call.
+
+            - `2027` - A chunk reference has a start time before the call start time.
+
+            - `2028` - A chunk reference has a created time before the audio start time.
+
+            - `2029` - The chunk references are not in time order.
+
+            - `2100` - The user is locked and cannot be authenticated.
+
+            - `2101` - The user''s modality is locked and cannot be authenticated.
+
+            - `2102` - The user is disabled and cannot be authenticated.
+
+            - `2104` - No active and complete biometric data was found for the user.
+
+            - `3021` - Voice authentication session not found or expired.
+
+            - `3022` - The user for the session was not found.
+
+            - `3024` - The request supplies chunk references but the session has none.
+
+            - `3025` - The request supplies call metadata but the session has none.
+
+            - `3026` - The callMetadata attribute is invalid or missing required fields.
+
+            - `3027` - The callMetadata attribute is missing the required callId field.
+
+            - `3032` - The biometric status is invalid for this operation.
+
+            - `3036` - There is no suitable voice data available for matching against the presented sample.
+
+            - `3039` - The voice authentication session data is missing the partial presented biometric.
+
+            - `3040` - The voice authentication session data is missing the partial transformed biometric.
+
+            - `3041` - The voice authentication session data is missing the matching processes.
+
+            - `3043` - The continuation sample has an unexpected biometric subtype.
+
+            - `3044` - Too many audio chunks were supplied for consolidation.
+
+            - `3045` - The supplied audio chunks belong to more than one call.
+
+            - `3046` - The supplied audio chunks belong to more than one channel.
+
+            - `3047` - The referenced audio chunks could not be found.
+
+            - `3048` - An error occurred while consolidating the authentication audio.
+
+            - `3049` - Voice authentication is not configured for the store.
+
+            - `3050` - The ASV transform service returned a client error.
+
+            - `3051` - The ASV transform service returned a server error.
+
+            - `3052` - The ASV transform service returned an invalid response.
+
+            - `3053` - The voice transform failed with a continuity error.
+
+            - `3054` - The ASV verify service returned a client error.
+
+            - `3055` - The ASV verify service returned a server error.
+
+            - `3056` - The ASV verify service returned an invalid response.
+
+            - `3058` - The biometric request contains an invalid configuration.
+
+            - `3059` - The biometric request contains an invalid QC template.
+
+            - `3060` - No suitable ROC curve was found for the supplied speech durations.
+
+            - `3061` - No ASV TI service configuration was found for the store.
+
+            - `20114` - The biometric data is missing.
+
+            - `20115` - The biometric type is not supported.
+
+            - `20118` - All supplied biometric data must be of the same type.
+
+            - `20119` - All supplied biometric data must be of the same subtype.'
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **2009**: No biometric data of the requested type was found for the user.
+
+            - **2010**: No biometric data of the requested type and subtype was found for the user.
+
+            - **2013**: No biometric data was found for the user.
+
+            - **2103**: The user''s biometric is disabled and an authentication cannot be performed.
+
+            '
+          content:
+            application/json: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:continueAuthenticateVoice
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/voice:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Initiate voice authentication for a user
+      description: 'Initiates a voice authentication session for the specified user. A voice sample must be provided with a `type` of `Voice`, a `subtype` such as `DVASVTI5_8K`, the `data` set to the audio data and a status, typically set to `ACTIVE`.
+
+
+        A session is created and a session ID is returned in the response. The session ID is used to continue the authentication with additional audio samples using the `continueAuthenticateVoice` API.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:authenticateVoice` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:authenticateVoice`'
+      operationId: authenticateVoice
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about the voice authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceAuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: Voice authentication session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceAuthenticationResponse'
+        '400':
+          description: 'An error occurred.
+
+
+            Possible error codes:
+
+            - `3020` - The voice authentication sample data is missing.
+
+            - `2012` - The biometric type is missing.
+
+            - `2022` - The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - `2023` - A chunk reference is not in the expected format.
+
+            - `2024` - A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - `2025` - A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - `2026` - A chunk reference has a call ID that does not match the current call.
+
+            - `2027` - A chunk reference has a start time before the call start time.
+
+            - `2028` - A chunk reference has a created time before the audio start time.
+
+            - `2029` - The chunk references are not in time order.
+
+            - `2100` - The user is locked and cannot be authenticated.
+
+            - `2101` - The user''s modality is locked and cannot be authenticated.
+
+            - `2102` - The user is disabled and cannot be authenticated.
+
+            - `2104` - No active and complete biometric data was found for the user.
+
+            - `3024` - The request supplies chunk references but the session has none.
+
+            - `3025` - The request supplies call metadata but the session has none.
+
+            - `3026` - The callMetadata attribute is invalid or missing required fields.
+
+            - `3027` - The callMetadata attribute is missing the required callId field.
+
+            - `3032` - The biometric status is invalid for this operation.
+
+            - `3036` - There is no suitable voice data available for matching against the presented sample.
+
+            - `3044` - Too many audio chunks were supplied for consolidation.
+
+            - `3045` - The supplied audio chunks belong to more than one call.
+
+            - `3046` - The supplied audio chunks belong to more than one channel.
+
+            - `3047` - The referenced audio chunks could not be found.
+
+            - `3048` - An error occurred while consolidating the authentication audio.
+
+            - `3049` - Voice authentication is not configured for the store.
+
+            - `3050` - The ASV transform service returned a client error.
+
+            - `3051` - The ASV transform service returned a server error.
+
+            - `3052` - The ASV transform service returned an invalid response.
+
+            - `3053` - The voice transform failed with a continuity error.
+
+            - `3054` - The ASV verify service returned a client error.
+
+            - `3055` - The ASV verify service returned a server error.
+
+            - `3056` - The ASV verify service returned an invalid response.
+
+            - `3058` - The biometric request contains an invalid configuration.
+
+            - `3059` - The biometric request contains an invalid QC template.
+
+            - `3060` - No suitable ROC curve was found for the supplied speech durations.
+
+            - `3061` - No ASV TI service configuration was found for the store.
+
+            - `20114` - The biometric data is missing.
+
+            - `20115` - The biometric type is not supported.
+
+            - `20118` - All supplied biometric data must be of the same type.
+
+            - `20119` - All supplied biometric data must be of the same subtype.'
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2009**: No biometric data of the requested type was found for the user.
+
+            - **2010**: No biometric data of the requested type and subtype was found for the user.
+
+            - **2013**: No biometric data was found for the user.
+
+            - **2103**: The user''s biometric is disabled and an authentication cannot be performed.
+
+            '
+          content:
+            application/json: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:authenticateVoice
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/biometrics/{id}/ext:
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a user biometric by external user ID and biometric ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserBiometricByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserBiometricByExtId`'
+      operationId: deleteUserBiometricByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeVersions
+        in: query
+        description: Should the biometric versions be deleted
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: User biometric deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserBiometricByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics:
+    get:
+      tags:
+      - User Biometric Management
+      summary: List biometrics for a user identified by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserBiometrics` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserBiometrics`'
+      operationId: listUserBiometrics
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserBiometrics
+    post:
+      tags:
+      - User Biometric Management
+      summary: Add or update biometric within an identity store for a user identified by its…
+      description: 'If a biometric for this user with the specified type and subtype already exists then the following fields will be updated from the request:
+
+        - atributes- createdFromRefs- data- status.
+
+
+        Otherwise a new biometric entry will be created using the details in the request with the user and store details set to reference the user and store specified in the request parameters.
+
+
+        **NOTE**: The `type`, `subtype` and `data` fields of the biometric object are mandatory and the data must match the `subtype`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:addUserBiometric` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:addUserBiometric`'
+      operationId: addUserBiometric
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The biometric to create or update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBiometric'
+        required: true
+      responses:
+        '201':
+          description: Biometric created/updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2002**: A biometric for this user with a duplicate type and subtype exists
+
+            - **2003**: A data integrity violation occurred when saving the biometric to the database
+
+            - **2004**: The biometric metadata resource could not be loaded.
+
+            - **2005**: The biometric type is not supported
+
+            - **2006**: The biometric subtype is not supported by the biometric metadata.
+
+            - **2012**: The biometric type is missing.
+
+            - **2014**: The subtype biometric data is too long for the specified subtype and can''t be stored in the database.
+
+            - **2015**: The user is not in a state to allow this operation.
+
+            - **2018**: The required validation service was not found in the biometric metadata.
+
+            - **2019**: The configured validation service is not of the expected type.
+
+            - **2020**: The supplied ASV TI voice template is missing the required speechDuration attribute.
+
+            - **2021**: The supplied ASV TI voice template has an invalid speechDuration value.
+
+            - **2022**: The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - **2023**: A chunk reference is not in the expected format.
+
+            - **2024**: A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - **2025**: A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - **2026**: A chunk reference has a call ID that does not match the current call.
+
+            - **2027**: A chunk reference has a start time before the call start time.
+
+            - **2028**: A chunk reference has a created time before the audio start time.
+
+            - **2029**: The chunk references are not in time order.
+
+            - **3024**: The request supplies chunk references but the existing partial enrolment has none.
+
+            - **3025**: The request supplies call metadata but the existing partial enrolment has none.
+
+            - **3026**: The callMetadata attribute is invalid or missing required fields.
+
+            - **3027**: The callMetadata attribute is missing the required callId field.
+
+            - **3028**: No partial reference biometric was found to update during enrolment.
+
+            - **3029**: Failed to consolidate the voice biometric audio data.
+
+            - **3030**: No voice biometric data was found in the request.
+
+            - **3031**: No voice biometric data was found in the stored version.
+
+            - **3032**: The biometric status is invalid for this operation.
+
+            - **3034**: The configured TI voice service is newer than the one used to start the partial enrolment and legacy continuation is disabled.
+
+            - **3035**: The stored partial enrolment biometric is invalid.
+
+            - **3037**: The request call metadata callId does not match the last callId of the existing partial enrolment.
+
+            - **3042**: A partial enrolment is already in progress for this user, type and subtype.
+
+            - **3049**: Voice authentication is not configured for the store.
+
+            - **3050**: The ASV transform service returned a client error.
+
+            - **3051**: The ASV transform service returned a server error.
+
+            - **3052**: The ASV transform service returned an invalid response.
+
+            - **3053**: The voice transform failed with a continuity error.
+
+            - **3058**: The biometric request contains an invalid configuration.
+
+            - **3059**: The biometric request contains an invalid QC template.
+
+            - **3060**: No suitable ROC curve was found for the supplied speech durations.
+
+            - **3061**: No ASV TI service configuration was found for the store.
+
+            - **20113**: The biometric subtype is missing.
+
+            - **20114**: The biometric data is missing.
+
+            - **20120**: An error occurred while generating the face template (face transformation service returned an error).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **1000**: The biometric object could not be stored in or retrieved from the object store (S3).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:addUserBiometric
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/biometrics/{type}/ext:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Update all biometrics for a user (identified by external user ID) of the…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserBiometricStatusByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserBiometricStatusByExtId`'
+      operationId: updateUserBiometricStatusByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Biometric type, for example `Face`
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The biometric status information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBiometricStatusHolder'
+        required: true
+      responses:
+        '200':
+          description: User biometric updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2007**: All biometrics of the specified type are already in the specified state.
+
+            - **2030**: No status was provided in the request.
+
+            - **2031**: The requested status is not allowed to be set (for example the internal PARTIAL_ENROLLMENT status).
+
+            - **2032**: The biometrics of the specified type are in a status (for example the internal PARTIAL_ENROLLMENT status) that cannot be updated.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2009**: No biometrics of the specified type found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserBiometricStatusByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  ? /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/references
+  : get:
+      tags:
+      - User Biometric Management
+      summary: Get the biometric sample versions references by the biometric specified by its…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getReferenceUserBiometrics` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getReferenceUserBiometrics`'
+      operationId: getReferenceUserBiometrics
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: VersionId of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Reference User biometric versions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric versions not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getReferenceUserBiometrics
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/{id}:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric including sensitive data for a user identified by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometric` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometric`'
+      operationId: getUserBiometric
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometric
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a user biometric by internal user ID and biometric ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserBiometric` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserBiometric`'
+      operationId: deleteUserBiometric
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeVersions
+        in: query
+        description: Should the biometric versions be deleted
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: User biometric deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserBiometric
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/ext:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Add or update biometric within an identity store for a user identified by its…
+      description: 'If a biometric for this user with the specified type and subtype already exists then the following fields will be updated from the request:
+
+        - atributes- createdFromRefs- data- status.
+
+
+        Otherwise a new biometric entry will be created using the details in the request with the user and store details set to reference the user and store specified in the request parameters.
+
+
+        **NOTE**: The `type`, `subtype` and `data` fields of the biometric object are mandatory.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:addUserBiometricByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:addUserBiometricByExtId`'
+      operationId: addUserBiometricByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The biometric to create or update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBiometric'
+        required: true
+      responses:
+        '201':
+          description: Biometric created/updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2002**: A biometric for this user with a duplicate type and subtype exists
+
+            - **2003**: A data integrity violation occurred when saving the biometric to the database
+
+            - **2004**: The biometric metadata resource could not be loaded.
+
+            - **2005**: The biometric type is not supported
+
+            - **2006**: The biometric subtype is not supported by the biometric metadata.
+
+            - **2012**: The biometric type is missing.
+
+            - **2014**: The subtype biometric data is too long for the specified subtype and can''t be stored in the database.
+
+            - **2015**: The user is not in a state to allow this operation.
+
+            - **2018**: The required validation service was not found in the biometric metadata.
+
+            - **2019**: The configured validation service is not of the expected type.
+
+            - **2020**: The supplied ASV TI voice template is missing the required speechDuration attribute.
+
+            - **2021**: The supplied ASV TI voice template has an invalid speechDuration value.
+
+            - **2022**: The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - **2023**: A chunk reference is not in the expected format.
+
+            - **2024**: A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - **2025**: A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - **2026**: A chunk reference has a call ID that does not match the current call.
+
+            - **2027**: A chunk reference has a start time before the call start time.
+
+            - **2028**: A chunk reference has a created time before the audio start time.
+
+            - **2029**: The chunk references are not in time order.
+
+            - **3024**: The request supplies chunk references but the existing partial enrolment has none.
+
+            - **3025**: The request supplies call metadata but the existing partial enrolment has none.
+
+            - **3026**: The callMetadata attribute is invalid or missing required fields.
+
+            - **3027**: The callMetadata attribute is missing the required callId field.
+
+            - **3028**: No partial reference biometric was found to update during enrolment.
+
+            - **3029**: Failed to consolidate the voice biometric audio data.
+
+            - **3030**: No voice biometric data was found in the request.
+
+            - **3031**: No voice biometric data was found in the stored version.
+
+            - **3032**: The biometric status is invalid for this operation.
+
+            - **3034**: The configured TI voice service is newer than the one used to start the partial enrolment and legacy continuation is disabled.
+
+            - **3035**: The stored partial enrolment biometric is invalid.
+
+            - **3037**: The request call metadata callId does not match the last callId of the existing partial enrolment.
+
+            - **3042**: A partial enrolment is already in progress for this user, type and subtype.
+
+            - **3049**: Voice authentication is not configured for the store.
+
+            - **3050**: The ASV transform service returned a client error.
+
+            - **3051**: The ASV transform service returned a server error.
+
+            - **3052**: The ASV transform service returned an invalid response.
+
+            - **3053**: The voice transform failed with a continuity error.
+
+            - **3058**: The biometric request contains an invalid configuration.
+
+            - **3059**: The biometric request contains an invalid QC template.
+
+            - **3060**: No suitable ROC curve was found for the supplied speech durations.
+
+            - **3061**: No ASV TI service configuration was found for the store.
+
+            - **20113**: The biometric subtype is missing.
+
+            - **20114**: The biometric data is missing.
+
+            - **20120**: An error occurred while generating the face template (face transformation service returned an error).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **1000**: The biometric object could not be stored in or retrieved from the object store (S3).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:addUserBiometricByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  ? /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/ext
+  : get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric version including sensitive data for a user identified by…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtypeByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtypeByExtId`'
+      operationId: getUserBiometricVersionWithTypeAndSubtypeByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: Version ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric version retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtypeByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/authentications/failure/ext:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Record that a failed authentication has taken place with a user biometric.
+      description: 'If an authentication fails before the identity store must be notified so that it can record the failure and increment the user lock counter.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailureByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailureByExtId`'
+      operationId: recordUserBiometricAuthenticationFailureByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about a failed biometric authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BiometricAuthenticationFailureRequest'
+        required: true
+      responses:
+        '200':
+          description: Failed biometric authentication recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2005**: The specified biometric type is not supported
+
+            - **2006**: The specified biometric subtype is not supported
+
+            - **2012**: The type of the biometric data has not been specified
+
+            - **2100**: Can''t authenticate because the user is locked
+
+            - **2101**: Can''t authenticate because the user''s modality is locked
+
+            - **2102**: Can''t authenticate because the user is disabled
+
+            - **20113**: The subtype of the biometric data has not been specified.
+
+            - **20130**: The reason for the biometric authentication failure has not been specified.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailureByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric including sensitive data for a user identified with type and…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtype` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtype`'
+      operationId: getUserBiometricWithTypeAndSubtype
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtype
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a user biometric by internal user ID and biometric type and subtype
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtype` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtype`'
+      operationId: deleteUserBiometricWithTypeAndSubtype
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeVersions
+        in: query
+        description: Should the biometric versions be deleted
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: User biometric deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtype
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  ? /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/references/ext
+  : get:
+      tags:
+      - User Biometric Management
+      summary: Get the biometric samples references by the biometric specified by its type…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getReferenceUserBiometricsByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getReferenceUserBiometricsByExtId`'
+      operationId: getReferenceUserBiometricsByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: VersionId of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric versions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric versions not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getReferenceUserBiometricsByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/biometrics/authentications/face/ext:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Perform a biometric face match. The user is identified by its external ID
+      description: 'The face matching takes place within the identity store and the success or failure event is created. A face match sample must be provided with a `type` of `Face`, a `subtype` of `Image` or a supported template type, the `data` set to the image or template data and a status, typically set to `ACTIVE`.
+
+
+        If the `storeAudit` configuration field is set to `true` in the identity store''s biometric authentication configuration then a detailed audit of the biometric authentication is created.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:matchFaceByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:matchFaceByExtId`'
+      operationId: matchFaceByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about the face authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaceMatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Face matched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAndFaceMatchResponseId'
+        '400':
+          description: 'An error occurred - including the face match failing.
+
+
+            **NOTE** For convenience the updated user object is returned when there is a face match failure because it may contain updated information about the user lock state.
+
+
+            Possible error codes:
+
+            - **8**: Face algorithm not supported
+
+            - **2006**: The biometric subtype is not supported
+
+            - **2100**: The user is locked so authentication cannot be performed
+
+            - **2101**: The face modality is locked so authentication cannot be performed
+
+            - **2102**: The user is disabled so authentication cannot be performed
+
+            - **2103**: The presented biometric is disabled so authentication cannot be performed
+
+            - **20114**: Biometric data is not supplied in the request
+
+            - **20115**: The specified biometric type is not supported
+
+            - **20120**: An unexpected error occurred while generating face template
+
+            - **20121**: An error occurred while attempting to perform a face match
+
+            - **20122**: There is no suitable face data available for matching against the presented sample
+
+            - **20123**: The matching process data is missing from the request
+
+            - **20124**: The matching algorithm is missing from the request
+
+            - **20125**: The matching threshold must be between 0 and 1
+
+            - **20126**: The internal matching threshold must be between 0 and 1
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+              example:
+                code: '401'
+                message: Authentication failed
+                user:
+                  id: EEWOIHIJ3CJYXAKIRGAMEIUJGU
+                  status: ACTIVE
+                  extId: '12345678'
+                  locale:
+                    language: en
+                    country: US
+                  timezone: Europe/London
+                  firstName: John
+                  lastName: Does
+                  email: jd@mail.com
+                  dateOfBirth: {}
+                  nationalities:
+                  - US
+                  locks:
+                    lockCounter: 1
+                  createdDtm: {}
+                  lastUpdatedDtm: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2013**: Biometric data not found for the specified user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:matchFaceByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/failure:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Record that a failed authentication has taken place with a user biometric.
+      description: 'If an authentication fails before the identity store must be notified so that it can record the failure and increment the user lock counter.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailure` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailure`'
+      operationId: recordUserBiometricAuthenticationFailure
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about a failed biometric authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BiometricAuthenticationFailureRequest'
+        required: true
+      responses:
+        '200':
+          description: Failed biometric authentication recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2005**: The specified biometric type is not supported
+
+            - **2006**: The specified biometric subtype is not supported
+
+            - **2012**: The type of the biometric data has not been specified
+
+            - **2100**: Can''t authenticate because the user is locked
+
+            - **2101**: Can''t authenticate because the user''s modality is locked
+
+            - **2102**: Can''t authenticate because the user is disabled
+
+            - **20113**: The subtype of the biometric data has not been specified.
+
+            - **20130**: The reason for the biometric authentication failure has not been specified.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:recordUserBiometricAuthenticationFailure
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/partialEnrolment:
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a partial enrolment for a user identified by internal user ID with the…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deletePartialEnrolment` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deletePartialEnrolment`'
+      operationId: deletePartialEnrolment
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Partial enrolment deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **3033**: No partial enrolment found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deletePartialEnrolment
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/data:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric version sensitive data for a user identified with type and…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtype` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtype`'
+      operationId: getUserBiometricVersionDataWithTypeAndSubtype
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: VersionId of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric version retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometricVersionData'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtype
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/face:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Perform a biometric face match. The user is identified by its internal ID
+      description: 'The face matching takes place within the identity store and the success or failure event is created. A face match sample must be provided with a `type` of `Face`, a `subtype` of `Image` or a supported template type, the `data` set to the image or template data and a status, typically set to `ACTIVE`.
+
+
+        If the `storeAudit` configuration field is set to `true` in the identity store''s biometric authentication configuration then a detailed audit of the biometric authentication is created.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:matchFace` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:matchFace`'
+      operationId: matchFace
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about the face authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaceMatchRequest'
+        required: true
+      responses:
+        '200':
+          description: Face matched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAndFaceMatchResponseId'
+        '400':
+          description: 'An error occurred - including the face match failing.
+
+
+            **NOTE** For convenience the updated user object is returned when there is a face match failure because it may contain updated information about the user lock state.
+
+
+            Possible error codes:
+
+            - **8**: Face algorithm not supported
+
+            - **2006**: The biometric subtype is not supported
+
+            - **2100**: The user is locked so authentication cannot be performed
+
+            - **2101**: The face modality is locked so authentication cannot be performed
+
+            - **2102**: The user is disabled so authentication cannot be performed
+
+            - **2103**: The presented biometric is disabled so authentication cannot be performed
+
+            - **20114**: Biometric data is not supplied in the request
+
+            - **20115**: The biometric type is not supported
+
+            - **20120**: An unexpected error occurred while generating face template
+
+            - **20121**: An error occurred while attempting to perform a face match
+
+            - **20122**: There is no suitable face data available for matching against the presented sample
+
+            - **20123**: The matching process data is missing from the request
+
+            - **20124**: The matching algorithm is missing from the request
+
+            - **20125**: The matching threshold must be between 0 and 1
+
+            - **20126**: The internal matching threshold must be between 0 and 1
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationError'
+              example:
+                code: '401'
+                message: Authentication failed
+                user:
+                  id: EEWOIHIJ3CJYXAKIRGAMEIUJGU
+                  status: ACTIVE
+                  extId: '12345678'
+                  locale:
+                    language: en
+                    country: US
+                  timezone: Europe/London
+                  firstName: John
+                  lastName: Does
+                  email: jd@mail.com
+                  dateOfBirth: {}
+                  nationalities:
+                  - US
+                  locks:
+                    lockCounter: 1
+                  createdDtm: {}
+                  lastUpdatedDtm: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2013**: Biometric data not found for the specified user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:matchFace
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/ext:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric including sensitive data for a user identified by external ID…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtypeByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtypeByExtId`'
+      operationId: getUserBiometricWithTypeAndSubtypeByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricWithTypeAndSubtypeByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric version including sensitive data for a user identified with…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtype` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtype`'
+      operationId: getUserBiometricVersionWithTypeAndSubtype
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: VersionId of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric version retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometricVersion'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricVersionWithTypeAndSubtype
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/{id}/ext:
+    get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric including sensitive data for a user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricByExtId`'
+      operationId: getUserBiometricByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometric'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/biometrics/{type}:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Update all biometrics for a user (identified by internal user ID) of the…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserBiometricStatus` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserBiometricStatus`'
+      operationId: updateUserBiometricStatus
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Biometric type, for example `Face`
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The biometric status information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBiometricStatusHolder'
+        required: true
+      responses:
+        '200':
+          description: User biometric updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2007**: All biometrics of the specified type are already in the specified state.
+
+            - **2030**: No status was provided in the request.
+
+            - **2031**: The requested status is not allowed to be set (for example the internal PARTIAL_ENROLLMENT status).
+
+            - **2032**: The biometrics of the specified type are in a status (for example the internal PARTIAL_ENROLLMENT status) that cannot be updated.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2009**: No biometrics of the specified type found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserBiometricStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/authentications/voice/ext:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Initiate voice authentication for a user where the user is identified by their…
+      description: 'Initiates a voice authentication session for the specified user. A voice sample must be provided with a `type` of `Voice`, a `subtype` such as `DVASVTI5_8K`, the `data` set to the audio data and a status, typically set to `ACTIVE`.
+
+
+        A session is created and a session ID is returned in the response. The session ID is used to continue the authentication with additional audio samples using the `continueAuthenticateVoice` API.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:authenticateVoiceByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:authenticateVoiceByExtId`'
+      operationId: authenticateVoiceByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Information about the voice authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceAuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: Voice authentication session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceAuthenticationResponse'
+        '400':
+          description: 'An error occurred.
+
+
+            Possible error codes:
+
+            - `2012` - The biometric type is missing.
+
+            - `2022` - The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - `2023` - A chunk reference is not in the expected format.
+
+            - `2024` - A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - `2025` - A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - `2026` - A chunk reference has a call ID that does not match the current call.
+
+            - `2027` - A chunk reference has a start time before the call start time.
+
+            - `2028` - A chunk reference has a created time before the audio start time.
+
+            - `2029` - The chunk references are not in time order.
+
+            - `2100` - The user is locked and cannot be authenticated.
+
+            - `2101` - The user''s modality is locked and cannot be authenticated.
+
+            - `2102` - The user is disabled and cannot be authenticated.
+
+            - `2104` - No active and complete biometric data was found for the user.
+
+            - `3020` - The voice authentication sample data is missing.
+
+            - `3024` - The request supplies chunk references but the session has none.
+
+            - `3025` - The request supplies call metadata but the session has none.
+
+            - `3026` - The callMetadata attribute is invalid or missing required fields.
+
+            - `3027` - The callMetadata attribute is missing the required callId field.
+
+            - `3032` - The biometric status is invalid for this operation.
+
+            - `3036` - There is no suitable voice data available for matching against the presented sample.
+
+            - `3044` - Too many audio chunks were supplied for consolidation.
+
+            - `3045` - The supplied audio chunks belong to more than one call.
+
+            - `3046` - The supplied audio chunks belong to more than one channel.
+
+            - `3047` - The referenced audio chunks could not be found.
+
+            - `3048` - An error occurred while consolidating the authentication audio.
+
+            - `3049` - Voice authentication is not configured for the store.
+
+            - `3050` - The ASV transform service returned a client error.
+
+            - `3051` - The ASV transform service returned a server error.
+
+            - `3052` - The ASV transform service returned an invalid response.
+
+            - `3053` - The voice transform failed with a continuity error.
+
+            - `3054` - The ASV verify service returned a client error.
+
+            - `3055` - The ASV verify service returned a server error.
+
+            - `3056` - The ASV verify service returned an invalid response.
+
+            - `3058` - The biometric request contains an invalid configuration.
+
+            - `3059` - The biometric request contains an invalid QC template.
+
+            - `3060` - No suitable ROC curve was found for the supplied speech durations.
+
+            - `3061` - No ASV TI service configuration was found for the store.
+
+            - `20114` - The biometric data is missing.
+
+            - `20115` - The biometric type is not supported.
+
+            - `20118` - All supplied biometric data must be of the same type.
+
+            - `20119` - All supplied biometric data must be of the same subtype.'
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2009**: No biometric data of the requested type was found for the user.
+
+            - **2010**: No biometric data of the requested type and subtype was found for the user.
+
+            - **2013**: No biometric data was found for the user.
+
+            - **2103**: The user''s biometric is disabled and an authentication cannot be performed.
+
+            '
+          content:
+            application/json: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:authenticateVoiceByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  ? /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/data/ext
+  : get:
+      tags:
+      - User Biometric Management
+      summary: Get a biometric version sensitive data for a user identified by external ID…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtypeByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtypeByExtId`'
+      operationId: getUserBiometricVersionDataWithTypeAndSubtypeByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: versionId
+        in: path
+        description: Version ID of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User biometric version retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBiometricVersionData'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserBiometricVersionDataWithTypeAndSubtypeByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/biometrics/types/{type}/subtypes/{subtype}/ext:
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a user biometric by external user ID and biometric type and subtype
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtypeByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtypeByExtId`'
+      operationId: deleteUserBiometricWithTypeAndSubtypeByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeVersions
+        in: query
+        description: Should all versions of the biometric be deleted
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: User biometric deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2001**: Biometric not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserBiometricWithTypeAndSubtypeByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/biometrics:
+    post:
+      tags:
+      - User Biometric Management
+      summary: Enrol a biometric within an identity store, creating the user to hold the…
+      description: 'Enrols a biometric and, as part of the same operation, gets or creates the user that holds it.
+
+
+        If `userExtId` is supplied and a user with that external ID exists, the biometric is enrolled against that user. If no such user exists, a user is created with the supplied external ID. If `userExtId` is not supplied, a user is created with a generated GUID as its external ID.
+
+
+        **NOTE**: The `userBiometric` object is mandatory and its `type`, `subtype` and `data` fields are mandatory and the data must match the `subtype`.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:addUserBiometricAndCreateUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:addUserBiometricAndCreateUser`'
+      operationId: addUserBiometricAndCreateUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      requestBody:
+        description: The optional external ID of the user and the biometric to enrol
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserBiometricAndCreateUserRequest'
+        required: true
+      responses:
+        '201':
+          description: Biometric enrolled and user created/retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddUserBiometricAndCreateUserResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2002**: A biometric for this user with a duplicate type and subtype exists
+
+            - **2003**: A data integrity violation occurred when saving the biometric to the database
+
+            - **2004**: The biometric metadata resource could not be loaded.
+
+            - **2005**: The biometric type is not supported
+
+            - **2006**: The biometric subtype is not supported by the biometric metadata.
+
+            - **2012**: The biometric is missing or the biometric type is missing.
+
+            - **2014**: The subtype biometric data is too long for the specified subtype and can''t be stored in the database.
+
+            - **2015**: The user is not in a state to allow this operation.
+
+            - **2018**: The required validation service was not found in the biometric metadata.
+
+            - **2019**: The configured validation service is not of the expected type.
+
+            - **2020**: The supplied ASV TI voice template is missing the required speechDuration attribute.
+
+            - **2021**: The supplied ASV TI voice template has an invalid speechDuration value.
+
+            - **2022**: The request biometric contains call metadata but an unexpected sourceType attribute.
+
+            - **2023**: A chunk reference is not in the expected format.
+
+            - **2024**: A chunk reference has a tenant ID that does not match the request tenant ID.
+
+            - **2025**: A chunk reference has a channel inconsistent with the previous chunk for the same call.
+
+            - **2026**: A chunk reference has a call ID that does not match the current call.
+
+            - **2027**: A chunk reference has a start time before the call start time.
+
+            - **2028**: A chunk reference has a created time before the audio start time.
+
+            - **2029**: The chunk references are not in time order.
+
+            - **3024**: The request supplies chunk references but the existing partial enrolment has none.
+
+            - **3025**: The request supplies call metadata but the existing partial enrolment has none.
+
+            - **3026**: The callMetadata attribute is invalid or missing required fields.
+
+            - **3027**: The callMetadata attribute is missing the required callId field.
+
+            - **3028**: No partial reference biometric was found to update during enrolment.
+
+            - **3029**: Failed to consolidate the voice biometric audio data.
+
+            - **3030**: No voice biometric data was found in the request.
+
+            - **3031**: No voice biometric data was found in the stored version.
+
+            - **3032**: The biometric status is invalid for this operation.
+
+            - **3034**: The configured TI voice service is newer than the one used to start the partial enrolment and legacy continuation is disabled.
+
+            - **3035**: The stored partial enrolment biometric is invalid.
+
+            - **3037**: The request call metadata callId does not match the last callId of the existing partial enrolment.
+
+            - **3042**: A partial enrolment is already in progress for this user, type and subtype.
+
+            - **3049**: Voice authentication is not configured for the store.
+
+            - **3050**: The ASV transform service returned a client error.
+
+            - **3051**: The ASV transform service returned a server error.
+
+            - **3052**: The ASV transform service returned an invalid response.
+
+            - **3053**: The voice transform failed with a continuity error.
+
+            - **3058**: The biometric request contains an invalid configuration.
+
+            - **3059**: The biometric request contains an invalid QC template.
+
+            - **3060**: No suitable ROC curve was found for the supplied speech durations.
+
+            - **3061**: No ASV TI service configuration was found for the store.
+
+            - **20113**: The biometric subtype is missing.
+
+            - **20114**: The biometric data is missing.
+
+            - **20120**: An error occurred while generating the face template (face transformation service returned an error).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **1000**: The biometric object could not be stored in or retrieved from the object store (S3).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:addUserBiometricAndCreateUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/types/{type}/subtypes/{subtype}/partialEnrolment/ext:
+    delete:
+      tags:
+      - User Biometric Management
+      summary: Delete a partial enrolment for a user identified by external user ID with the…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deletePartialEnrolmentByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deletePartialEnrolmentByExtId`'
+      operationId: deletePartialEnrolmentByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Type of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: subtype
+        in: path
+        description: Subtype of the biometric
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Partial enrolment deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **3033**: No partial enrolment found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deletePartialEnrolmentByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    PasscodeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        policyName:
+          type: string
+          description: Identifies the identity store passcode policy.
+        status:
+          type: string
+          description: The status of the user passcode.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastRenewedDtm:
+          type: string
+          format: date-time
+          description: The last time the passcode was renewed. Only present if a renewal has occurred.
+        expirationDate:
+          type: string
+          format: date
+          description: Expiration date for a passcode. Only required if regular renewals are enforced.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passcode has not been used for authentication then this field is not present.
+    UserAndFaceMatchResponseId:
+      type: object
+      description: The results of the face authentication
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDto'
+          description: The user for whom the authentication took place.
+        transactionId:
+          type: string
+          description: A transaction ID of the face authentication.
+        result:
+          type: string
+          description: "The result of an authentication. Possible values: \n- **SUCCESS**: The authentication succeeded.\n- **FAILED**: The authentication failed. The `errorMessage` and `errorCode` fields should be populated.\n"
+          enum:
+          - SUCCESS
+          - FAILED
+        score:
+          type: number
+          format: double
+        threshold:
+          type: number
+          format: double
+        sourceReference:
+          $ref: '#/components/schemas/UserBiometricVersionId'
+    FaceMatchingProcessesData:
+      type: object
+      default: DFV6`
+      description: The list of matching algorithms to be run in preferred order based on data availability.
+      example:
+      - transformAlgorithm: DFV6E
+        minConfidence: 3
+        internalScore: 0.6
+      properties:
+        algorithm:
+          type: string
+          enum:
+          - DFV6
+          - DFV7
+        threshold:
+          type: number
+          format: double
+        internalThreshold:
+          type: number
+          format: double
+    DeviceSummary:
+      type: object
+      description: 'Summary information about a device containing keys registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: 'A unique identifier of the device on which the keys are installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        rpId:
+          type: string
+          description: The relying party ID.
+        os:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        name:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        keys:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/AppkeySummary'
+          description: 'A map of appkey types to list of key summary information where the key types are:
+
+            - **DEVICE**: A device appkey which authenticates the device without user input.
+
+            - **BIOMETRIC**: A biometric appkey which authenticates the user using a biometric.
+
+            List is here to support "more than one app keys of the same type" concept, but in most cases we expect the size of it will be one.'
+    SecretSummary:
+      type: object
+      description: 'Summary information about a secret registered to the user.
+
+
+        **NOT USED IN THIS RELEASE**'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - LOCKED
+          - TEMP_LOCKED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+    TrustXLocale:
+      type: object
+      description: Locale information. Exposes the language, country and variant locale components, for example `en_US_UNIX` contains these components as `en`, `US` and `UNIX` respectively.
+      properties:
+        language:
+          type: string
+          description: The mandatory locale language component
+        country:
+          type: string
+          description: The optional locale country component
+        variant:
+          type: string
+          description: The optional locale variant component
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    LocationByIpInfo:
+      type: object
+      description: Location metadata
+      properties:
+        ipAddress:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+    UserLocks:
+      type: object
+      description: 'User lock information.
+
+
+        Describes locks at the user level and modality level. A user can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this user.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the user is *permanently* locked then this is the time at which the lock came into effect.
+        userModalityLocks:
+          type: array
+          description: 'Locking information related to particular authentication modalities.
+
+
+            **Not supported in this release**'
+          items:
+            $ref: '#/components/schemas/UserModalityLock'
+    UserSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, appkeys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          description: A list of biometrics registered to the user
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        documents:
+          type: array
+          description: 'A list of documents registered to the user
+
+            **NOT USED IN THIS RELEASE**'
+          items:
+            $ref: '#/components/schemas/DocumentSummary'
+        secrets:
+          type: array
+          description: 'A list of secrets registered to the user
+
+            **NOT USED IN THIS RELEASE**'
+          items:
+            $ref: '#/components/schemas/SecretSummary'
+        passkeys:
+          type: array
+          description: A list of passkeys registered to the user
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        appkeys:
+          type: array
+          description: A list of appkeys registered to the user
+          items:
+            $ref: '#/components/schemas/AppkeySummary'
+        totps:
+          type: array
+          description: A list of TOTPs registered to the user
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          description: A list of passcodes registered to the user
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    VoiceAuthenticationResult:
+      type: object
+      description: The result details of a completed voice authentication.
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDto'
+          description: The user for whom the authentication took place.
+        transactionId:
+          type: string
+          description: A transaction ID of the voice authentication.
+        result:
+          type: string
+          description: The result of the voice authentication.
+          enum:
+          - SUCCESS
+          - FAILED
+        rawScore:
+          type: number
+          format: double
+          description: The raw match score.
+        score:
+          type: number
+          format: double
+          description: The match score which must be equal to or below the threshold for a match to succeed.
+        threshold:
+          type: number
+          format: double
+          description: The match threshold.
+        version:
+          type: string
+          description: The optional voice matching algorithm version.
+        policy:
+          type: string
+          description: The voice matching policy used.
+        sourceReference:
+          $ref: '#/components/schemas/UserBiometricVersionId'
+          description: Information about the reference biometric version.
+        auditPath:
+          type: string
+          description: The API endpoint to retrieve the authentication audit details. Null if the audit is not available.
+    UserAgentInfo:
+      type: object
+      description: User agent metadata
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+    VoiceAuthenticationRequest:
+      type: object
+      description: A request to initiate a voice authentication. Contains the sample to be authenticated and optional configuration and client context data.
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        sample:
+          $ref: '#/components/schemas/UserBiometric'
+          description: The biometric sample to be authenticated. The type, subtype, data and status must be set.
+    AddUserBiometricAndCreateUserRequest:
+      type: object
+      description: A request to enrol a biometric, creating the user to hold the enrolment if one does not already exist.
+      properties:
+        userExtId:
+          type: string
+          description: The optional external ID of the user. If a user with this external ID exists the biometric is enrolled against that user, otherwise a new user is created with this external ID. If not supplied a new user is created with a generated GUID as its external ID.
+        userBiometric:
+          $ref: '#/components/schemas/UserBiometric'
+          description: The biometric to enrol. The `type`, `subtype` and `data` fields are mandatory and the data must match the `subtype`.
+      required:
+      - userBiometric
+    UserBiometricVersionData:
+      type: object
+      properties:
+        data:
+          type: string
+          format: byte
+          description: The biometric data.
+        contentType:
+          type: string
+          description: The content type of the biometric data if available.
+    TrustWebClientMetadata:
+      type: object
+      description: Metadata supplied with from a trust web client
+      properties:
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+        locationByIp:
+          $ref: '#/components/schemas/LocationByIpInfo'
+        userAgent:
+          $ref: '#/components/schemas/UserAgentInfo'
+    AppkeySummary:
+      type: object
+      description: 'Summary information about an appkey registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        deviceId:
+          type: string
+          description: 'A unique identifier of the device on which the appkey is installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        deviceOs:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device make and model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceName:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        rpId:
+          type: string
+          description: The relying party ID.
+        aaid:
+          type: string
+          description: A unique identifier of the appkey type.
+        keyId:
+          type: string
+          description: A unique identifier of the particular appkey credential.
+        status:
+          type: string
+          description: The status of the appkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this appkey has not been used for authentication then this field is not present.
+    AddUserBiometricAndCreateUserResponse:
+      type: object
+      description: The result of enrolling a biometric and creating or retrieving the user that holds it.
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDto'
+          description: The created or existing user that holds the enrolment.
+        userBiometric:
+          $ref: '#/components/schemas/UserBiometric'
+          description: The enrolled biometric, as returned by the existing add biometric API.
+      required:
+      - user
+      - userBiometric
+    UserModalityLock:
+      type: object
+      description: 'Modality lock information.
+
+
+        Describes locks at the modality level. A modality can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this modality.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *permanently* locked then this is the time at which the lock came into effect.
+        type:
+          type: string
+          description: The modality type, for example `Face`.
+    UserDtoSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, device keys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSummary'
+        totps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    UserBiometricVersionId:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        versionId:
+          type: string
+    DocumentSummary:
+      type: object
+      description: 'Summary information about a document registered to the user.
+
+
+        **NOT USED IN THIS RELEASE**'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    UserDto:
+      type: object
+      description: A user in an identity store.
+      properties:
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+        type:
+          type: string
+          description: A user type supplied by the customer.
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+        lastName:
+          type: string
+          description: The user's last name.
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\n\nOne attribute, which is set **internally** by the server on a user during passkey registration, is `passkeyUsers`. A specific user handle may be provided via the passkey registration request, if not it is set to a random ID when the first passkey is created for the user. The attribute value looks like this:.\n\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserDtoSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    TOTPSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: The status of the user TOTP.
+          enum:
+          - ACTIVE
+          - PENDING
+          - DISABLED
+        issuer:
+          type: string
+          description: The issuer of the user TOTP.
+        username:
+          type: string
+          description: The user name label used for registering TOTP.
+        policyName:
+          type: string
+          description: TOTP Policy name
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code.
+        activatedDtm:
+          type: string
+          format: date-time
+          description: Date and time of the TOTP activation - this is time when first auth with TOTP happened and marked TOTP as active.
+        expirationDtm:
+          type: string
+          format: date-time
+          description: Expiration dtm for the pending TOTPs - this is time before which is possible to activate pending TOTP.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this TOTP has not been used for authentication then this field is not present.
+    UserBiometricStatusHolder:
+      type: object
+      description: A request DTO used to supply a biometric status update.
+      properties:
+        status:
+          type: string
+          description: A request DTO used to supply a biometric status update.
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+      required:
+      - status
+    UserBiometric:
+      type: object
+      description: A biometric belonging to a user in an identity store.
+      properties:
+        permittedOperations:
+          type: array
+          items:
+            type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database biometric ID. Set by the server.
+        storeId:
+          type: string
+          description: Unique 26-character database store ID. Set by the server.
+        userId:
+          type: string
+          description: Unique 26-character database user ID. Set by the server.
+        type:
+          type: string
+          description: The biometric type, for example `Face`.
+        subtype:
+          type: string
+          description: The biometric subtype, for example the face algorithm `DFV6E`.
+        status:
+          type: string
+          description: The biometric status, for example `ACTIVE` or `DISABLED`.
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+        createdFromRefs:
+          type: array
+          description: An optional list of references to other biometric source objects in the form type/subtype/versionId.
+          items:
+            $ref: '#/components/schemas/UserBiometricVersionId'
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: An optional set of additional attributes associated with this biometric.
+        data:
+          type: string
+          format: byte
+          description: The biometric data, for example a face image or audio sample.
+        lastUsedDtm:
+          type: string
+          format: date-time
+          description: If the biometric has been used for authentication this field contains the time it was last used.
+        versionId:
+          type: string
+          description: The unique version of this type/subtype for this user - used to access any version.
+      required:
+      - status
+      - subtype
+      - type
+    PasskeySummary:
+      type: object
+      description: Summary information about a passkey registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        credentialId:
+          type: string
+          description: A unique identifier of the particular passkey credential.
+        status:
+          type: string
+          description: The status of the passkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passkey has not been used for authentication then this field is not present.
+        name:
+          type: string
+          description: The name of the passkey supplied when the passkey was registered.
+    VoiceAuthenticationResponse:
+      type: object
+      description: The response from a voice authentication operation.
+      properties:
+        authenticationResult:
+          $ref: '#/components/schemas/VoiceAuthenticationResult'
+          description: The result of the voice authentication. Only present when the authentication is complete.
+        sessionId:
+          type: string
+          description: The session ID for the voice authentication. Used to continue the authentication with additional samples.
+    AuthenticationError:
+      type: object
+      properties:
+        message:
+          type: string
+        extraDetail:
+          type: string
+        code:
+          type: integer
+          format: int32
+        user:
+          $ref: '#/components/schemas/UserDto'
+        biometricSourceReference:
+          $ref: '#/components/schemas/UserBiometricVersionId'
+        score:
+          type: number
+          format: double
+        threshold:
+          type: number
+          format: double
+    UserBiometricVersion:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        createdFromRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserBiometricVersionId'
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        data:
+          type: string
+          format: byte
+        createdDtm:
+          type: string
+          format: date-time
+        versionId:
+          type: string
+    BiometricAuthenticationFailureRequest:
+      type: object
+      description: A request to record a biometric authentication failure. Contains information about the type of biometric which failed, the reason for failure and an optional biometric sample, configuration and client context data.
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        type:
+          type: string
+          description: The biometric type, for example `Face`.
+        subtype:
+          type: string
+          description: The biometric subtype, for example `Image`.
+        sampleData:
+          type: string
+          format: byte
+          description: Optional biometric sample data, for example a face image.
+        failureReason:
+          type: string
+          description: The reason why the biometric authentication failed, for example 'Liveness check failed'.
+        config:
+          $ref: '#/components/schemas/FaceAuthenticationConfig'
+          description: Optional authentication configuration details. If provided they will override the default configuration.
+    FaceAuthenticationConfig:
+      type: object
+      description: Face authentication configuration settings
+      properties:
+        storeAudit:
+          type: boolean
+          default: false
+          description: Whether to create a detailed audit file for each face authentication
+        auditDuration:
+          type: string
+          default: P30D (30 days) or whatever is configured as `store.default.faceAuthenticationConfig.auditDuration`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+        storeEnrolmentImage:
+          type: boolean
+          default: true
+          description: Should the enrolment image be stored?
+          example: true
+        matchingProcessesData:
+          type: array
+          default: DFV6`
+          description: The list of matching algorithms to be run in preferred order based on data availability.
+          example:
+          - transformAlgorithm: DFV6E
+            minConfidence: 3
+            internalScore: 0.6
+          items:
+            $ref: '#/components/schemas/FaceMatchingProcessesData'
+    DeviceInfo:
+      type: object
+      description: Information extracted from the device where the appkey resides
+      properties:
+        appId:
+          type: string
+          description: Identifies the device app which owns the appkey
+        deviceId:
+          type: string
+          description: 'Identifies the device on which the app resides
+
+
+            **NOTE** This identifier is not trustworthy and is not used. The `appId` is used throughout the system as the proxy device ID because it is always available.'
+        make:
+          type: string
+          description: The device make
+        model:
+          type: string
+          description: The device model
+        osVersion:
+          type: string
+          description: The device OS version
+        osType:
+          type: string
+          description: The device OS type, for example `android`
+        sdkVersion:
+          type: string
+          description: The device client SDK version
+        name:
+          type: string
+          description: The device friendly name
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        healthCheckPassed:
+          type: boolean
+          description: 'Whether the device health check passed
+
+            Only available if the `HEALTH_CHECK` extension is enabled in the appkey registration policy'
+        environmentCheckResult:
+          type: string
+          description: 'The device environment. Possibly values:
+
+            - **Passed**: App cannot be debugged and is not running in an emulator.
+
+            - **Emulator**: App is running in an emulator.
+
+            - **Debugger**: App can be debugged.
+
+            Only available if the `ENVIRONMENT_CHECK` extension is enabled in the appkey registration policy'
+    FaceMatchRequest:
+      type: object
+      description: A request to perform a face match. Contains the sample to be matched and optional configuration and client context data.
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        sample:
+          $ref: '#/components/schemas/UserBiometric'
+          description: The biometric sample to be matched. The type, subtype, data and status must be set.
+        config:
+          $ref: '#/components/schemas/FaceAuthenticationConfig'
+          description: Optional authentication configuration details. If provided they will override the default configuration.
+    User:
+      type: object
+      description: A user in an identity store.
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+          maxLength: 255
+          minLength: 0
+        type:
+          type: string
+          description: A user type supplied by the customer.
+          maxLength: 64
+          minLength: 0
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+          maxLength: 128
+          minLength: 0
+        lastName:
+          type: string
+          description: The user's last name.
+          maxLength: 128
+          minLength: 0
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\nThe only attribute which is currently defined by the service is passkeyUsers which has the following structure and allows optional user handles to be set for passkey users. If this is not set then this field is set to a random ID when the first passkey is created for the user.\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+      required:
+      - status
+    BiometricSummary:
+      type: object
+      description: Summary information about a biometric registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+          description: The biometric type, for example `Face`
+        subtype:
+          type: string
+          description: The biometric subtype, for example an algorithm identifier like `DFV6E`
+        status:
+          type: string
+          description: The biometric status
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this biometric has not been used for authentication then this field is not present.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

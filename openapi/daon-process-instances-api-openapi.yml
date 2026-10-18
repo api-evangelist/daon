@@ -1,0 +1,1763 @@
+openapi: 3.2.0
+info:
+  title: Daon Process Instances API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Process Instances across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Process Instances
+paths:
+  /api/process-manager/processInstances/{processInstanceId}/fraudState:
+    get:
+      tags:
+      - Process Instances
+      summary: Get Process Instance Fraud State
+      description: 'Get the fraud state for a process instance. If no fraud state report has been made, returns null fraudState.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getProcessInstanceFraudState`'
+      operationId: getProcessInstanceFraudState
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Fraud state returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceFraudStateResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient tenant permissions
+        '404':
+          description: Process instance not found
+          content: {}
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:getProcessInstanceFraudState
+    post:
+      tags:
+      - Process Instances
+      summary: Update Process Instance Fraud State
+      description: 'Update the fraud state for a process instance. Use NO_FRAUD_INDICATED to reset a previous fraud classification.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:updateProcessInstanceFraudState`'
+      operationId: updateProcessInstanceFraudState
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProcessInstanceFraudStateRequest'
+        required: true
+      responses:
+        '200':
+          description: Fraud state updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceFraudStateResponse'
+        '400':
+          description: Invalid request body
+          content: {}
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - insufficient tenant permissions
+        '404':
+          description: Process instance not found
+          content: {}
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:updateProcessInstanceFraudState
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/{processInstanceId}:
+    get:
+      tags:
+      - Process Instances
+      summary: Get a Process Instance
+      description: 'Get a Process Instance based an ID.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getProcessInstance`'
+      operationId: getProcessInstance
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:getProcessInstance
+    delete:
+      tags:
+      - Process Instances
+      summary: Delete a Process Instance
+      description: 'Delete a Process Instance based an ID.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:deleteProcessInstance`'
+      operationId: deleteProcessInstance
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: force
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: deleteTrends
+        in: query
+        description: When true, deletes associated trends related to this process instance after this process instance is removed.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:deleteProcessInstance
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/csv:
+    post:
+      tags:
+      - Process Instances
+      summary: Export process instance search results to CSV
+      description: 'List Process Instances based on a filter and export results to a CSV file.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:exportProcessInstancesToCsv`'
+      operationId: exportProcessInstancesToCsv
+      parameters:
+      - name: searchString
+        in: query
+        description: The string of text to search. This can be a name, email etc.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          description: The string of text to search. This can be a name, email etc.
+      - name: processDefinitionId
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefinitionName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processInstanceStatus
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - ACTIVE
+          - COMPLETED_TERMINATED
+          - COMPLETED_ENDED_ERROR
+          - COMPLETED_ENDED_SUCCESS
+          - REVIEW
+          - PAUSED
+          - COMPLETED_PROCESS_ERROR
+      - name: versionName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: startDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: sort
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: forTest
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveConfig'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: BETA
+      x-permission: TNT#{tenantid}#ProcessManager:exportProcessInstancesToCsv
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/byIds:
+    post:
+      tags:
+      - Process Instances
+      summary: Get Process Instances by IDs
+      description: 'Retrieve a list of process instances matching the provided IDs. Duplicate IDs are silently deduplicated; each matching instance is returned at most once.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getProcessInstancesByIds`'
+      operationId: getProcessInstancesByIds
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessInstanceByIdsRequestDto'
+        required: true
+      responses:
+        '200':
+          description: List of process instances matching the provided IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessManageProcessInstanceSearchResultDto'
+        '400':
+          description: Invalid request (empty ID list or exceeds maximum size)
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessManageProcessInstanceSearchResultDto'
+        '403':
+          description: Forbidden - insufficient tenant permissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessManageProcessInstanceSearchResultDto'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:getProcessInstancesByIds
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/create:
+    post:
+      tags:
+      - Process Instances
+      summary: Create a Process Instance
+      description: 'Create a Process Instance.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:createProcessInstance`'
+      operationId: createProcessInstance
+      parameters:
+      - name: pt
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: includeThemeUrl
+        in: query
+        description: When true, includes the theme URL as a query parameter in the redirect URL response
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: When true, includes the theme URL as a query parameter in the redirect URL response
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessInstanceCreateDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectionUrlDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:createProcessInstance
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/search:
+    get:
+      tags:
+      - Process Instances
+      summary: Search Process Instances
+      description: 'Search Process Instances based on the provided criteria.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:searchProcessInstancesBetweenDates`'
+      operationId: searchProcessInstancesBetweenDates
+      parameters:
+      - name: searchString
+        in: query
+        description: The string of text to search. This can be a name, email etc.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          description: The string of text to search. This can be a name, email etc.
+      - name: processDefinitionId
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefinitionName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processInstanceStatus
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - ACTIVE
+          - COMPLETED_TERMINATED
+          - COMPLETED_ENDED_ERROR
+          - COMPLETED_ENDED_SUCCESS
+          - REVIEW
+          - PAUSED
+          - COMPLETED_PROCESS_ERROR
+      - name: versionName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: startDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: direction
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      - name: sortColumn
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: forTest
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageProcessManageProcessInstanceSearchResultDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:searchProcessInstancesBetweenDates
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/{processInstanceId}/processInstanceArchive:
+    post:
+      tags:
+      - Process Instances
+      summary: Generate a process instance data zip archive
+      description: 'Generates a zip archive containing all user data files and activity stream for a process instance.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:generateProcessInstanceZipArchive`'
+      operationId: generateProcessInstanceZipArchive
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveConfig'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:generateProcessInstanceZipArchive
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances:
+    get:
+      tags:
+      - Process Instances
+      summary: List Process Instances
+      description: 'List Process Instances based on a filter.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:listProcessInstancesBetweenDates`'
+      operationId: listProcessInstancesBetweenDates
+      parameters:
+      - name: startDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: endDateTime
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageProcessInstance'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:listProcessInstancesBetweenDates
+    post:
+      tags:
+      - Process Instances
+      summary: Create a Process Instance (with redirect)
+      description: 'Create a Process Instance with redirect.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:createProcessInstanceAndRedirect`'
+      operationId: createProcessInstanceAndRedirect
+      parameters:
+      - name: pt
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: includeThemeUrl
+        in: query
+        description: When true, includes the theme URL as a query parameter in the redirect URL response
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: When true, includes the theme URL as a query parameter in the redirect URL response
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessInstanceCreateDto'
+      responses:
+        '307':
+          description: Temporary Redirect
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:createProcessInstanceAndRedirect
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/{processInstanceId}/withParameters:
+    get:
+      tags:
+      - Process Instances
+      summary: Get a Process Instance with additional paramaters
+      description: 'Get a Process Instance based an ID (with addititional paramaters).
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getProcessInstanceWithParameters`'
+      operationId: getProcessInstanceWithParameters
+      parameters:
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceFullDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:getProcessInstanceWithParameters
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ProcessInstance:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+          description: Tenant ID
+        processDefnId:
+          type: string
+          description: Process Definition ID
+        processDefnName:
+          type: string
+          description: Process Definition Name
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: Process Definition Version
+        processDefinitionType:
+          type: string
+          description: Process Definition Type. This is used to determine the type of process, e.g., authentication, verification, etc.
+          enum:
+          - AUTHENTICATION
+          - VERIFICATION
+          - OTHER
+        processTokenId:
+          type: string
+          description: The Process Token ID which was used to create this process instance
+        processTokenCounter:
+          type: integer
+          format: int32
+        status:
+          type: string
+          description: The status of the process instance, e.g., pending, active etc.
+          enum:
+          - PENDING
+          - ACTIVE
+          - COMPLETED_TERMINATED
+          - COMPLETED_ENDED_ERROR
+          - COMPLETED_ENDED_SUCCESS
+          - REVIEW
+          - PAUSED
+          - COMPLETED_PROCESS_ERROR
+        processServerId:
+          type: string
+          description: The ID of the process server that is executing this process instance
+        createdDtm:
+          type: string
+          format: date-time
+          description: When the process instance was created
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: When the process instance was last updated
+        expiringDtm:
+          type: string
+          format: date-time
+          description: When the process instance will expire, after this time it will be deleted by retention policy
+        completedDtm:
+          type: string
+          format: date-time
+          description: When the process instance was completed
+        elapsedMilliseconds:
+          type: integer
+          format: int64
+        extId:
+          type: string
+          deprecated: true
+          description: External ID (Deprecated use parameters map)
+        lastName:
+          type: string
+          deprecated: true
+          description: Last name (Deprecated use parameters map)
+        firstName:
+          type: string
+          deprecated: true
+          description: First name (Deprecated use parameters map)
+        dateOfBirth:
+          type: string
+          format: date
+          deprecated: true
+          description: Date of birth (Deprecated use parameters map)
+        phoneNumber:
+          type: string
+          deprecated: true
+          description: Phone number (Deprecated use parameters map)
+        email:
+          type: string
+          deprecated: true
+          description: Email (Deprecated use parameters map)
+        nationality:
+          type: string
+          deprecated: true
+          description: Nationality (Deprecated use parameters map)
+        forTest:
+          type: boolean
+          deprecated: true
+          description: Denotes if this process instance is for testing purposes - i.e. was created as a test case from the backoffice. (Deprecated use parameters map)
+        parameters:
+          type: object
+          additionalProperties: {}
+        reviewedBy:
+          type: string
+        docNum1:
+          type: string
+        docNum2:
+          type: string
+        docNum3:
+          type: string
+        docNum4:
+          type: string
+        docNum5:
+          type: string
+        results:
+          type: object
+          additionalProperties: {}
+        externalSources:
+          $ref: '#/components/schemas/ExternalSources'
+          description: External sources used in the process instance, e.g., faces captures that were performed outside of TrustX.
+        extendedSearchField:
+          type: string
+        processDefnS3Bucket:
+          type: string
+        processDefnS3Dir:
+          type: string
+        processTokenParameters:
+          type: object
+          additionalProperties: {}
+        extendedSearchTerms:
+          type: array
+          items:
+            type: string
+        scheduledExpiry:
+          type: boolean
+          description: Indicates if the process instance is scheduled for expiry based on retention policy. If true, the process instance will be deleted after the retention period.
+          readOnly: true
+        retentionDays:
+          type: integer
+          format: int32
+          description: The number of days after which the process instance will be deleted by retention policy. This value is used to calculate the expiringDtm.
+          readOnly: true
+        fraudState:
+          type: string
+          description: 'Fraud review outcome recorded for this process instance. This field is returned only after a fraud state has been reported. Values: FRAUD_CONFIRMED, FRAUD_SUSPECTED, or NO_FRAUD_INDICATED. To change this value, use the fraud-state endpoint for the process instance.'
+          enum:
+          - FRAUD_CONFIRMED
+          - FRAUD_SUSPECTED
+          - NO_FRAUD_INDICATED
+          readOnly: true
+        fraudStateLastUpdatedBy:
+          type: string
+          description: Identifier of the authenticated caller that last reported or changed the fraud state. This field is returned only after a fraud state has been reported.
+          readOnly: true
+        fraudStateLastUpdated:
+          type: string
+          format: date-time
+          description: Date and time, in UTC, when the fraud state was last reported or changed. This field is returned only after a fraud state has been reported.
+          example: {}
+          readOnly: true
+        fraudStateNote:
+          type: string
+          description: Optional note supplied with the latest fraud-state report. This field is returned only when a note was provided. To change this value, use the fraud-state endpoint for the process instance.
+          maxLength: 2000
+          readOnly: true
+    UpdateProcessInstanceFraudStateRequest:
+      type: object
+      properties:
+        fraudState:
+          type: string
+          description: The fraud state to set.
+          enum:
+          - FRAUD_CONFIRMED
+          - FRAUD_SUSPECTED
+          - NO_FRAUD_INDICATED
+        fraudStateNote:
+          type: string
+          description: Optional note associated with the fraud state.
+          maxLength: 2000
+          minLength: 0
+      required:
+      - fraudState
+    ProcessInstanceByIdsRequestDto:
+      type: object
+      description: Request to retrieve process instances by a list of IDs
+      properties:
+        ids:
+          type: array
+          description: List of process instance IDs to retrieve
+          example:
+          - abc123
+          - def456
+          items:
+            type: string
+          minItems: 1
+      required:
+      - ids
+    PageProcessManageProcessInstanceSearchResultDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessManageProcessInstanceSearchResultDto'
+        empty:
+          type: boolean
+    Upload:
+      type: object
+      properties:
+        imageFormat:
+          type: string
+          description: Image Format
+          enum:
+          - JPEG
+          minLength: 1
+          readOnly: true
+        captureKey:
+          type: string
+          description: The image capture key
+          readOnly: true
+        uploadUrl:
+          type: string
+          description: The location to which the face image should be uploaded
+          readOnly: true
+        uploadHeaders:
+          type: object
+          additionalProperties:
+            type: string
+          description: The upload headers that must be set when uploading the images
+          readOnly: true
+      required:
+      - imageFormat
+    ProcessInstanceFullDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        processDefnId:
+          type: string
+        processDefnName:
+          type: string
+        processDefnVersion:
+          type: integer
+          format: int32
+        processTokenId:
+          type: string
+        processTokenCounter:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - PENDING
+          - ACTIVE
+          - COMPLETED_TERMINATED
+          - COMPLETED_ENDED_ERROR
+          - COMPLETED_ENDED_SUCCESS
+          - REVIEW
+          - PAUSED
+          - COMPLETED_PROCESS_ERROR
+        processServerId:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        expiringDtm:
+          type: string
+          format: date-time
+        completedDtm:
+          type: string
+          format: date-time
+        extId:
+          type: string
+        lastName:
+          type: string
+        firstName:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        nationality:
+          type: string
+        results:
+          type: object
+          additionalProperties: {}
+        externalSources:
+          $ref: '#/components/schemas/ExternalSources'
+        processDefnS3Bucket:
+          type: string
+        processDefnS3Dir:
+          type: string
+        processTokenParameters:
+          type: object
+          additionalProperties: {}
+        initParameters:
+          type: object
+          additionalProperties: {}
+        processDefinitionType:
+          type: string
+          enum:
+          - AUTHENTICATION
+          - VERIFICATION
+          - OTHER
+        themeUrl:
+          type: string
+        retentionDays:
+          type: integer
+          format: int32
+        archives:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessInstanceArchiveSummaryDto'
+    PageProcessInstance:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessInstance'
+        empty:
+          type: boolean
+    ProcessInstanceArchiveSummaryDto:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          description: 'Current archive status: QUEUED, PENDING, COMPLETED, FAILED or RETRYING.'
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Date and time, in UTC, when this archive record was last updated.
+          example: {}
+        policyName:
+          type: string
+          description: Name of the archive policy that produced this archive.
+        policyVersion:
+          type: integer
+          format: int32
+          description: Version of the archive policy that produced this archive.
+        policyId:
+          type: string
+          description: Identifier of the archive policy that produced this archive.
+        location:
+          type: string
+          description: Relative storage location of the written archive. Populated only once the archive has been successfully written (status COMPLETED).
+      readOnly: true
+    ProcessInstanceDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        processDefnId:
+          type: string
+        processDefnName:
+          type: string
+        processDefnVersion:
+          type: integer
+          format: int32
+        lastName:
+          type: string
+        firstName:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        elapsedMilliseconds:
+          type: integer
+          format: int64
+        status:
+          type: string
+        statusMapped:
+          type: string
+        results:
+          type: object
+          additionalProperties: {}
+        externalSources:
+          $ref: '#/components/schemas/ExternalSources'
+        retentionDays:
+          type: integer
+          format: int32
+          description: The retention days for the process instance. This is derived from the retention defined on the Process Definition.
+          readOnly: true
+        expiringDtm:
+          type: string
+          format: date-time
+          description: The date after which a process instance is eligible for deletion. The date is calculated based on when the process instance was created and retentionDays.
+          readOnly: true
+        reviewedBy:
+          type: string
+        fraudState:
+          type: string
+          description: 'Fraud review outcome recorded for this process instance. This field is returned only after a fraud state has been reported. Values: FRAUD_CONFIRMED, FRAUD_SUSPECTED, or NO_FRAUD_INDICATED. To change this value, use the fraud-state endpoint for the process instance.'
+          enum:
+          - FRAUD_CONFIRMED
+          - FRAUD_SUSPECTED
+          - NO_FRAUD_INDICATED
+          readOnly: true
+        fraudStateLastUpdated:
+          type: string
+          format: date-time
+          description: Date and time, in UTC, when the fraud state was last reported or changed. This field is returned only after a fraud state has been reported.
+          example: {}
+          readOnly: true
+        fraudStateLastUpdatedBy:
+          type: string
+          description: Identifier of the authenticated caller that last reported or changed the fraud state. This field is returned only after a fraud state has been reported.
+          readOnly: true
+        fraudStateNote:
+          type: string
+          description: Optional note supplied with the latest fraud-state report. This field is returned only when a note was provided. To change this value, use the fraud-state endpoint for the process instance.
+          maxLength: 2000
+          readOnly: true
+        archives:
+          type: array
+          description: Archives associated with this process instance (one entry per archive tracking record, across all policies and statuses). Empty when the process instance has no archives.
+          items:
+            $ref: '#/components/schemas/ProcessInstanceArchiveSummaryDto'
+          readOnly: true
+    ProcessInstanceCreateDto:
+      type: object
+      properties:
+        parameters:
+          type: object
+          additionalProperties: {}
+    RedirectionUrlDto:
+      type: object
+      properties:
+        redirectUrl:
+          type: string
+        processInstanceId:
+          type: string
+        themeUrl:
+          type: string
+        tenantId:
+          type: string
+        cdnUrl:
+          type: string
+        externalSources:
+          $ref: '#/components/schemas/ExternalSources'
+        processServerUrl:
+          type: string
+    Config:
+      type: object
+      properties:
+        password:
+          type: string
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    ProcessInstanceFraudStateResponse:
+      type: object
+      properties:
+        fraudState:
+          type: string
+          description: The fraud state of the process instance.
+          enum:
+          - FRAUD_CONFIRMED
+          - FRAUD_SUSPECTED
+          - NO_FRAUD_INDICATED
+        fraudStateLastUpdated:
+          type: string
+          format: date-time
+          description: The date and time the fraud state was last updated.
+        fraudStateLastUpdatedBy:
+          type: string
+          description: The authenticated user or API key that last updated the fraud state.
+        fraudStateNote:
+          type: string
+          description: Optional note associated with the fraud state.
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+    ArchiveConfig:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/Config'
+    ExternalSources:
+      type: object
+      properties:
+        faceUploads:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Upload'
+          description: External Face Uploads. This is a map based on a face key and the upload.
+          readOnly: true
+        documentUploads:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DocumentUpload'
+          description: External Document Uploads. This is a map based on a doc key and the upload.
+          readOnly: true
+    DocumentUpload:
+      type: object
+      properties:
+        documentFormat:
+          type: string
+          description: Document Format
+          enum:
+          - PDF
+          minLength: 1
+          readOnly: true
+        documentCaptureKey:
+          type: string
+          description: The document capture key
+          readOnly: true
+        pageCaptureKey:
+          type: string
+          description: The document page capture key
+          readOnly: true
+        uploadUrl:
+          type: string
+          description: The location to which the document should be uploaded
+          readOnly: true
+        uploadHeaders:
+          type: object
+          additionalProperties:
+            type: string
+          description: The upload headers that must be set when uploading the document
+          readOnly: true
+      required:
+      - documentFormat
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    ProcessManageProcessInstanceSearchResultDto:
+      type: object
+      description: Summary of a process instance search result
+      properties:
+        processDefnId:
+          type: string
+          description: The process definition ID
+        processDefnName:
+          type: string
+          description: The process definition name
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: The process definition version
+        processInstanceId:
+          type: string
+          description: The process instance ID
+        applicantName:
+          type: string
+          description: The applicant's full name
+        applicantEmail:
+          type: string
+          description: The applicant's email address
+        applicantPhoneNumber:
+          type: string
+          description: The applicant's phone number
+        processInstanceStatus:
+          type: string
+          description: The current status of the process instance
+        processInstanceStatusMapped:
+          type: string
+          description: The mapped/display status of the process instance
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time the process instance was created
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: The date and time the process instance was last updated
+        elapsedMilliseconds:
+          type: integer
+          format: int64
+          description: The elapsed time in milliseconds since the process instance was created
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the process instance
+        reviewedBy:
+          type: string
+          description: The user who reviewed the process instance
+        fraudState:
+          type: string
+          description: 'Fraud review outcome recorded for this process instance. This field is returned only after a fraud state has been reported. Values: FRAUD_CONFIRMED, FRAUD_SUSPECTED, or NO_FRAUD_INDICATED. To change this value, use the fraud-state endpoint for the process instance.'
+          enum:
+          - FRAUD_CONFIRMED
+          - FRAUD_SUSPECTED
+          - NO_FRAUD_INDICATED
+          readOnly: true
+        fraudStateLastUpdated:
+          type: string
+          format: date-time
+          description: Date and time, in UTC, when the fraud state was last reported or changed. This field is returned only after a fraud state has been reported.
+          example: {}
+          readOnly: true
+        fraudStateLastUpdatedBy:
+          type: string
+          description: Identifier of the authenticated caller that last reported or changed the fraud state. This field is returned only after a fraud state has been reported.
+          readOnly: true
+        fraudStateNote:
+          type: string
+          description: Optional note supplied with the latest fraud-state report. This field is returned only when a note was provided. To change this value, use the fraud-state endpoint for the process instance.
+          maxLength: 2000
+          readOnly: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

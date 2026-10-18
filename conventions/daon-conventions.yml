@@ -1,0 +1,63 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.trustx.com/trust/api-versioning.md
+sources:
+- https://docs.trustx.com/trust/api-versioning.md
+- openapi/daon-trustx-openapi.yml
+auth:
+  style: bearer-token
+  token_type: JWT
+  token_obtained_via: API key exchange
+  api_key_header: X-Api-Key or X-ApiKey
+idempotency:
+  coverage: none
+  note: No idempotency mechanism documented in the OpenAPI specification or documentation.
+pagination:
+  style: offset-based
+  parameters:
+    page: Page number (zero-based)
+    size: Number of items per page (minimum 1)
+    sort: Sort criteria
+  response_fields:
+    totalElements: Total number of elements across all pages
+    totalPages: Total number of pages
+    first: Whether this is the first page
+    last: Whether this is the last page
+    number: Current page number
+    size: Page size
+    content: Array of items on current page
+  note: Uses Spring Pageable pattern with page, size, and sort query parameters.
+versioning:
+  policy: Versioned APIs with backwards-compatible changes; breaking changes require new API versions
+  backwards_compatible_changes:
+  - Addition of new operations
+  - Addition of new optional request parameters
+  - Addition of new optional request HTTP headers
+  - Addition of new fields to existing API responses
+  - Addition of new enumerated values to API responses
+  - Addition of new response HTTP headers
+  - Change in order of fields for existing API responses
+  - Changes in length of fields such as error messages
+  - Addition of new error codes and updates to validation logic
+  breaking_changes:
+  - Removal or renaming of an operation
+  - Removal, addition or renaming of required request parameters
+  - Removal, addition or renaming of required HTTP headers
+  - Removal, addition or renaming of any required field in request body
+  - Change of semantics to any request parameter, HTTP header or field
+  - Removal of any previously supported enumerated value
+  - Changes to authentication or authorization requirements
+error_envelope:
+  format: ArthrSkyError schema
+  fields:
+    code: Integer error code
+    message: Error message
+    extraDetail: Additional error details
+request_id_tracing:
+  note: No request ID tracing documented in OpenAPI or documentation.
+rate_limit_signaling:
+  note: Rate limits may change and are not considered part of the API contract.
+reversibility:
+  note: No reversal operations documented for identity verification processes.
+dry_run_mode:
+  note: No dry-run mode documented in the OpenAPI specification or documentation.

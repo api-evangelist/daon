@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  title: Daon Process Definitions API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Process Definitions across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Process Definitions
+paths:
+  /api/process-manager/processDefinitions:
+    get:
+      tags:
+      - Process Definitions
+      summary: List Process Definitions
+      description: 'List process definitions given a search criteria.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:listProcessDefinitions`'
+      operationId: listProcessDefinitions
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: '%'
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageProcessDefinition'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ProcessManager:listProcessDefinitions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    Attributes:
+      type: object
+      properties:
+        searchable:
+          type: boolean
+    ProcessDefinition:
+      type: object
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+          readOnly: true
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+          readOnly: true
+        lastUpdatedBy:
+          type: string
+          readOnly: true
+        id:
+          type: string
+        tenantId:
+          type: string
+        name:
+          type: string
+          maxLength: 50
+          minLength: 0
+        description:
+          type: string
+          maxLength: 2000
+          minLength: 0
+        version:
+          type: integer
+          format: int32
+        serverType:
+          type: string
+          enum:
+          - P1
+          - E1
+        status:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+          - RETIRED
+        attributes:
+          $ref: '#/components/schemas/Attributes'
+        processDefinitionType:
+          type: string
+          enum:
+          - AUTHENTICATION
+          - VERIFICATION
+          - OTHER
+        resources:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ProcessResource'
+        themeId:
+          type: string
+        retentionDays:
+          type: integer
+          format: int32
+          readOnly: true
+      required:
+      - name
+      - serverType
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+    PageProcessDefinition:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessDefinition'
+        empty:
+          type: boolean
+    ProcessResource:
+      type: object
+      properties:
+        sha256Hash:
+          type: string
+          format: byte
+        status:
+          type: string
+          enum:
+          - PERSIST
+          - DELETE
+        data:
+          type: string
+          format: byte
+        type:
+          type: string
+          enum:
+          - BPMN
+          - CONFIG
+      required:
+      - data
+      - type
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

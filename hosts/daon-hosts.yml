@@ -1,0 +1,161 @@
+generated: '2026-10-18'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 12
+  own: 7
+  other_domain: 3
+  platform: 2
+  roles:
+  - api
+  - docs
+  - other
+  - source
+  - status
+  - support
+  - website
+hosts:
+- host: api.daon.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: daon.com
+  role: api
+  relation: own
+- host: api.trustx.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: trustx.com
+  role: api
+  relation: other-domain
+- host: docs.trustx.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Documentation
+  - APIReference
+  - ChangeLog
+  serves:
+  - docs
+  - developer-portal
+  vendor: developerhub
+  registrable_domain: trustx.com
+  role: docs
+  relation: other-domain
+- host: es-la.daon.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: daon.com
+  role: other
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: go.daon.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: daon.com
+  role: other
+  relation: own
+- host: status.daon.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: daon.com
+  role: status
+  relation: own
+- host: support.daon.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: daon.com
+  role: support
+  relation: own
+- host: trust.daon.com
+  found_by:
+  - pointer
+  - docs-index
+  - well-known
+  types:
+  - Compliance
+  serves:
+  - docs
+  platform: app.safebase.io
+  registrable_domain: daon.com
+  role: other
+  relation: own
+- host: www.daon.com
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  - DeveloperPortal
+  - Support
+  - Contact
+  - Blog
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - docs
+  - cdn
+  - hosting
+  vendor: cloudflare
+  registrable_domain: daon.com
+  role: website
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform
+- host: '{tenantid}.fir.trustx.com'
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: trustx.com
+  role: other
+  relation: other-domain

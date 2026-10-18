@@ -1,0 +1,4 @@
+generated: '2026-10-18'
+method: none
+scopes: []
+note: TrustX API uses JWT bearer tokens with permissions embedded in the token (e.g., TNT#{tenantid}#ArthrServer:listTenantApiKeys), not OAuth scopes.

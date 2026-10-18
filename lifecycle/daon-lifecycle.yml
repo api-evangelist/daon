@@ -1,0 +1,16 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.trustx.com/trust/api-versioning
+sources:
+- https://docs.trustx.com/trust/api-versioning
+- https://docs.trustx.com/trust/activity-versioning
+- https://docs.trustx.com/trust/api-changelog
+- https://docs.trustx.com/trust/api-changelog
+versioning:
+  docs: https://docs.trustx.com/trust/api-versioning
+deprecation:
+  policy: Notice of intent to deprecate shall be provided in order to give those with integrations opportunity to migrate to the newer API. Deprecated
+    APIs shall be supported for the given notice period after such time support for the deprecated API shall be removed.
+status_page: null
+docs: https://docs.trustx.com/trust/api-versioning

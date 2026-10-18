@@ -1,0 +1,636 @@
+openapi: 3.2.0
+info:
+  title: Daon Process Archive Search API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Process Archive Search across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Process Archive Search
+paths:
+  /api/process-manager/archives/queries/{executionId}/status:
+    get:
+      tags:
+      - Process Archive Search
+      summary: Poll the status of a process archive search query
+      description: 'Returns the Athena query state: QUEUED, RUNNING, SUCCEEDED, FAILED, or CANCELLED.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getQueryStatus`'
+      operationId: getQueryStatus
+      parameters:
+      - name: executionId
+        in: path
+        description: Athena execution ID returned by /start.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: State string returned.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Query failed (code 821).
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getQueryStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archives/{fileKey}/sig:
+    get:
+      tags:
+      - Process Archive Search
+      summary: Download the PGP detached signature file
+      description: 'Decodes {fileKey} to reconstruct the archive S3 key, then appends ".signature.asc" to retrieve the signature file.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getSignatureFile`'
+      operationId: getSignatureFile
+      parameters:
+      - name: fileKey
+        in: path
+        description: Hex file key returned by the archive search result.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ASCII-armored PGP signature returned.
+          content:
+            application/pgp-signature:
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: fileKey is malformed.
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant or signature file not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: S3 retrieval failed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getSignatureFile
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archives/{fileKey}/archive:
+    get:
+      tags:
+      - Process Archive Search
+      summary: Download the archive ZIP file
+      description: 'Decodes {fileKey} (hex(policyName/date/filename)) to reconstruct the S3 key and streams the encrypted ZIP bytes. The fileKey is returned in each archive search result.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchiveFile`'
+      operationId: getArchiveFile
+      parameters:
+      - name: fileKey
+        in: path
+        description: Hex file key returned by the archive search result.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ZIP archive bytes returned.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: fileKey is malformed.
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant or archive file not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: S3 retrieval failed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchiveFile
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archives/queries/{executionId}/result:
+    get:
+      tags:
+      - Process Archive Search
+      summary: Retrieve results of a completed process archive search query
+      description: 'Returns a page of archive metadata records. Pass nextToken to retrieve subsequent pages. Results contain S3 object keys only ? ZIP files are not decrypted.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getQueryResults`'
+      operationId: getQueryResults
+      parameters:
+      - name: executionId
+        in: path
+        description: Athena execution ID returned by /start.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: nextToken
+        in: query
+        description: Pagination token from the previous result call.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: Page size. Defaults to 10; capped at sky.archive.athena.max-results.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Page of archive metadata returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessArchiveQueryResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Failed to fetch results (code 821).
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getQueryResults
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archives/{fileKey}:
+    delete:
+      tags:
+      - Process Archive Search
+      summary: Delete an archive and its signature file
+      description: 'Decodes {fileKey} to reconstruct the S3 keys for both the ZIP archive and its ".signature.asc" companion. Verifies the archive object actually exists under {tenantId}''s own S3 prefix before doing anything ? this also guards against a fileKey that was generated for a different tenant, which (since fileKey itself carries no tenant information) would otherwise resolve to a key that simply doesn''t exist under this tenantId and silently no-op. Then deletes both objects permanently and records the deletion (processInstanceId, policyName, policyVersion ? all parsed from the archive key itself) so the process instance is filtered out of future archive search results ? the Athena event log itself is append-only and is never modified by this call.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:deleteArchive`'
+      operationId: deleteArchive
+      parameters:
+      - name: fileKey
+        in: path
+        description: Hex file key returned by the archive search result.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Both files deleted successfully.
+        '400':
+          description: fileKey is malformed.
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant not found, or the archive file does not exist under this tenant.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: S3 deletion failed.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:deleteArchive
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archives/queries/start:
+    post:
+      tags:
+      - Process Archive Search
+      summary: Start a process archive search query
+      description: 'Submits an asynchronous Athena query. Returns a queryExecutionId. Poll /status until SUCCEEDED, then call /result. fromTime and toTime are required (they drive dt partition pruning). Optional filters: processInstanceId, processDefinitionId, processDefinitionName, externalId, firstName, lastName, status, outcome, policyName, policyId. status may be a single value or a comma-separated collection; each entry is resolved first as a raw ProcessInstanceStatus name/abbreviation, then as a mapped status label (e.g. ''Accepted'') ? an entry matching neither returns 400 (code 825). Optional sort: a single ''property,direction'' string (Spring Pageable convention, e.g. ''status,desc''). Only one sort property is supported at a time. Supported properties: processInstanceId, firstName, createdDtm, status, extId, archivePolicy.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:startQuery`'
+      operationId: startQuery
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessArchiveQueryRequestDto'
+        required: true
+      responses:
+        '202':
+          description: Query started ? executionId returned.
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid request ? fromTime/toTime missing, an unsupported sort property/direction, or a status value matching neither a raw enum nor a mapped label.
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Failed to start Athena query (code 820).
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:startQuery
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProcessArchiveQueryRequestDto:
+      type: object
+      properties:
+        processInstanceId:
+          type: string
+        processTokenId:
+          type: string
+        status:
+          type: string
+        outcome:
+          type: string
+        reviewedBy:
+          type: string
+        processDefinitionId:
+          type: string
+        processDefinitionName:
+          type: string
+        processDefinitionVersion:
+          type: integer
+          format: int32
+        externalId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        nationality:
+          type: string
+        docNum1:
+          type: string
+        docNum2:
+          type: string
+        docNum3:
+          type: string
+        docNum4:
+          type: string
+        docNum5:
+          type: string
+        policyName:
+          type: string
+        policyId:
+          type: string
+        policyVersion:
+          type: integer
+          format: int32
+        archiveKey:
+          type: string
+        location:
+          type: string
+        removeAfterDate:
+          type: string
+        sort:
+          type: string
+        fromTime:
+          type: string
+          format: date-time
+        toTime:
+          type: string
+          format: date-time
+      required:
+      - fromTime
+      - toTime
+    ProcessArchiveQueryResponseDto:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessArchiveRecordDto'
+        nextToken:
+          type: string
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ProcessArchiveRecordDto:
+      type: object
+      properties:
+        processInstanceId:
+          type: string
+        tenantId:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        completedDtm:
+          type: string
+          format: date-time
+        archiveDate:
+          type: string
+        processDefinitionId:
+          type: string
+        processDefinitionName:
+          type: string
+        processDefinitionVersion:
+          type: integer
+          format: int32
+        processTokenId:
+          type: string
+        outcome:
+          type: string
+        status:
+          type: string
+        statusMapped:
+          type: string
+        fraudStatus:
+          type: string
+        reviewedBy:
+          type: string
+        extId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        nationality:
+          type: string
+        docNum1:
+          type: string
+        docNum2:
+          type: string
+        docNum3:
+          type: string
+        docNum4:
+          type: string
+        docNum5:
+          type: string
+        archivePolicyId:
+          type: string
+        archivePolicyName:
+          type: string
+        archivePolicyVersion:
+          type: integer
+          format: int32
+        removeAfterDate:
+          type: string
+        location:
+          type: string
+        archiveKey:
+          type: string
+        signatureKey:
+          type: string
+        fileKey:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

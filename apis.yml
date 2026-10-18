@@ -1,23 +1,1062 @@
 aid: daon
+
 name: Daon
-description: 'Daon is a company surfaced via the API Evangelist harvest backlog (source: kin-score-markets)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: Daon, which calls itself the Digital Identity Trust Company, enables organizations worldwide to proof, verify, authenticate and secure
+  identities across the customer lifecycle. Its product suite includes the IdentityX hosted platform and the TrustX SaaS identity verification
+  and orchestration platform, plus xAuth multi-factor authentication, xProof identity verification (IDV), xFace facial authentication, xVoice
+  voice authentication and xDeTECH synthetic/deepfake detection. Developers integrate through the TrustX REST API documented at docs.trustx.com
+  and through mobile SDKs (face, FIDO, NFC) published in the daoninc GitHub organization.
+
 url: https://raw.githubusercontent.com/api-evangelist/daon/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:kin-score-markets
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-18 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-18'
+
 modified: '2026-10-18'
+
 tags:
 - Company
-apis: []
+- Digital Identity
+- Identity Verification
+- Authentication
+- Biometrics
+- Fraud Prevention
+- Multi-Factor Authentication
+- FIDO
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
+image: https://www.daon.com/wp-content/uploads/2024/06/DaonWebDefault.webp
+
 common:
+- type: AgenticAccess
+  url: agentic-access/daon-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/daon-rate-limits.yml
+- type: Spectral
+  url: rules/daon-rules.yml
+- type: JSONLD
+  url: json-ld/daon-context.jsonld
+- type: Vocabulary
+  url: vocabulary/daon-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/daon-data-model.yml
+- type: Components
+  url: components/daon-components.yml
+- type: ChangeLog
+  url: changelog/daon-changelog.yml
+- type: Conventions
+  url: conventions/daon-conventions.yml
+- type: Sandbox
+  url: sandbox/daon-sandbox.yml
+- type: Compliance
+  url: https://trust.daon.com/
+- type: Deprecation
+  url: lifecycle/daon-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/daon-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/daon-problem-types.yml
+- type: Conformance
+  url: conformance/daon-conformance.yml
+- type: Overlay
+  url: overlays/daon-trustx-overlay.yaml
+- type: LLMsTxt
+  url: llms/daon-llms.txt
+- type: SecurityTxt
+  url: well-known/daon-status-security.txt
+- type: WellKnown
+  url: well-known/daon-well-known.yml
+- type: Hosts
+  url: hosts/daon-hosts.yml
+- type: IntegrationEdges
+  url: integrations/daon-integration-edges.yml
+- type: Vendors
+  url: vendors/daon-vendors.yml
+- type: SDKs
+  url: packages/daon-packages.yml
+- type: Packages
+  url: packages/daon-packages.yml
+- type: Authentication
+  url: authentication/daon-authentication.yml
 - type: Website
-  url: https://daon.com
+  url: https://www.daon.com/
+- type: TrustCenter
+  url: security/daon-trust-center.yml
+- type: DomainSecurity
+  url: security/daon-domain-security.yml
+- type: DeveloperPortal
+  url: https://www.daon.com/developers/
+- type: Documentation
+  url: https://docs.trustx.com/trust
+- type: APIReference
+  url: https://docs.trustx.com/trustx-api-reference
+- type: ChangeLog
+  url: https://docs.trustx.com/trust/api-changelog
+- type: Support
+  url: https://www.daon.com/customer-support/
+- type: Contact
+  url: https://www.daon.com/contact-us/
+- type: Blog
+  url: https://www.daon.com/type/article/
+- type: StatusPage
+  url: https://status.daon.com/
+- type: GitHubOrganization
+  url: https://github.com/daoninc
+- type: LinkedIn
+  url: https://www.linkedin.com/company/daon/
+- type: TermsOfService
+  url: https://www.daon.com/terms-of-use/
+- type: PrivacyPolicy
+  url: https://www.daon.com/privacy-policy/
+
+apis:
+- aid: daon:daon-admin-sessions-api
+  name: Daon Admin Sessions API
+  description: The Admin Sessions API from Daon — 3 operation(s) for admin sessions.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Admin Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-admin-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-api-keys-api
+  name: Daon API Keys API
+  description: The API Keys API from Daon — 3 operation(s) for api keys.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - API Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-api-keys-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-archive-policies-api
+  name: Daon Archive Policies API
+  description: The Archive Policies API from Daon — 5 operation(s) for archive policies.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Archive Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-archive-policies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-audits-api
+  name: Daon Audits API
+  description: The Audits API from Daon — 3 operation(s) for audits.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Audits
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-audits-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-cloud-secrets-api
+  name: Daon Cloud Secrets API
+  description: The Cloud Secrets API from Daon — 2 operation(s) for cloud secrets.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Cloud Secrets
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-cloud-secrets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-custom-pages-api
+  name: Daon Custom Pages API
+  description: The Custom Pages API from Daon — 7 operation(s) for custom pages.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Custom Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-custom-pages-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-archive-search-api
+  name: Daon Process Archive Search API
+  description: The Process Archive Search API from Daon — 6 operation(s) for process archive search.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Archive Search
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-archive-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-definition-tags-api
+  name: Daon Process Definition Tags API
+  description: The Process Definition Tags API from Daon — 3 operation(s) for process definition tags.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Definition Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-definition-tags-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-definitions-api
+  name: Daon Process Definitions API
+  description: The Process Definitions API from Daon — 1 operation(s) for process definitions.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Definitions
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-definitions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-instance-api
+  name: Daon Process Instance API
+  description: The Process Instance API from Daon — 2 operation(s) for process instance.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Instance
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-instance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-instance-archiving-api
+  name: Daon Process Instance Archiving API
+  description: >-
+    The Process Instance Archiving API from Daon — 3 operation(s) for process instance archiving.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Instance Archiving
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-instance-archiving-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-instances-api
+  name: Daon Process Instances API
+  description: The Process Instances API from Daon — 9 operation(s) for process instances.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Instances
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-instances-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-process-tokens-api
+  name: Daon Process Tokens API
+  description: The Process Tokens API from Daon — 2 operation(s) for process tokens.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Process Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-process-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-appkey-configuration-management-api
+  name: Daon Store Appkey Configuration Management API
+  description: >-
+    The Store Appkey Configuration Management API from Daon — 2 operation(s) for store appkey configuration
+    management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store Appkey Configuration Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-appkey-configuration-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-management-api
+  name: Daon Store Management API
+  description: The Store Management API from Daon — 3 operation(s) for store management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-passcode-policy-management-api
+  name: Daon Store Passcode Policy Management API
+  description: >-
+    The Store Passcode Policy Management API from Daon — 2 operation(s) for store passcode policy management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store Passcode Policy Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-passcode-policy-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-passkey-configuration-management-api
+  name: Daon Store Passkey Configuration Management API
+  description: >-
+    The Store Passkey Configuration Management API from Daon — 2 operation(s) for store passkey configuration
+    management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store Passkey Configuration Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-passkey-configuration-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-push-notification-policy-management-api
+  name: Daon Store Push Notification Policy Management API
+  description: >-
+    The Store Push Notification Policy Management API from Daon — 3 operation(s) for store push notification
+    policy management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store Push Notification Policy Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-push-notification-policy-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-store-totp-policy-management-api
+  name: Daon Store TOTP Policy Management API
+  description: >-
+    The Store TOTP Policy Management API from Daon — 2 operation(s) for store totp policy management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Store TOTP Policy Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-store-totp-policy-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-tenant-key-management-api
+  name: Daon Tenant Key Management API
+  description: The Tenant Key Management API from Daon — 2 operation(s) for tenant key management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Tenant Key Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-tenant-key-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-tenant-management-api
+  name: Daon Tenant Management API
+  description: The Tenant Management API from Daon — 4 operation(s) for tenant management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Tenant Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-tenant-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-trends-api
+  name: Daon Trends API
+  description: The Trends API from Daon — 5 operation(s) for trends.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Trends
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-trends-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-appkey-management-api
+  name: Daon User Appkey Management API
+  description: The User Appkey Management API from Daon — 27 operation(s) for user appkey management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Appkey Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-appkey-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-biometric-management-api
+  name: Daon User Biometric Management API
+  description: >-
+    The User Biometric Management API from Daon — 29 operation(s) for user biometric management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Biometric Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-biometric-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-management-api
+  name: Daon User Management API
+  description: The User Management API from Daon — 11 operation(s) for user management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-passcode-management-api
+  name: Daon User Passcode Management API
+  description: >-
+    The User Passcode Management API from Daon — 16 operation(s) for user passcode management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Passcode Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-passcode-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-passkey-management-api
+  name: Daon User Passkey Management API
+  description: The User Passkey Management API from Daon — 17 operation(s) for user passkey management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Passkey Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-passkey-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-push-notification-management-api
+  name: Daon User Push Notification Management API
+  description: >-
+    The User Push Notification Management API from Daon — 6 operation(s) for user push notification management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User Push Notification Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-push-notification-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-user-totp-management-api
+  name: Daon User TOTP Management API
+  description: The User TOTP Management API from Daon — 12 operation(s) for user totp management.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - User TOTP Management
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-user-totp-management-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-userdata-controller-api
+  name: Daon Userdata Controller API
+  description: The userdata-controller API from Daon — 4 operation(s) for userdata-controller.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - userdata-controller
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-userdata-controller-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-watchlist-entry-v2-api
+  name: Daon Watchlist Entry V2 API
+  description: The Watchlist Entry V2 API from Daon — 2 operation(s) for watchlist entry v2.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Watchlist Entry V2
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-watchlist-entry-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-watchlist-management-deprecated-api
+  name: Daon Watchlist Management (Deprecated) API
+  description: >-
+    The Watchlist Management (Deprecated) API from Daon — 2 operation(s) for watchlist management (deprecated).
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Watchlist Management (Deprecated)
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-watchlist-management-deprecated-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-watchlist-member-management-deprecated-api
+  name: Daon Watchlist Member Management (Deprecated) API
+  description: >-
+    The Watchlist Member Management (Deprecated) API from Daon — 3 operation(s) for watchlist member management
+    (deprecated).
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Watchlist Member Management (Deprecated)
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-watchlist-member-management-deprecated-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+- aid: daon:daon-watchlist-v2-api
+  name: Daon Watchlist V2 API
+  description: The Watchlist V2 API from Daon — 6 operation(s) for watchlist v2.
+  humanURL: https://docs.trustx.com/trustx-api-reference
+  baseURL: https://{tenantId}.fir.trustx.com
+  tags:
+  - Watchlist V2
+  properties:
+  - type: OpenAPI
+    url: openapi/daon-watchlist-v2-api-openapi.yml
+  - type: Documentation
+    url: https://docs.trustx.com/trust
+  - type: APIReference
+    url: https://docs.trustx.com/trustx-api-reference
+  - type: JSONSchema
+    url: json-schema/daon-store-event-query-request-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-data-response-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-passcode-policy-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-passkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-appkey-schema.json
+  - type: JSONSchema
+    url: json-schema/daon-user-schema.json
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Identity established from www.daon.com (title "The Digital Identity Trust Company - Daon"); docs.trustx.com is linked from daon.com/developers
+    as TrustX Documentation (TrustX is a Daon product); github.com/daoninc is titled "Daon" and links daon.com. No public Pricing, Roadmap, SignUp
+    or Postman pages found. support.daon.com help center returns 403 (restricted, login-gated) and was not added.
+  evidence:
+  - url: https://www.daon.com/
+    status: 200
+  - url: https://www.daon.com/developers/
+    status: 200
+  - url: https://docs.trustx.com/trust
+    status: 200
+  - url: https://docs.trustx.com/trustx-api-reference
+    status: 200
+  - url: https://docs.trustx.com/trust/api-changelog
+    status: 200
+  - url: https://www.daon.com/customer-support/
+    status: 200
+  - url: https://www.daon.com/contact-us/
+    status: 200
+  - url: https://status.daon.com/
+    status: 200
+  - url: https://github.com/daoninc
+    status: 200
+  - url: https://www.linkedin.com/company/daon/
+    status: 200
+  - url: https://support.daon.com/hc/en-us
+    status: 403
+x-enrichment:
+  date: '2026-10-18'
+  status: enriched
+  artifacts_added: 51
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=deepseek,regulatory=anthropic

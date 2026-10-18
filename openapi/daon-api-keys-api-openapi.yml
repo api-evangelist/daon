@@ -1,0 +1,510 @@
+openapi: 3.2.0
+info:
+  title: Daon API Keys API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged API Keys across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: API Keys
+paths:
+  /api/arthr/apiKeys/issue:
+    post:
+      tags:
+      - API Keys
+      summary: Obtain a bearer token by API Key for the tenant
+      description: Returns the JWT token, otherwise 401 and an error code and message.
+      operationId: issueTenantJwt
+      parameters:
+      - name: X-ApiKey
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: X-Api-Key
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWTTokenResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      security:
+      - ApiKeyAuth: []
+      x-visibility: GA
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/arthr/apiKeys:
+    get:
+      tags:
+      - API Keys
+      summary: List API Keys for the tenant
+      description: 'List API Keys for the tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:listTenantApiKeys`'
+      operationId: listTenantApiKeys
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: '%'
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageApiKey'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:listTenantApiKeys
+    post:
+      tags:
+      - API Keys
+      summary: Create an API Key for a tenant
+      description: 'Create an API Key for a tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:createTenantApiKey`'
+      operationId: createTenantApiKey
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:createTenantApiKey
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/arthr/apiKeys/{apiKeyId}:
+    get:
+      tags:
+      - API Keys
+      summary: Get an API Key for a tenant
+      description: 'Returns the specific API Key for a tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:getFromTenant`'
+      operationId: getFromTenant
+      parameters:
+      - name: apiKeyId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:getFromTenant
+    post:
+      tags:
+      - API Keys
+      summary: Update an API Key for a tenant
+      description: 'Updates an API Key for a tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:updateTenantApiKey`'
+      operationId: updateTenantApiKey
+      parameters:
+      - name: apiKeyId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:updateTenantApiKey
+    delete:
+      tags:
+      - API Keys
+      summary: Delete an API Key
+      description: 'Deletes the specific API Key. Once the API is deleted it cannot be recovered.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:deleteFromTenant`'
+      operationId: deleteFromTenant
+      parameters:
+      - name: apiKeyId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:deleteFromTenant
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    ArthrSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    JWTTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        ttl:
+          type: integer
+          format: int32
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    PageApiKey:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
+        empty:
+          type: boolean
+    ApiKey:
+      type: object
+      properties:
+        permittedOperations:
+          type: array
+          items:
+            type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+          enum:
+          - PERMANENT
+          - SESSION
+        code:
+          type: string
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          maxLength: 255
+          minLength: 0
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - BLOCKED
+          - ARCHIVED
+        permissions:
+          type: array
+          items:
+            type: string
+          minItems: 1
+        expiringDtm:
+          type: string
+          format: date-time
+        lastIssuedAtDtm:
+          type: string
+          format: date-time
+      required:
+      - name
+      - permissions
+      - status
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

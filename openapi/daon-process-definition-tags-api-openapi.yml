@@ -1,0 +1,388 @@
+openapi: 3.2.0
+info:
+  title: Daon Process Definition Tags API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Process Definition Tags across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Process Definition Tags
+paths:
+  /api/process-manager/processDefinitions/tags/{name}:
+    delete:
+      tags:
+      - Process Definition Tags
+      summary: Delete tag
+      description: 'Delete a Tag from a Process Definition. Returns HTTP 204 for successful deletion of the Tag; otherwise, an appropriate error. Once the Tag is deleted, it cannot be referenced within the system (subject to cache expiry).
+
+
+        Warning: If you delete a Tag that is being used to reference a Process Definition when creating Process Tokens or Process Instances you will no longer be able to create Process Tokens or Instances.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:deleteTagFromProcessDefinition`'
+      operationId: deleteTagFromProcessDefinition
+      parameters:
+      - name: name
+        in: path
+        description: The Name of the tag to be deleted.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: The Name of the tag to be deleted.
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Process definition tag not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:deleteTagFromProcessDefinition
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processDefinitions/{processDefinitionId}/tags:
+    post:
+      tags:
+      - Process Definition Tags
+      summary: Tag process definition
+      description: 'Create a Tag on the Process Definition.
+
+        This operation will move an existing Tag from another Process Definition if it already exists.
+
+        Returns HTTP 201 for successful creation or move of the tag(s) and tag(s) created or modified in body,
+
+        otherwise an appropriate error.
+
+
+        Note:
+
+
+        Tags are unique but can be moved from one process definition to another.
+
+
+        Tags must be alphanumeric and can contain spaces, hyphen (-) or underscore (_).
+
+
+        Tags cannot start or end with a space; tags that start or end with a space will be trimmed.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:tagProcessDefinition`'
+      operationId: tagProcessDefinition
+      parameters:
+      - name: processDefinitionId
+        in: path
+        description: The ID of the Process Definition to be tagged.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: The ID of the Process Definition to be tagged.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessDefinitionTagCreateListDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDefinitionTagListDto'
+        '400':
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Process definition not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:tagProcessDefinition
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processDefinitions/tags:
+    get:
+      tags:
+      - Process Definition Tags
+      summary: Get tag list
+      description: 'List the Tags that exist (for the tenant). If successful, it returns HTTP 200 and a list of Tags; otherwise, an appropriate error is returned.
+
+
+        The API allows the caller to filter on one or more Tag names (comma-separated). Wildcard matches are performed for Tag names, unless the `exactMatch` parameter is set to true.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getTagsForTenant`'
+      operationId: getTagsForTenant
+      parameters:
+      - name: names
+        in: query
+        description: Filter by one or more Tag names
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          description: Filter by one or more Tag names
+          items:
+            type: string
+            description: Filter by one or more Tag names
+          uniqueItems: true
+      - name: exactMatch
+        in: query
+        description: Determine if exact matches should be used for the Tag names. Defaults to false
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          description: Determine if exact matches should be used for the Tag names. Defaults to false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDefinitionTagListDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getTagsForTenant
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ProcessDefinitionTagCreateDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of Tag. The tag name is unique across each tenant.
+        description:
+          type: string
+          description: A description of the Tag. This is used for informational purposes only.
+        displayColor:
+          type: string
+          description: A chosen color of the Tag. This is used for display purposes only.
+          pattern: ^(#)?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ProcessDefinitionTagDto:
+      type: object
+      properties:
+        processDefinitionId:
+          type: string
+          description: The process definition ID that tag is referencing.
+          readOnly: true
+        processDefinitionName:
+          type: string
+          description: The process definition name that tag is referencing.
+          readOnly: true
+        processDefinitionVersion:
+          type: integer
+          format: int32
+          description: The process definition version that tag is referencing.
+          readOnly: true
+        processDefinitionFullName:
+          type: string
+          description: Full name(name + version) if the process definition version that tag is referencing.
+          readOnly: true
+        name:
+          type: string
+          description: The name of Tag. The tag name is unique across each tenant.
+        description:
+          type: string
+          description: A description of the Tag. This is used for informational purposes only.
+        displayColor:
+          type: string
+          description: A chosen color of the Tag. This is used for display purposes only.
+        createdDtm:
+          type: string
+          format: date-time
+          description: The time the Tag was created.
+          readOnly: true
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: The time the Tag was last updated.
+          readOnly: true
+        createdBy:
+          type: string
+          description: The last updater of the Tag.
+          readOnly: true
+        lastUpdatedBy:
+          type: string
+          description: The creator of the Tag.
+          readOnly: true
+    ProcessDefinitionTagListDto:
+      type: object
+      properties:
+        tags:
+          type: array
+          description: The collection of tags
+          items:
+            $ref: '#/components/schemas/ProcessDefinitionTagDto'
+          readOnly: true
+    ProcessDefinitionTagCreateListDto:
+      type: object
+      properties:
+        tags:
+          type: array
+          description: The list of tags to apply to the process definition
+          items:
+            $ref: '#/components/schemas/ProcessDefinitionTagCreateDto'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

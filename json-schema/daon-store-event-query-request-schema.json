@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/daon/main/json-schema/daon-store-event-query-request-schema.json",
+  "title": "StoreEventQueryRequest",
+  "description": "A store event query.\n\nSetting fields on the query will filter the query to those results which match the fields that are set.\n\nThese mandatory request fields define the time period for which events will be queried, all other fields are optional:\n- fromTime\n- toTime\n\nFields whose values must exactly match the returned events:\n- storeId\n- userId\n- id\n- processDefnId\n- processDefnVersion\n- processInstanceId\n- parentProcessDefnId\n- parentProcessDefnVersion\n- parentProcessInstanceId\n- childProcessDefnVersion\n\nFields whose values must be *like* those in the returned events - these fields will be added to the query as `LIKE %{value}%`:\n- eventType\n- storeName\n- userExtId\n- processDefnName\n- parentProcessDefnName\n- childProcessDefnName\n- childProcessDefnTag\n- type\n- subtype\n- requestId\n- requestor\n- description\n- referenceFile\n\nThe `info` field allows the contents of the event `info` map to be queried. Each entry's key is the info field name to match on, and its value specifies whether to perform an `EXACT` or `LIKE` match. A `LIKE` match is added to the query as `LIKE %{matchValue}%`. The info field name is matched case insensitively, while the match value is compared as stored.\n\nThe default sort order is by `createdDtm` in descending order, so most recent first. This can be overridden by supplying `sortParameters`. See the parameter description for an example.",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/daon-trustx-openapi.yml#/components/schemas/StoreEventQueryRequest",
+  "type": "object",
+  "properties": {
+    "tenantId": {
+      "type": "string",
+      "description": "The tenant ID. Set internally when a query is started. Not a query field."
+    },
+    "id": {
+      "type": "string",
+      "description": "The unique event UUID. Query value must exactly match the event value."
+    },
+    "storeId": {
+      "type": "string",
+      "description": "The database store ID. Query value must exactly match the event value."
+    },
+    "storeName": {
+      "type": "string",
+      "description": "The store name. Query value is matched as being LIKE the event value."
+    },
+    "eventType": {
+      "type": "string",
+      "description": "The event type, for example `user_added`. Query value is matched as being LIKE the event value."
+    },
+    "userId": {
+      "type": "string",
+      "description": "The database user ID. Query value must exactly match the event value."
+    },
+    "userExtId": {
+      "type": "string",
+      "description": "The external user ID. Query value is matched as being LIKE the event value."
+    },
+    "processDefnId": {
+      "type": "string",
+      "description": "The process definition ID. Query value must exactly match the event value."
+    },
+    "processDefnName": {
+      "type": "string",
+      "description": "The process definition name. Query value is matched as being LIKE the event value."
+    },
+    "processDefnVersion": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The process definition version. Query value must exactly match the event value."
+    },
+    "processInstanceId": {
+      "type": "string",
+      "description": "The process instance ID. Query value must exactly match the event value."
+    },
+    "parentProcessDefnId": {
+      "type": "string",
+      "description": "The parent process definition ID. Query value must exactly match the event value."
+    },
+    "parentProcessDefnName": {
+      "type": "string",
+      "description": "The parent process definition name. Query value is matched as being LIKE the event value."
+    },
+    "parentProcessDefnVersion": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The parent process definition version. Query value must exactly match the event value."
+    },
+    "parentProcessInstanceId": {
+      "type": "string",
+      "description": "The parent process instance ID. Query value must exactly match the event value."
+    },
+    "childProcessDefnName": {
+      "type": "string",
+      "description": "The child process definition name. Query value is matched as being LIKE the event value."
+    },
+    "childProcessDefnVersion": {
+      "type": "integer",
+      "format": "int32",
+      "description": "The child process definition version. Query value must exactly match the event value."
+    },
+    "childProcessDefnTag": {
+      "type": "string",
+      "description": "The child process definition tag. Query value is matched as being LIKE the event value."
+    },
+    "type": {
+      "type": "string",
+      "description": "The event type. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value."
+    },
+    "subtype": {
+      "type": "string",
+      "description": "The event subtype. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value."
+    },
+    "requestId": {
+      "type": "string",
+      "description": "The request ID. Query value is matched as being LIKE the event value."
+    },
+    "requestor": {
+      "type": "string",
+      "description": "The requestor. Query value is matched as being LIKE the event value."
+    },
+    "description": {
+      "type": "string",
+      "description": "The event description. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value."
+    },
+    "referenceFile": {
+      "type": "string",
+      "description": "The event audit file reference. Query value is matched as being LIKE the event value."
+    },
+    "fromTime": {
+      "type": "string",
+      "description": "The start time for returned events."
+    },
+    "toTime": {
+      "type": "string",
+      "description": "The end time for returned events."
+    },
+    "sortParameters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SortParameter"
+      }
+    },
+    "size": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional page size - number of elements that will be returned per page."
+    },
+    "info": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/InfoMatch"
+      },
+      "description": "Optional criteria to query the contents of the event `info` map. Each map key is the name of the info field to match on, and the value specifies the match type and value. The info field name (map key) is matched case insensitively. The match value is compared as stored: an `EXACT` match requires the whole value to match, a `LIKE` match is added to the query as `LIKE %{matchValue}%`."
+    },
+    "recordType": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fromTime",
+    "toTime"
+  ],
+  "$defs": {
+    "InfoMatch": {
+      "type": "object",
+      "description": "Describes how to match against the value of an info field.",
+      "properties": {
+        "matchType": {
+          "type": "string",
+          "description": "Whether to perform an exact match or a like match on the info field value. A `LIKE` match is added to the query as `LIKE %{matchValue}%`.",
+          "enum": [
+            "EXACT",
+            "LIKE"
+          ]
+        },
+        "matchValue": {
+          "type": "string",
+          "description": "The value to match against the info field value. The match value is compared as stored (an `EXACT` match requires the whole value to match, a `LIKE` match is a substring match). Note that the info field name used as the map key is matched case insensitively."
+        }
+      },
+      "required": [
+        "matchType",
+        "matchValue"
+      ]
+    },
+    "SortParameter": {
+      "type": "object",
+      "description": "A sort parameter for an event query request.",
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "The name of the field to sort by."
+        },
+        "ascending": {
+          "type": "boolean",
+          "description": "Whether to sort in ascending order."
+        }
+      }
+    }
+  }
+}

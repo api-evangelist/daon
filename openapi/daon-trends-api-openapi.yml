@@ -1,0 +1,1229 @@
+openapi: 3.2.0
+info:
+  title: Daon Trends API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Trends across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Trends
+paths:
+  /api/watchlist-manager/trends:
+    get:
+      tags:
+      - Trends
+      summary: List trend records
+      description: 'Lists individual trend records for a specific identifier over a time period. If ''type'' is omitted, a unified view across all trend types is returned with common attributes only. If ''type'' is provided, full type-specific details are included. Uses slice-based pagination for efficient handling of large datasets. The response includes a ''queryValue'' field indicating the actual value used for the query (may be normalized). Pagination uses `page` (zero-based, default 0) and `size` (default 10). Sorting uses the `sort` query parameter, repeated as needed, each in the form `property,(asc|desc)` (e.g. `sort=recordedDtm,desc`). When omitted, the default is `recordedDtm` descending. Supported sort properties are the trend list view fields: `recordedDtm`, `id`, `type`, `value`, `processDefnId`, `processDefnName`, `processDefnVersion`, `processInstanceId`, `trendGroup`, `expiresAfterDate`, `expiresAfterDays`. Other property names are not supported and may result in an error.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:listTrendRecords`'
+      operationId: listTrendRecords
+      parameters:
+      - name: type
+        in: query
+        description: The type of identifier to list (documentNumber, ipv4Address, visitorID, email, phoneNumber). If omitted, records of all types are returned with only common attributes.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: The exact value of the identifier to list (mutually exclusive with valueLike). For ipv4Address, email, and phoneNumber types, format validation is applied (see normalize parameter).
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: The start of the time period to query (ISO 8601 format in UTC)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end of the time period to query (ISO 8601 format in UTC). If omitted, the query runs from startDateTime up to the current time at execution.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: documentType
+        in: query
+        description: Filter by document type (only valid when type=documentNumber)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: trendGroup
+        in: query
+        description: Filter by trend group
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_]+$
+      - name: processDefnName
+        in: query
+        description: Filter by process definition name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefnVersion
+        in: query
+        description: Filter by process definition version
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: processInstanceId
+        in: query
+        description: Filter by process instance ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: valueLike
+        in: query
+        description: 'Pattern match for identifier value using SQL LIKE (mutually exclusive with value). Minimum 3 characters. The value is automatically wrapped with % on both sides for substring (contains) matching ? prefix and suffix matching are not supported. Example: valueLike=DOC matches any value containing ''DOC''.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          maxLength: 2147483647
+          minLength: 3
+      - name: normalize
+        in: query
+        description: 'Controls normalization for email and phoneNumber searches. Defaults to true for exact value searches, false for valueLike. When true with exact value: normalizes and returns error 58/59 if the format is invalid. When true with valueLike: attempts normalization but falls back to raw pattern on failure. When false: raw value is passed through without normalization (email/phone only). Note: ipv4Address format is always validated on exact value searches regardless of this flag (error 46).'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: region
+        in: query
+        description: Optional region for phone number normalization (e.g. US, GB). When type is phoneNumber and normalize is true, this region is used for normalization; if not supplied, the tenant's default region is used.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Trend records retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendRecordsListResponseDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 45 (INVALID_TREND_TYPE), Error Code 46 (INVALID_IPV4_ADDRESS_FORMAT), Error Code 51 (INVALID_TIME_RANGE), Error Code 58 (INVALID_EMAIL_FORMAT), Error Code 59 (INVALID_PHONE_NUMBER_FORMAT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:listTrendRecords
+    post:
+      tags:
+      - Trends
+      summary: Add trend record
+      description: 'Adds a single trend record for a document number, IP address, visitor ID, email, or phone number. The request body is polymorphic based on the type of identifier being recorded.
+
+
+        API Permissions: `SYS#WatchlistManager:addTrendRecord`'
+      operationId: addTrendRecord
+      parameters:
+      - name: normalize
+        in: query
+        description: Optional normalization behavior for create (email/phoneNumber only). Defaults to true when omitted. When false, raw value is stored without normalization.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/DocumentNumberTrendRecordDto'
+              - $ref: '#/components/schemas/EmailTrendRecordDto'
+              - $ref: '#/components/schemas/Ipv4AddressTrendRecordDto'
+              - $ref: '#/components/schemas/PhoneNumberTrendRecordDto'
+              - $ref: '#/components/schemas/VisitorIdTrendRecordDto'
+        required: true
+      responses:
+        '201':
+          description: Trend record added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractTrendRecordDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 45 (INVALID_TREND_TYPE), Error Code 46 (INVALID_IPV4_ADDRESS_FORMAT), Error Code 55 (PROCESS_DEFINITION_FIELDS_REQUIRED), Error Code 56 (INVALID_EXPIRES_AFTER_DAYS), Error Code 58 (INVALID_EMAIL_FORMAT), Error Code 59 (INVALID_PHONE_NUMBER_FORMAT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: SYS#WatchlistManager:addTrendRecord
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/trends/processInstances/{processInstanceId}:
+    delete:
+      tags:
+      - Trends
+      summary: Delete trend records by process instance ID
+      description: 'Deletes all trend records associated with the supplied process instance ID across all trend types.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:deleteTrendsByProcessInstanceId`'
+      operationId: deleteTrendRecordsByProcessInstanceId
+      parameters:
+      - name: processInstanceId
+        in: path
+        description: Process instance ID whose trend records should be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Trend records deleted successfully
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:deleteTrendsByProcessInstanceId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/trends/processInstances:
+    get:
+      tags:
+      - Trends
+      summary: List process instances for a trend value
+      description: 'Returns process instances that share a given trend value over a time period. The response wraps the original process-manager process instance payloads and adds HATEOAS links so the UI can navigate directly to each process instance. Process instance IDs are deduplicated within each page; if the same process instance has multiple trend records that span page boundaries, it may appear in more than one page of results. Callers that require a fully deduplicated list across all pages should accumulate and deduplicate client-side. Pagination uses `page` (zero-based, default 0) and `size` (default 10, consistent with Watchlist Manager V2 list endpoints). Sorting is not client-configurable: the `sort` query parameter is ignored if sent. Results are always ordered by the most recent trend `recordedDtm` per distinct process instance within the time range (descending), i.e. process instances with the newest matching trend activity appear first.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:listTrendProcessInstances`'
+      operationId: listProcessInstancesForTrend
+      parameters:
+      - name: type
+        in: query
+        description: The type of identifier to query (documentNumber, ipv4Address, visitorID, email, phoneNumber)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: The exact value of the identifier to query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: The start of the time period to query (ISO 8601 format in UTC)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end of the time period to query (ISO 8601 format in UTC). If omitted, the query runs from startDateTime up to the current time at execution.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: documentType
+        in: query
+        description: Filter by document type (only valid when type=documentNumber)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: trendGroup
+        in: query
+        description: Filter by trend group
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_]+$
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Process instances retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendProcessInstancesResponseDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 45 (INVALID_TREND_TYPE), Error Code 51 (INVALID_TIME_RANGE)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:listTrendProcessInstances
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/trends/{id}:
+    get:
+      tags:
+      - Trends
+      summary: Get trend record by ID
+      description: 'Retrieves a single trend record by its unique ID, including all attributes. The response is polymorphic based on the type of identifier.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getTrendRecord`'
+      operationId: getTrendRecord
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the trend record
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Trend record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractTrendRecordDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Trend record with the specified ID does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getTrendRecord
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/trends/stats:
+    get:
+      tags:
+      - Trends
+      summary: Query trend statistics
+      description: 'Returns trend statistics for a specific identifier over a given time period. Granularity is automatically determined from the time range using a snap-up algorithm that selects the smallest ''nice'' interval from a fixed set (1s, 2s, 5s, 10s, 15s, 30s, 1m, 2m, 5m, 10m, 20m, 30m, 1h, 2h, 4h, 8h, 1d) to keep the response at approximately 90 data points, depending on bucket alignment. The granularity is returned as a compact label in the response (e.g. ''5m'', ''2h'', ''1d''). The response includes a ''queryValue'' field indicating the actual value used for the query (may be normalized).
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getTrendStatistics`'
+      operationId: getTrendStatistics
+      parameters:
+      - name: type
+        in: query
+        description: 'The type of identifier to query. One of: documentNumber, ipv4Address, visitorID, email, phoneNumber'
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: The exact value of the identifier to query (mutually exclusive with valueLike). For ipv4Address, email, and phoneNumber types, format validation is applied (see normalize parameter).
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: The start of the time period to query (ISO 8601 format in UTC)
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: The end of the time period to query (ISO 8601 format in UTC). If omitted, the query runs from startDateTime up to the current time at execution.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: documentType
+        in: query
+        description: Filter by document type (only valid when type=documentNumber)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: trendGroup
+        in: query
+        description: Filter by trend group
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9_]+$
+      - name: processDefnName
+        in: query
+        description: Filter by process definition name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefnVersion
+        in: query
+        description: Filter by process definition version
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: processInstanceId
+        in: query
+        description: Filter by process instance ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: valueLike
+        in: query
+        description: 'Pattern match for identifier value using SQL LIKE (mutually exclusive with value). Minimum 3 characters. The value is automatically wrapped with % on both sides for substring (contains) matching ? prefix and suffix matching are not supported. Example: valueLike=DOC matches any value containing ''DOC''.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          maxLength: 2147483647
+          minLength: 3
+      - name: normalize
+        in: query
+        description: 'Controls normalization for email and phoneNumber searches. Defaults to true for exact value searches, false for valueLike. When true with exact value: normalizes and returns error 58/59 if the format is invalid. When true with valueLike: attempts normalization but falls back to raw pattern on failure. When false: raw value is passed through without normalization (email/phone only). Note: ipv4Address format is always validated on exact value searches regardless of this flag (error 46).'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: region
+        in: query
+        description: Optional region for phone number normalization (e.g. US, GB). When type is phoneNumber and normalize is true, uses this region; if not supplied, the tenant's default region is used.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Trend statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendStatisticsResponseDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 45 (INVALID_TREND_TYPE), Error Code 46 (INVALID_IPV4_ADDRESS_FORMAT), Error Code 51 (INVALID_TIME_RANGE), Error Code 52 (TIME_RANGE_EXCEEDED), Error Code 58 (INVALID_EMAIL_FORMAT), Error Code 59 (INVALID_PHONE_NUMBER_FORMAT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getTrendStatistics
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    TrendStatisticsResponseDto:
+      type: object
+      description: Response containing trend statistics aggregated by time periods
+      properties:
+        type:
+          type: string
+          description: The type of identifier queried
+          example: documentNumber
+        value:
+          type: string
+          description: The value of the identifier queried
+          example: ABC123456
+        queryValue:
+          type: string
+          description: The actual value used for the query (may be normalized)
+          example: '+15551234567'
+        documentType:
+          type: string
+          description: The document type (only present for documentNumber type)
+          example: Austria - Id Card (2021)
+        startDateTime:
+          type: string
+          format: date-time
+          description: The start of the query time period
+          example: {}
+        endDateTime:
+          type: string
+          format: date-time
+          description: The end of the query time period
+          example: {}
+        granularity:
+          type: string
+          description: The time granularity used for aggregation, expressed as a compact label (e.g. '10s', '5m', '2h', '1d'). Selected automatically from the set [1s, 2s, 5s, 10s, 15s, 30s, 1m, 2m, 5m, 10m, 20m, 30m, 1h, 2h, 4h, 8h, 1d] to target approximately 90 data points, depending on bucket alignment.
+          example: 5m
+        totalOccurrences:
+          type: integer
+          format: int64
+          description: Total number of occurrences in the time period
+          example: 42
+        periods:
+          type: array
+          description: Array of time periods with occurrence counts, sorted by periodStart ascending
+          items:
+            $ref: '#/components/schemas/TrendStatisticsPeriodDto'
+    TrendStatisticsPeriodDto:
+      type: object
+      description: A time period with occurrence count within trend statistics
+      properties:
+        periodStart:
+          type: string
+          format: date-time
+          description: The start of the time period
+          example: {}
+        periodEnd:
+          type: string
+          format: date-time
+          description: The end of the time period
+          example: {}
+        occurrenceCount:
+          type: integer
+          format: int64
+          description: The number of occurrences in this period
+          example: 5
+    PhoneNumberTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractTrendRecordDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The phone number value being recorded. On input, this is the original value which will be normalized to E.164 format. On output, this is the normalized value in E.164 format.
+            example: +353 1 234 5678
+            maxLength: 24
+            minLength: 0
+          originalValue:
+            type: string
+            description: The original phone number value before normalization
+            example: +353 1 234 5678
+            maxLength: 40
+            minLength: 0
+            readOnly: true
+          region:
+            type: string
+            description: Optional region/country code for normalizing the phone number (e.g. US, GB). If not supplied, the tenant's default region is used.
+            example: IE
+            maxLength: 10
+            minLength: 0
+            writeOnly: true
+      description: Trend record for phone number occurrences
+      required:
+      - processInfo
+      - type
+      - value
+    TrendRecordsListResponseDto:
+      type: object
+      description: Response containing paginated trend records with query metadata
+      properties:
+        records:
+          $ref: '#/components/schemas/SliceAbstractTrendRecordDto'
+          description: Paginated list of trend records
+        queryValue:
+          type: string
+          description: The actual value used for the query (may be normalized)
+          example: '+15551234567'
+    EmailTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractTrendRecordDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The email address value being recorded. On input, this is the original value which will be normalized. On output, this is the normalized value.
+            example: user@example.com
+            maxLength: 254
+            minLength: 0
+          originalValue:
+            type: string
+            description: The original email address value before normalization
+            example: user@example.com
+            maxLength: 254
+            minLength: 0
+            readOnly: true
+      description: Trend record for email address occurrences
+      required:
+      - processInfo
+      - type
+      - value
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    Ipv4AddressTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractTrendRecordDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The value of the identifier being recorded (single IPv4 address in dotted notation only; CIDR ranges are not accepted)
+            example: 192.168.1.1
+            maxLength: 15
+            minLength: 0
+      description: Trend record for IPv4 address occurrences
+      required:
+      - processInfo
+      - type
+      - value
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    SliceAbstractTrendRecordDto:
+      type: object
+      properties:
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentNumberTrendRecordDto'
+            - $ref: '#/components/schemas/EmailTrendRecordDto'
+            - $ref: '#/components/schemas/Ipv4AddressTrendRecordDto'
+            - $ref: '#/components/schemas/PhoneNumberTrendRecordDto'
+            - $ref: '#/components/schemas/VisitorIdTrendRecordDto'
+        empty:
+          type: boolean
+    TrendsProcessInstanceSearchResult:
+      type: object
+      description: The result of a process instance search for a trend record, containing key details about the process instance and navigation links.
+      properties:
+        processDefnId:
+          type: string
+          description: The process definition ID
+        processDefnName:
+          type: string
+          description: The process definition name
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: The process definition version
+        processInstanceId:
+          type: string
+          description: The process instance ID
+        applicantName:
+          type: string
+          description: The applicant's full name
+        applicantEmail:
+          type: string
+          description: The applicant's email address
+        applicantPhoneNumber:
+          type: string
+          description: The applicant's phone number
+        processInstanceStatus:
+          type: string
+          description: The current status of the process instance
+        processInstanceStatusMapped:
+          type: string
+          description: The mapped/display status of the process instance
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time the process instance was created
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: The date and time the process instance was last updated
+        elapsedMilliseconds:
+          type: integer
+          format: int64
+          description: The elapsed time in milliseconds since the process instance was created
+        lastUpdatedBy:
+          type: string
+          description: The user who last updated the process instance
+        reviewedBy:
+          type: string
+          description: The user who reviewed the process instance
+    ProcessInfoDto:
+      type: object
+      description: Process information associated with a watchlist entry or trend record
+      properties:
+        processDefnId:
+          type: string
+          description: Unique identifier for the process definition
+          example: 01HZ123456789ABCDEFGHIJKLM
+          maxLength: 26
+          minLength: 26
+        processDefnName:
+          type: string
+          description: Human-readable name of the process definition
+          example: Identity Verification Process
+          maxLength: 50
+          minLength: 0
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: Version number of the process definition
+          example: 1
+          minimum: 1
+        processInstanceId:
+          type: string
+          description: Unique identifier for the process instance
+          example: 01HZ123456789ABCDEFGHIJKLM
+          maxLength: 26
+          minLength: 26
+      required:
+      - processDefnId
+      - processDefnName
+      - processDefnVersion
+      - processInstanceId
+    VisitorIdTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractTrendRecordDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The value of the identifier being recorded
+            example: VIS123
+            maxLength: 100
+            minLength: 0
+      description: Trend record for visitor ID occurrences
+      required:
+      - processInfo
+      - type
+      - value
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    DocumentNumberTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractTrendRecordDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The value of the identifier being recorded
+            example: ABC123456
+            maxLength: 100
+            minLength: 0
+          documentType:
+            type: string
+            description: 'The document type (e.g., ''Austria - Id Card (2021)'', ''Serbia - Id Card (2009-2014) #1'')'
+            example: Austria - Id Card (2021)
+            maxLength: 250
+            minLength: 0
+      description: Trend record for document number occurrences
+      required:
+      - processInfo
+      - type
+      - value
+    AbstractTrendRecordDto:
+      type: object
+      description: Base class for trend records with common metadata fields
+      discriminator:
+        propertyName: type
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the trend record
+          example: 01HZ7K8QRST9VWXYZ0123456789
+          readOnly: true
+        type:
+          type: string
+          description: Type of the trend record (determines which specific fields are available)
+          example: documentNumber
+          minLength: 1
+        recordedDtm:
+          type: string
+          format: date-time
+          description: Timestamp when the occurrence was recorded (generated on storage)
+          example: {}
+          readOnly: true
+        processInfo:
+          $ref: '#/components/schemas/ProcessInfoDto'
+          description: Process information associated with this trend record
+        trendGroup:
+          type: string
+          description: Optional trend group for grouping trends by business context
+          example: idvFlow
+          maxLength: 32
+          minLength: 0
+          pattern: ^[a-zA-Z0-9_]+$
+        expiresAfter:
+          type: string
+          format: date-time
+          description: The calculated expiration timestamp (recordedDtm + expiresAfterDays)
+          example: {}
+          readOnly: true
+        expiresAfterDays:
+          type: integer
+          format: int32
+          description: The number of days after which the record will expire
+          example: 90
+          minimum: 1
+        attributes:
+          type: object
+          additionalProperties: {}
+          description: Optional additional attributes for the trend record
+          example:
+            category: priority
+            source: mobile
+        value:
+          type: string
+      required:
+      - processInfo
+      - type
+    TrendProcessInstancesResponseDto:
+      type: object
+      description: Response containing a slice of process instances that share a given trend value
+      properties:
+        type:
+          type: string
+          description: Trend type used for the query
+          example: documentNumber
+        value:
+          type: string
+          description: Raw trend value used for the query (no normalization applied)
+        page:
+          type: integer
+          format: int32
+          description: Zero-based page index of the returned data
+        size:
+          type: integer
+          format: int32
+          description: Page size used for the query
+        processInstances:
+          $ref: '#/components/schemas/SliceTrendsProcessInstanceSearchResult'
+          description: Process instances that share the given trend value. Exposed as a Spring Data Slice, including pagination metadata and hasNext flag.
+    SliceTrendsProcessInstanceSearchResult:
+      type: object
+      properties:
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendsProcessInstanceSearchResult'
+        empty:
+          type: boolean
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

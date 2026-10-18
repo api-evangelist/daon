@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/daon/main/json-schema/daon-passcode-policy-schema.json",
+  "title": "PasscodePolicy",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/daon-trustx-openapi.yml#/components/schemas/PasscodePolicy",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The passcode policy name.",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "The passcode policy configuration description."
+    },
+    "minimumLength": {
+      "type": "integer",
+      "format": "int32",
+      "description": "An optional passcode minimum length."
+    },
+    "maximumLength": {
+      "type": "integer",
+      "format": "int32",
+      "description": "An optional passcode maximum length."
+    },
+    "digitCount": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional minimum number of digits within the passcode."
+    },
+    "symbolCount": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional minimum number of symbols within the passcode."
+    },
+    "lowerCaseCount": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional minimum number of lower case characters within the passcode."
+    },
+    "upperCaseCount": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional minimum number of upper case characters within the passcode."
+    },
+    "characterVariety": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional minimum number of different classes of character that the passcode must contain, where the classes are symbols, digits, upper case and lower case."
+    },
+    "passcodeHistory": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Optional passcode history. A submitted passcode is checked against a configurable number of previously submitted passcodes to see if it matches."
+    },
+    "requiredRegExes": {
+      "type": "array",
+      "description": "Optional list of required regular expressions, all of which must be matched for the passcode to be accepted as valid.",
+      "items": {
+        "$ref": "#/$defs/PasscodeRegex"
+      }
+    },
+    "allowedRegExes": {
+      "type": "array",
+      "description": "Optional list of allowed regular expressions, at least one of which must be matched for the passcode to be accepted as valid.",
+      "items": {
+        "$ref": "#/$defs/PasscodeRegex"
+      }
+    },
+    "disallowedRegExes": {
+      "type": "array",
+      "description": "Optional list of disallowed regular expressions, none of which must be matched for the passcode to be accepted as valid.",
+      "items": {
+        "$ref": "#/$defs/PasscodeRegex"
+      }
+    },
+    "algorithm": {
+      "type": "string",
+      "description": "The passcode generation/verification algorithm.",
+      "enum": [
+        "SRP"
+      ]
+    },
+    "algorithmVariant": {
+      "type": "string",
+      "description": "The variant of the algorithm used as a user friendly name for a set of algorithm parameters."
+    },
+    "srpAlgorithmParameters": {
+      "$ref": "#/$defs/SRPAlgorithmParameters",
+      "description": "SRP algorithm parameters."
+    },
+    "passcodeValidityDuration": {
+      "type": "string",
+      "description": "Optional passcode validity duration. The value is a duration string. If not supplied the passcode has no expiration date associated with it and therefore does not expire."
+    },
+    "sessionDuration": {
+      "type": "string",
+      "description": "Session lifetime. The value is a duration string. Defaults to 5 minutes.\n\n"
+    },
+    "auditLevel": {
+      "type": "string",
+      "default": "NONE",
+      "description": "Defines the level of auditing, none, fail-only or always. Defaults to NONE.",
+      "enum": [
+        "NONE",
+        "FAILED_ONLY",
+        "ALL"
+      ]
+    },
+    "auditDuration": {
+      "type": "string",
+      "default": "30 days or whatever number is configured as `default.max.audit.retention.days`",
+      "description": "How long to store the audit file. The value is a duration string."
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "$defs": {
+    "PasscodeRegex": {
+      "type": "object",
+      "description": "A regular expression matched against a passcode.",
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "description": "The regex pattern."
+        },
+        "error": {
+          "type": "string",
+          "description": "An error which will be displayed if the regex check fails."
+        }
+      },
+      "required": [
+        "error",
+        "pattern"
+      ]
+    },
+    "SRPAlgorithmParameters": {
+      "type": "object",
+      "description": "Parameters for the Secure Remote Passcode (SRP) passcode algorithm.",
+      "properties": {
+        "prime": {
+          "type": "string",
+          "format": "byte",
+          "description": "The safe prime to use. **IT IS HIGHLY RECOMMENDED TO USE `primeBitLen` INSTEAD WHICH USES THE SAFE PRIME VALUES DEFINED IN RFC 5054 APPENDIX A**. If both `prime` and `primeBitLen` are supplied, `prime` takes precedence."
+        },
+        "primeBitLen": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The bit length of the safe prime (n) to use, as defined in RFC 5054 Appendix A. Values:\n- 1536\n- 2048\n- 3072\n- 4096\n- 6144\n- 8192\n"
+        },
+        "saltByteLen": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The length of the salt in bytes."
+        },
+        "g": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The generator value."
+        },
+        "hashAlgorithm": {
+          "type": "string",
+          "description": "The hash algorithm. Values:\n- SHA-256\n- SHA-384\n- SHA-512\n"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1706 @@
+openapi: 3.2.0
+info:
+  title: Daon Store Push Notification Policy Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Store Push Notification Policy Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Store Push Notification Policy Management
+paths:
+  /api/identity-store/stores/{storeName}/pushNotificationPolicy/{rpId}:
+    get:
+      tags:
+      - Store Push Notification Policy Management
+      summary: Get an existing Push Notification policy by relying party
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getStorePushNotificationPolicy` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getStorePushNotificationPolicy`'
+      operationId: getStorePushNotificationPolicy
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: rpId
+        in: path
+        description: Relying Party ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: AcmeBankApp
+      responses:
+        '200':
+          description: Push Notification policy retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushNotificationPolicy'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **2701**: Push Notification Policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getStorePushNotificationPolicy
+    post:
+      tags:
+      - Store Push Notification Policy Management
+      summary: Update an existing Push Notification policy for relying party
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateStorePushNotificationPolicy` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateStorePushNotificationPolicy`'
+      operationId: updateStorePushNotificationPolicy
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: rpId
+        in: path
+        description: Push Notification Relying Party
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: AcmeBankApp
+      requestBody:
+        description: The Push Notification policy to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushNotificationPolicy'
+        required: true
+      responses:
+        '200':
+          description: Push Notification policy configuration updated successfully in the store
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2702**: The Push Notification relying party ID may not be changed for store
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **2701**: Push Notification Policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateStorePushNotificationPolicy
+    delete:
+      tags:
+      - Store Push Notification Policy Management
+      summary: Delete an existing Push Notification policy with relying party
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteStorePushNotificationPolicy` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteStorePushNotificationPolicy`'
+      operationId: deleteStorePushNotificationPolicy
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: rpId
+        in: path
+        description: Push Notification Relying Party ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: AcmeBankApp
+      responses:
+        '200':
+          description: Push Notification policy deleted successfully from the store
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **2701**: Push Notification Policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteStorePushNotificationPolicy
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/pushNotifications/relyingParties:
+    get:
+      tags:
+      - Store Push Notification Policy Management
+      summary: Get a list of valid relying parties for push notifications.
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listPushNotificationRelyingParties` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listPushNotificationRelyingParties`'
+      operationId: listPushNotificationRelyingParties
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: type
+        in: query
+        description: Type of relying parties to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: appkey
+      - name: configured
+        in: query
+        description: if not supplied, return all relying parties; if true, return only those with an existing push notification configuration; if false, return only those without a configuration
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Push Notification valid relying parties retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listPushNotificationRelyingParties
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/pushNotificationPolicy:
+    post:
+      tags:
+      - Store Push Notification Policy Management
+      summary: Create a new Push Notification policy within an identity store for relying party
+      description: 'The policy name is identified by the `name` field within the supplied configuration object.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:addStorePushNotificationPolicy` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:addStorePushNotificationPolicy`'
+      operationId: addStorePushNotificationPolicy
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      requestBody:
+        description: The Push Notification policy to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushNotificationPolicy'
+        required: true
+      responses:
+        '201':
+          description: Store with new Push Notification policy created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2700**: A Push Notification policy already exists for relying party.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:addStorePushNotificationPolicy
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ASVVerificationScoreThresholds:
+      type: object
+      description: ASV threshold configuration. Different thresholds can be set for different locales. If a locale does not have a specific value, the `defaultLocale` value will be used.
+      properties:
+        defaultLocale:
+          type: string
+          description: The default locale for which the threshold values apply which *must* be specified in the `values` map. If a locale does not have a specific value, the `defaultLocale` value will be used.
+        values:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ASVThreshold'
+          description: A map of locales to ASV thresholds. The key is the locale and the value is the ASV threshold values for that locale. Multiple thresholds for different amounts of speech captured during voice enrolment or verification can be specified.
+    AuthenticationPolicy:
+      type: object
+      description: A relying party's passkey authentication policy
+      properties:
+        userVerification:
+          type: string
+          description: 'Defines whether user verification is required on the authenticator.
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - required
+          - preferred
+          - discouraged
+        auditLevel:
+          type: string
+          description: Defines the level of auditing, none, fail-only or always.
+          enum:
+          - NONE
+          - FAILED_ONLY
+          - ALL
+        auditDuration:
+          type: string
+          default: 30 days or whatever number is configured as `default.max.audit.retention.days`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during authentication. Hints are ordered by decreasing preference and are not requirements. See the webauthn specification for details.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        externalChallengeAllowed:
+          type: boolean
+          default: false
+          description: If `true` then the user may supply the authentication challenge, otherwise it is generated randomly by the Identity Store service.
+        sessionManagementExternal:
+          type: boolean
+          default: false
+          description: If `true` then the authentication session data is managed by the customer. It is returned to the customer when a authentication request is generated and must be supplied back to the server when authentication is completed. If `false` then the authentication session data is managed by the server. A session ID is returned with the authentication request which must be supplied back to the server when authentication is completed. The session has a limited lifetime which can be configured via  `sessionDuration`.
+        sessionDuration:
+          type: string
+          description: 'The session lifetime. The value is a duration string.
+
+
+            **This value is mandatory if `sessionManagementExternal` is `false` (the default).**
+
+
+            **NOTE**: Session data is cached in memory so as short a value as possible is recommended.'
+          example: PT5M
+      required:
+      - auditLevel
+      - userVerification
+    RegularExpression:
+      type: object
+      properties:
+        regularExpression:
+          type: string
+        tag:
+          type: string
+    ApnsConfig:
+      type: object
+      properties:
+        appBundleId:
+          type: string
+          description: The bundle identifier of iOS app.
+        teamId:
+          type: string
+          description: Apple Developer Team ID. Required for generating JWT tokens when using APNs token-based authentication.
+        keyId:
+          type: string
+          description: The Key ID associated with your APNs authentication key (.p8 file). Used in the JWT header for APNs requests.
+        sandboxEnabled:
+          type: boolean
+          description: Flag that indicates whether to use the APNs sandbox or production environment.
+        soundEnabled:
+          type: boolean
+          description: Flag that indicates whether to push notification with or without sound.
+        tokenSigningKey:
+          type: string
+          description: The private key content from APNs .p8 file. This key is used to sign the JWT for token-based authentication with APNs.
+        tokenSigningKeyEnc:
+          type: string
+          description: An encrypted authentication token signing key provided from .p8 file for storing in db.
+    ModalityLockConfig:
+      type: object
+      description: Lock configuration specific to a modality, for example face or voice.
+      properties:
+        externalLockManagement:
+          type: boolean
+          default: false
+          description: If `true` then user locking is managed externally by the customer. Users are not automatically locked as the result of authentications.
+        tempLockDurations:
+          type: array
+          description: 'How long to lock the user for each temporary lock escalation. Each value is a duration string.
+
+            For example: to lock for 5 minutes after 3 attempts, 10 minutes after 6 attempts and lock permanently after 9 attempts. Set `invalidCountsBeforeTempLock` to `{3,6,9}` and `tempLockDurations` to `{"PT5M","PT10M"}`'
+          example:
+          - PT5M
+          - PT10M
+          items:
+            type: string
+            example: PT2H30M
+        invalidCountsBeforeTempLock:
+          type: array
+          description: 'How many invalid attempts are required to escalate a temporary lock. When the lock count reaches the final value the user is locked permanently.
+
+            For example: to lock for 5 minutes after 3 attempts, 10 minutes after 6 attempts and lock permanently after 9 attempts. Set `invalidCountsBeforeTempLock` to `{3,6,9}` and `tempLockDurations` to `{"PT5M","PT10M"}`'
+          example:
+          - 3
+          - 6
+          - 9
+          items:
+            type: integer
+            format: int32
+        type:
+          type: string
+          description: The type of modality, for example `Face`.
+      required:
+      - tempLockDurations
+      - type
+    ASVThreshold:
+      type: object
+      description: ASV verification score thresholds for different amounts of speech captured during voice enrolment or verification
+      properties:
+        enrolmentSpeechSeconds:
+          type: integer
+          format: int32
+          description: The amount of speech captured during enrolment in seconds
+        verificationSpeechSeconds:
+          type: integer
+          format: int32
+          description: The amount of speech captured during verification in seconds
+        threshold:
+          type: number
+          format: double
+          description: The ASV threshold which must be met or exceeded for the operation to succeed. This value must be between 0.0 and 1.0 inclusive.
+    CredProtect:
+      type: object
+      description: 'Defines the level of protection required for registered credentials.
+
+
+        **See field descriptions for recommended values.**'
+      properties:
+        credentialProtectionPolicy:
+          type: string
+          description: 'Defines the credential protection policy
+
+
+            **For ease of use this should be set to `userVerificationOptional`**'
+          enum:
+          - userVerificationOptional
+          - userVerificationOptionalWithCredentialIDList
+          - userVerificationRequired
+        enforceCredentialProtectionPolicy:
+          type: boolean
+          description: 'Whether to enforce the credential protection policy
+
+
+            **For ease of use this should be set to `null`**'
+      required:
+      - credentialProtectionPolicy
+      - enforceCredentialProtectionPolicy
+    FaceMatchingProcessesData:
+      type: object
+      default: DFV6`
+      description: The list of matching algorithms to be run in preferred order based on data availability.
+      example:
+      - transformAlgorithm: DFV6E
+        minConfidence: 3
+        internalScore: 0.6
+      properties:
+        algorithm:
+          type: string
+          enum:
+          - DFV6
+          - DFV7
+        threshold:
+          type: number
+          format: double
+        internalThreshold:
+          type: number
+          format: double
+    ClientDataRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        evaluationRules:
+          $ref: '#/components/schemas/FIDOExtensionEvaluationGroup'
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    IDSTenant:
+      type: object
+      description: A TrustX tenant for which a number of identity stores maybe created.
+      properties:
+        id:
+          type: string
+          description: Unique mandatory tenant ID. Required on tenant creation.
+          maxLength: 64
+          minLength: 1
+        createdDtm:
+          type: string
+          format: date-time
+          description: Created date time.
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: Last updated time.
+        nextKeyUpdateDtm:
+          type: string
+          format: date-time
+          description: Time when the next automated data encryption key rollover will take place.
+        nextCaKeyUpdateDtm:
+          type: string
+          format: date-time
+          description: Time when the next automated CA root key rollover will take place.
+        nextKekUpdateDtm:
+          type: string
+          format: date-time
+          description: Time when the next automated key encryption key rollover will take place.
+    StoreConfiguration:
+      type: object
+      description: Identity Store configuration settings. Contains global settings, user locking configuration and policies for face, appkey and passkey registration and authentication
+      properties:
+        defaultUserLocale:
+          type: string
+          default: en_US - retrieved from the `store.default.userLocale` property
+          description: The default locale assigned to users created within this store. The value is a locale string in the form of `{language}_{optional country}_{optional variant}`.
+        defaultUserTimezone:
+          type: string
+          default: US/Eastern - retrieved from the `store.default.userTimezone` property
+          description: The default timezone assigned to users created within this store. The value is a a standard TZDB timezone string as listed [here](https://github.com/eggert/tz/blob/main/zone.tab).
+        defaultUserStatus:
+          type: string
+          default: ACTIVE
+          description: The default status assigned to users created within this store.
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        faceAuthenticationConfig:
+          $ref: '#/components/schemas/FaceAuthenticationConfig'
+          description: Face authentication configuration settings. Required for face authentication.
+        voiceAuthenticationConfig:
+          $ref: '#/components/schemas/VoiceAuthenticationConfig'
+          description: Voice authentication configuration settings. Required for voice authentication.
+        userLockConfig:
+          $ref: '#/components/schemas/UserLockConfig'
+          description: User lock configuration settings. If not supplied, default values are used.
+        passkeyRelyingParties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PasskeyRelyingPartyConfig'
+          description: Map of passkey configuration keyed by relying party ID. Required for passkey authentication.
+        appkeyRelyingParties:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AppkeyRelyingPartyConfig'
+          description: Map of passkey configuration keyed by relying party ID. Required for appkey authentication.
+        totpPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TOTPPolicy'
+          description: Map of TOTP policies keyed by policy name. Required for TOTP authentication.
+        pushNotificationPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PushNotificationPolicy'
+          description: Map of Push Notification policies keyed by relying party ID. Required for push notifications.
+        passcodePolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PasscodePolicy'
+          description: Map of passcode configuration keyed by policy name. Required for passcode authentication.
+    FIDOExtensionEvaluationGroup:
+      type: object
+      properties:
+        evaluationType:
+          type: string
+          enum:
+          - ANY_MATCH
+          - ALL_MATCH
+          - FAIL_IF_ANY
+          - FAIL_IF_ALL
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOExtensionEvaluation'
+    PasskeyRelyingPartyConfig:
+      type: object
+      description: A relying party's passkey configuration
+      properties:
+        rpId:
+          type: string
+          description: The relying party ID.
+          maxLength: 255
+          minLength: 0
+        name:
+          type: string
+          description: The passkey relying party configuration name.
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: The passkey relying party configuration description.
+        restrictedOrigins:
+          type: array
+          description: 'A list of acceptable origins.
+
+            If supplied, passkey authentications are restricted to these origins.
+
+            If not supplied, passkey authentications are restricted to the relying party ID domain.'
+          items:
+            type: string
+            format: uri
+        registrationPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RegistrationPolicy'
+          description: "Registration policies keyed by policy name.\nThe policy name must not be more than 20 characters long and \nmust only contain alphanumeric characters and hyphens"
+        authenticationPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AuthenticationPolicy'
+          description: "Authentication policies keyed by policy name.\nThe policy name must not be more than 20 characters long and \nmust only contain alphanumeric characters and hyphens"
+      required:
+      - authenticationPolicies
+      - name
+      - registrationPolicies
+      - rpId
+    PasscodeCriteria:
+      type: object
+      properties:
+        passcodeHistory:
+          type: integer
+          format: int32
+        requiredSymbolCount:
+          type: integer
+          format: int32
+        requiredUpperCaseCount:
+          type: integer
+          format: int32
+        requiredLowerCaseCount:
+          type: integer
+          format: int32
+        requiredDigitCount:
+          type: integer
+          format: int32
+        characterVariety:
+          type: integer
+          format: int32
+        disallowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        requiredRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        allowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+    ASVTIServiceConfig:
+      allOf:
+      - $ref: '#/components/schemas/BiometricServiceConfig'
+      - type: object
+        properties:
+          minSpeechEnrol:
+            type: integer
+            format: int32
+            description: The minimum amount of speech required for enrolment in seconds
+          minSpeechVerify:
+            type: integer
+            format: int32
+            description: The minimum amount of speech required for verification in seconds
+          maxSpeechVerify:
+            type: integer
+            format: int32
+            description: Maximum amount of speech that will be used for verification in seconds. If the value is less than or equal to 0 it is ignored. Text independent voice matching will be attempted once minSpeechVerify seconds of audio have been received and the match result will be returned. If the value is greater than 0 it must not be less than minSpeechVerify. Text independent voice matching  will be attempted once minSpeechVerify seconds of audio have been received. If the match succeeds a success result is returned, otherwise verification will continue until the maximum amount of speech has been captured. The verification continues with additional speech so it has a better chance of succeeding eventually.
+          continuityThresholdEnrol:
+            type: number
+            format: double
+            description: The continuity threshold for enrolment. Must be between -1.0 and 1.0 inclusive.
+          continuityMergeThresholdEnrol:
+            type: number
+            format: double
+            description: The continuity merge threshold for enrolment. Must be between -1.0 and 1.0 inclusive.
+          continuityMergeDurationEnrol:
+            type: number
+            format: double
+            description: The continuity merge duration for enrolment
+          continuityThresholdVerify:
+            type: number
+            format: double
+            description: The continuity threshold for verification. Must be between -1.0 and 1.0 inclusive.
+          continuityMergeThresholdVerify:
+            type: number
+            format: double
+            description: The continuity merge threshold for verification. Must be between -1.0 and 1.0 inclusive.
+          continuityMergeDurationVerify:
+            type: number
+            format: double
+            description: The continuity merge duration for verification
+          verificationScoreThresholds:
+            $ref: '#/components/schemas/ASVVerificationScoreThresholds'
+            description: The ASV verification score thresholds for different amounts of speech captured during voice enrolment or verification
+      description: ASV TI service configuration
+    AppkeyRelyingPartyConfig:
+      type: object
+      description: A relying party's appkey configuration
+      properties:
+        rpId:
+          type: string
+          description: The relying party ID.
+          maxLength: 255
+          minLength: 0
+        name:
+          type: string
+          description: The appkey relying party configuration name.
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: The appkey relying party configuration description.
+        trustedFacets:
+          $ref: '#/components/schemas/FIDOTrustedFacets'
+          description: A list of trusted appkey origins, typically device application IDs.
+        registrationPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AppkeyRegistrationPolicy'
+          description: "Registration policies keyed by policy name.\nThe policy name must not be more than 20 characters long and \nmust only contain alphanumeric characters and hyphens"
+        authenticationPolicies:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AppkeyAuthenticationPolicy'
+          description: "Authentication policies keyed by policy name.\nThe policy name must not be more than 20 characters long and \nmust only contain alphanumeric characters and hyphens"
+      required:
+      - authenticationPolicies
+      - name
+      - registrationPolicies
+      - rpId
+      - trustedFacets
+    UserLockConfig:
+      type: object
+      properties:
+        externalLockManagement:
+          type: boolean
+          default: false
+          description: If `true` then user locking is managed externally by the customer. Users are not automatically locked as the result of authentications.
+        tempLockDurations:
+          type: array
+          description: 'How long to lock the user for each temporary lock escalation. Each value is a duration string.
+
+            For example: to lock for 5 minutes after 3 attempts, 10 minutes after 6 attempts and lock permanently after 9 attempts. Set `invalidCountsBeforeTempLock` to `{3,6,9}` and `tempLockDurations` to `{"PT5M","PT10M"}`'
+          example:
+          - PT5M
+          - PT10M
+          items:
+            type: string
+            example: PT2H30M
+        invalidCountsBeforeTempLock:
+          type: array
+          description: 'How many invalid attempts are required to escalate a temporary lock. When the lock count reaches the final value the user is locked permanently.
+
+            For example: to lock for 5 minutes after 3 attempts, 10 minutes after 6 attempts and lock permanently after 9 attempts. Set `invalidCountsBeforeTempLock` to `{3,6,9}` and `tempLockDurations` to `{"PT5M","PT10M"}`'
+          example:
+          - 3
+          - 6
+          - 9
+          items:
+            type: integer
+            format: int32
+        mode:
+          type: string
+          default: USER_ONLY
+          description: Defines the way user locking operates. **USER_ONLY is the only mode supported for this release.**
+          enum:
+          - USER_ONLY
+          - MODALITY_TO_USER
+          - USER_AND_MODALITY
+        modalityLockConfigs:
+          type: array
+          description: Defines locking configuration per modality. **Not supported for this release.**
+          items:
+            $ref: '#/components/schemas/ModalityLockConfig'
+      required:
+      - tempLockDurations
+    PasscodePolicy:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The passcode policy name.
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          description: The passcode policy configuration description.
+        minimumLength:
+          type: integer
+          format: int32
+          description: An optional passcode minimum length.
+        maximumLength:
+          type: integer
+          format: int32
+          description: An optional passcode maximum length.
+        digitCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of digits within the passcode.
+        symbolCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of symbols within the passcode.
+        lowerCaseCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of lower case characters within the passcode.
+        upperCaseCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of upper case characters within the passcode.
+        characterVariety:
+          type: integer
+          format: int32
+          description: Optional minimum number of different classes of character that the passcode must contain, where the classes are symbols, digits, upper case and lower case.
+        passcodeHistory:
+          type: integer
+          format: int32
+          description: Optional passcode history. A submitted passcode is checked against a configurable number of previously submitted passcodes to see if it matches.
+        requiredRegExes:
+          type: array
+          description: Optional list of required regular expressions, all of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+        allowedRegExes:
+          type: array
+          description: Optional list of allowed regular expressions, at least one of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+        disallowedRegExes:
+          type: array
+          description: Optional list of disallowed regular expressions, none of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+        algorithm:
+          type: string
+          description: The passcode generation/verification algorithm.
+          enum:
+          - SRP
+        algorithmVariant:
+          type: string
+          description: The variant of the algorithm used as a user friendly name for a set of algorithm parameters.
+        srpAlgorithmParameters:
+          $ref: '#/components/schemas/SRPAlgorithmParameters'
+          description: SRP algorithm parameters.
+        passcodeValidityDuration:
+          type: string
+          description: Optional passcode validity duration. The value is a duration string. If not supplied the passcode has no expiration date associated with it and therefore does not expire.
+          example: PT2H30M
+        sessionDuration:
+          type: string
+          description: 'Session lifetime. The value is a duration string. Defaults to 5 minutes.
+
+
+            '
+          example: PT5M
+        auditLevel:
+          type: string
+          default: NONE
+          description: Defines the level of auditing, none, fail-only or always. Defaults to NONE.
+          enum:
+          - NONE
+          - FAILED_ONLY
+          - ALL
+        auditDuration:
+          type: string
+          default: 30 days or whatever number is configured as `default.max.audit.retention.days`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+      required:
+      - name
+    AppkeyRegistrationPolicy:
+      type: object
+      description: A relying party's appkey registration policy
+      properties:
+        fidoPolicy:
+          $ref: '#/components/schemas/FIDOPolicy'
+          description: 'Defines what types of appkey may be used.
+
+
+            **See Daon documentation for recommended policy settings and the [UAF Protocol Specification](https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html) for details of policy fields.**'
+        extensions:
+          type: array
+          description: 'Defines what types of appkey client SDK extension to use.
+
+
+            **For optimal support this should be set to `["DEVICE_INFO","HEALTH_CHECK","ENVIRONMENT_CHECK"]`**'
+          items:
+            type: string
+        externalChallengeAllowed:
+          type: boolean
+          default: false
+          description: If `true` then the user may supply the challenge, otherwise it is generated randomly by the Identity Store service.
+        sessionManagementExternal:
+          type: boolean
+          default: false
+          description: If `true` then the session data is managed by the customer. It is returned to the customer when a request is generated and must be supplied back to the server when the operation is completed. If `false` then the session data is managed by the server. A session ID is returned with the request which must be supplied back to the server when operation is completed. The session has a limited lifetime which can be configured via  `sessionDuration`.
+        sessionDuration:
+          type: string
+          description: 'The session lifetime. The value is a duration string.
+
+
+            **This value is mandatory if `sessionManagementExternal` is `false` (the default).**
+
+
+            **NOTE**: Session data is cached in memory so as short a value as possible is recommended.'
+          example: PT5M
+        fullAuditingRequired:
+          type: boolean
+          default: false
+          description: Whether to store a detailed audit of the registration
+      required:
+      - extensions
+      - fidoPolicy
+    BiometricServiceConfig:
+      type: object
+      description: Biometric service configuration for an Identity Store
+      discriminator:
+        propertyName: algorithm
+      properties:
+        algorithm:
+          type: string
+    RegistrationPolicy:
+      type: object
+      description: A relying party's passkey registration policy
+      properties:
+        authenticatorSelectionCriteria:
+          $ref: '#/components/schemas/AuthenticatorSelectionCriteria'
+          description: 'Defines what sort of authenticators may be selected for registration.
+
+
+            **See field descriptions for recommended values.**'
+        attestation:
+          type: string
+          description: 'Defines whether or how the client conveys the registration attestation object.
+
+
+            **For ease of use this should be set to `none`**'
+          enum:
+          - none
+          - indirect
+          - direct
+        credProtect:
+          $ref: '#/components/schemas/CredProtect'
+          description: 'Defines the level of protection required for registered credentials.
+
+
+            **See field descriptions for recommended values.**'
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during registration. Hints are ordered by decreasing preference and are not requirements. See the webauthn specification for details.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        fullAuditingRequired:
+          type: boolean
+          default: false
+          description: Whether to store a detailed audit of the registration
+        externalChallengeAllowed:
+          type: boolean
+          default: false
+          description: If `true` then the user may supply the registration challenge, otherwise it is generated randomly by the Identity Store service.
+        sessionManagementExternal:
+          type: boolean
+          default: false
+          description: If `true` then the registration session data is managed by the customer. It is returned to the customer when a registration request is generated and must be supplied back to the server when registration is completed. If `false` then the registration session data is managed by the server. A session ID is returned with the registration request which must be supplied back to the server when registration is completed. The session has a limited lifetime which can be configured via  `sessionDuration`.
+        sessionDuration:
+          type: string
+          description: 'The session lifetime. The value is a duration string.
+
+
+            **This value is mandatory if `sessionManagementExternal` is `false` (the default).**
+
+
+            **NOTE**: Session data is cached in memory so as short a value as possible is recommended.'
+          example: PT5M
+      required:
+      - attestation
+      - authenticatorSelectionCriteria
+      - credProtect
+    PushNotificationPolicy:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The Push Notification policy name.
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          description: The Push Notification policy configuration description.
+        appkeyRpId:
+          type: string
+          description: The Appkey Relying Party ID.
+        apnsConfig:
+          $ref: '#/components/schemas/ApnsConfig'
+          description: The Apple Push Notification configuration, required for sending notification to iOS devices.
+        fcmConfig:
+          $ref: '#/components/schemas/FcmConfig'
+          description: The Firebase Cloud Messaging configuration, required for sending notification to android devices.
+      required:
+      - appkeyRpId
+      - name
+    FIDOExtensionEvaluation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - REGEX
+          - CONTAINS
+          - MATCH
+          - SN_CTS_PROFILE_MATCH
+          - SN_BASIC_INTEGRITY
+          - IA_DEVICE_INTEGRITY
+          - IA_APP_LICENSING
+          - IA_APP_RECOGNITION
+        evaluationRule:
+          type: string
+    ServiceUpdateBehaviour:
+      type: object
+      description: Optional parameters which control partial enrolment continuation behaviour after an update of the TI voice service. In the initial release the only supported flag is `continuePartialEnrolmentsUsingLegacyService`.
+      properties:
+        continuePartialEnrolmentsUsingLegacyService:
+          type: boolean
+          description: The only `onServiceUpdate` flag supported in the initial release. Defaults to `true` which means that if the TI voice service version is updated, existing partial enrolments will be continued using the legacy service. A value of `false` means that the partial enrolment continuation will fail if the TI voice service version is updated.
+    TIVoiceConfig:
+      type: object
+      description: Text-independent voice configuration for an Identity Store
+      properties:
+        onServiceUpdate:
+          $ref: '#/components/schemas/ServiceUpdateBehaviour'
+          description: The behaviour of the Identity Store when the TI voice service is updated. If not specified, the default behaviour is to continue partial enrolments using the legacy service. In the initial release this is the only supported `onServiceUpdate` behaviour; auto re-enrolment on authenticate and falling back to the legacy service for authentication are not yet implemented and will default to `true` once added.
+        supportedServices:
+          type: array
+          description: The TI voice services configured for the Identity Store. The first item in the list is the primary service which will be used for enrolment and authentication. The other services in the list are used as a fallback where necessary.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/ASVTIServiceConfig'
+    AppkeyAuthenticationPolicy:
+      type: object
+      description: A relying party's appkey authentication policy
+      properties:
+        fidoPolicy:
+          $ref: '#/components/schemas/FIDOPolicy'
+          description: 'Defines what types of appkey may be used.
+
+
+            **See Daon documentation for recommended policy settings and the [UAF Protocol Specification](https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html) for details of policy fields.**'
+        extensions:
+          type: array
+          description: 'Defines what types of appkey client SDK extension to use.
+
+
+            **For optimal support this should be set to `["DEVICE_INFO","HEALTH_CHECK","ENVIRONMENT_CHECK"]`**'
+          items:
+            type: string
+        externalChallengeAllowed:
+          type: boolean
+          default: false
+          description: If `true` then the user may supply the challenge, otherwise it is generated randomly by the Identity Store service.
+        sessionManagementExternal:
+          type: boolean
+          default: false
+          description: If `true` then the session data is managed by the customer. It is returned to the customer when a request is generated and must be supplied back to the server when the operation is completed. If `false` then the session data is managed by the server. A session ID is returned with the request which must be supplied back to the server when operation is completed. The session has a limited lifetime which can be configured via  `sessionDuration`.
+        sessionDuration:
+          type: string
+          description: 'The session lifetime. The value is a duration string.
+
+
+            **This value is mandatory if `sessionManagementExternal` is `false` (the default).**
+
+
+            **NOTE**: Session data is cached in memory so as short a value as possible is recommended.'
+          example: PT5M
+        auditLevel:
+          type: string
+          description: Defines the level of auditing, none, fail-only or always.
+          enum:
+          - NONE
+          - FAILED_ONLY
+          - ALL
+        auditDuration:
+          type: string
+          default: 30 days or whatever number is configured as `default.max.audit.retention.days`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+      required:
+      - auditLevel
+      - extensions
+      - fidoPolicy
+    AuthenticatorSelectionCriteria:
+      type: object
+      description: Defines what sort of authenticators may be selected for registration.**See field descriptions for recommended values.**
+      properties:
+        authenticatorAttachment:
+          type: string
+          description: 'How the authenticator is tied to the platform
+
+
+            **For ease of use this should be set to `platform`**'
+          enum:
+          - platform
+          - cross-platform
+        residentKey:
+          type: string
+          description: 'Specifies the extent to which the Relying Party desires to create a client-side discoverable credential.
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - discouraged
+          - preferred
+          - required
+        requireResidentKey:
+          type: boolean
+          description: 'Whether the key is resident within the authenticator
+
+
+            **For ease of use this should be set to `false`**'
+        userVerification:
+          type: string
+          description: 'Whether user verification is required
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - required
+          - preferred
+          - discouraged
+      required:
+      - authenticatorAttachment
+      - residentKey
+      - userVerification
+    TOTPPolicy:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The TOTP policy name.
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          description: The TOTP policy configuration description.
+        periodSeconds:
+          type: integer
+          format: int32
+          description: The time window in seconds for which a TOTP authentication code will be valid, in seconds.
+        digits:
+          type: integer
+          format: int32
+          description: The number of digits in the authentication code, in the range 6-8.
+        algorithms:
+          type: array
+          description: 'The algorithms applied to the secret and time step to generate the authentication code. By default this will be a list consisting of: [SHA512, SHA256, SHA1]'
+          items:
+            type: string
+        issuer:
+          type: string
+          description: Issuer string, used as an identifier in Authenticator App, together with username from TOTP registration request. Optional, but highly recommended.
+        registrationValidityPeriod:
+          type: string
+          description: The period during which a PENDING registration can be completed by presenting a valid authentication code.
+          example: PT2H30M
+        auditLevel:
+          type: string
+          default: NONE
+          description: Defines the level of auditing, none, fail-only or always. Defaults to NONE.
+          enum:
+          - NONE
+          - FAILED_ONLY
+          - ALL
+        auditDuration:
+          type: string
+          default: 30 days or whatever number is configured as `default.max.audit.retention.days`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+      required:
+      - name
+    Store:
+      type: object
+      description: An identity store which can contain users who can be authenticated using various methods (biometric, appkey, passkey).
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database store ID.
+        tenant:
+          $ref: '#/components/schemas/IDSTenant'
+        name:
+          type: string
+          description: A mandatory name which is unique for the tenant.
+          maxLength: 40
+          minLength: 1
+          pattern: ^[a-zA-Z0-9-]+$
+        description:
+          type: string
+          description: An optional description.
+          maxLength: 255
+          minLength: 0
+        configuration:
+          $ref: '#/components/schemas/StoreConfiguration'
+          description: Store configuration settings. If not supplied defaults will be used and the functionality of the store will be restricted. For example a passkey configuration is required to use passkeys.
+        attributeSchema:
+          type: object
+          additionalProperties:
+            type: object
+          description: An optional JSON Schema (https://json-schema.org/) document that user attributes must conform to. If null, no attribute validation is applied.
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+      required:
+      - name
+    Version:
+      type: object
+      properties:
+        major:
+          type: integer
+          format: int32
+        minor:
+          type: integer
+          format: int32
+    PasscodeRegex:
+      type: object
+      description: A regular expression matched against a passcode.
+      properties:
+        pattern:
+          type: string
+          description: The regex pattern.
+        error:
+          type: string
+          description: An error which will be displayed if the regex check fails.
+      required:
+      - error
+      - pattern
+    FIDOMatchCriteria:
+      type: object
+      properties:
+        aaid:
+          type: array
+          items:
+            type: string
+        vendorID:
+          type: array
+          items:
+            type: string
+        keyIDs:
+          type: array
+          items:
+            type: string
+        userVerification:
+          type: integer
+          format: int64
+        keyProtection:
+          type: integer
+          format: int32
+        matcherProtection:
+          type: integer
+          format: int32
+        attachmentHint:
+          type: integer
+          format: int64
+        tcDisplay:
+          type: integer
+          format: int64
+        authenticationAlgorithms:
+          type: array
+          items:
+            type: integer
+            format: int32
+        assertionSchemes:
+          type: array
+          items:
+            type: string
+        attestationTypes:
+          type: array
+          items:
+            type: integer
+            format: int32
+        authenticatorVersion:
+          type: integer
+          format: int32
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    Extension:
+      type: object
+      properties:
+        id:
+          type: string
+        data:
+          type: string
+        fail_if_unknown:
+          type: boolean
+    FcmConfig:
+      type: object
+      properties:
+        googleApplicationCredentials:
+          type: string
+          description: Google application credentials for sending bearer token request, generated in Firebase console.
+        googleApplicationCredentialsEnc:
+          type: string
+          description: Encrypted Google application credentials for sending bearer token request, for storing in db.
+        fcmUrl:
+          type: string
+          description: The endpoint for Firebase Cloud Messaging (FCM) to send Android push notifications.
+    FIDOTrustedFacets:
+      type: object
+      description: A list of trusted appkey origins, typically device application IDs.
+      properties:
+        version:
+          $ref: '#/components/schemas/Version'
+          description: 'The facet list version
+
+
+            **Must be 1.0 (major:1, minor:0)**'
+        ids:
+          type: array
+          description: A non-empty list of trusted appkey origins (device applications). Refer to the [FIDO AppID and Facet Specification](https://fidoalliance.org/specs/fido-v2.0-id-20180227/fido-appid-and-facets-v2.0-id-20180227.html)
+          items:
+            type: string
+      required:
+      - ids
+      - version
+    FIDOPolicy:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/FIDOMatchCriteria'
+        disallowed:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        registrationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticatorsAllowedUnlocking:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        additionalInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        passcodeCriteria:
+          $ref: '#/components/schemas/PasscodeCriteria'
+        authenticatorsRequiringVerificationOnReEnrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsRequiringDataReplacement:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsAllowedReenrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+    FaceAuthenticationConfig:
+      type: object
+      description: Face authentication configuration settings
+      properties:
+        storeAudit:
+          type: boolean
+          default: false
+          description: Whether to create a detailed audit file for each face authentication
+        auditDuration:
+          type: string
+          default: P30D (30 days) or whatever is configured as `store.default.faceAuthenticationConfig.auditDuration`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+        storeEnrolmentImage:
+          type: boolean
+          default: true
+          description: Should the enrolment image be stored?
+          example: true
+        matchingProcessesData:
+          type: array
+          default: DFV6`
+          description: The list of matching algorithms to be run in preferred order based on data availability.
+          example:
+          - transformAlgorithm: DFV6E
+            minConfidence: 3
+            internalScore: 0.6
+          items:
+            $ref: '#/components/schemas/FaceMatchingProcessesData'
+    VoiceAuthenticationConfig:
+      type: object
+      description: Voice authentication configuration settings
+      properties:
+        storeAudit:
+          type: boolean
+          default: false
+          description: Whether to create a detailed audit file for each voice authentication
+        auditDuration:
+          type: string
+          default: P30D (30 days) or whatever is configured as `store.default.voiceAuthenticationConfig.auditDuration`
+          description: How long to store the audit file. The value is a duration string.
+          example: P30D
+        auditRawAuthenticationData:
+          type: boolean
+          default: false
+          description: Whether to store raw authentication data for voice authentication
+        storeRawEnrolmentData:
+          type: boolean
+          default: false
+          description: Whether to store raw enrolment data for voice enrolment
+        sessionDuration:
+          type: string
+          default: PT5M (5 minutes) or whatever is configured as `store.default.voiceAuthenticationConfig.sessionDuration`
+          description: The voice authentication session lifetime. The value is a duration string.
+          example: PT5M
+        tiConfig:
+          $ref: '#/components/schemas/TIVoiceConfig'
+          description: Text independent voice authentication configuration settings
+    SRPAlgorithmParameters:
+      type: object
+      description: Parameters for the Secure Remote Passcode (SRP) passcode algorithm.
+      properties:
+        prime:
+          type: string
+          format: byte
+          description: The safe prime to use. **IT IS HIGHLY RECOMMENDED TO USE `primeBitLen` INSTEAD WHICH USES THE SAFE PRIME VALUES DEFINED IN RFC 5054 APPENDIX A**. If both `prime` and `primeBitLen` are supplied, `prime` takes precedence.
+        primeBitLen:
+          type: integer
+          format: int32
+          description: 'The bit length of the safe prime (n) to use, as defined in RFC 5054 Appendix A. Values:
+
+            - 1536
+
+            - 2048
+
+            - 3072
+
+            - 4096
+
+            - 6144
+
+            - 8192
+
+            '
+        saltByteLen:
+          type: integer
+          format: int32
+          description: The length of the salt in bytes.
+        g:
+          type: integer
+          format: int64
+          description: The generator value.
+        hashAlgorithm:
+          type: string
+          description: 'The hash algorithm. Values:
+
+            - SHA-256
+
+            - SHA-384
+
+            - SHA-512
+
+            '
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

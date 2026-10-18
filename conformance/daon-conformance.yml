@@ -1,0 +1,35 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/daon-trustx-openapi.yml
+standards:
+- id: OpenAPI
+  conforms: true
+  evidence: Specification uses OpenAPI 3.1.0
+- id: oauth2
+  conforms: partial
+  evidence: Uses JWT bearer tokens for authentication, but not full OAuth 2.0 flow
+- id: jwt
+  conforms: true
+  evidence: Uses JWT tokens for bearer authentication
+- id: fido
+  conforms: true
+  evidence: Daon provides FIDO SDKs for Android and iOS (fido-sdk-android, fido-sdk-ios)
+- id: pagination
+  conforms: true
+  evidence: Uses Spring Pageable pattern with page, size, sort parameters
+- id: openapi-3.1
+  conforms: true
+  evidence: the document declares 3.1.0
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+domain_standard_conformance:
+- id: identity-verification
+  conforms: true
+  evidence: Daon provides identity verification and authentication services conforming to industry standards for biometrics, document verification,
+    and liveness detection
+note: Daon implements identity verification standards through its SDKs and platforms, but specific standards compliance (NIST, ISO, etc.) is not
+  documented in the API specification.

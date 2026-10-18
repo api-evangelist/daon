@@ -1,0 +1,2799 @@
+openapi: 3.2.0
+info:
+  title: Daon Userdata Controller API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged userdata-controller across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: userdata-controller
+paths:
+  /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata/checks:
+    get:
+      tags:
+      - userdata-controller
+      summary: Get Checks
+      description: 'Get Checks for the Process Instance. Optionally filter by key
+
+
+        API Permissions: `TNT#{tenantid}#UserDataServer:getChecksByKey`'
+      operationId: getChecksByKey
+      parameters:
+      - name: processDefnId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: key
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResponse'
+              example:
+                visualIntegrity:
+                  id: visualIntegrity
+                  nested:
+                    doc1:
+                      id: doc1
+                      nested:
+                        back:
+                          id: back
+                          nested:
+                            documentScreenRep:
+                              id: documentScreenRep
+                              outcome: PASS
+                              metaData: {}
+                            documentColorCopy:
+                              id: documentColorCopy
+                              outcome: PASS
+                              metaData: {}
+                            documentQuality:
+                              id: documentQuality
+                              outcome: PASS
+                              metaData: {}
+                        front:
+                          id: front
+                          nested:
+                            documentPhotoSub:
+                              id: documentPhotoSub
+                              outcome: PASS
+                              metaData: {}
+                            documentScreenRep:
+                              id: documentScreenRep
+                              outcome: PASS
+                              metaData: {}
+                            documentColorCopy:
+                              id: documentColorCopy
+                              outcome: PASS
+                              metaData: {}
+                            documentQuality:
+                              id: documentQuality
+                              outcome: PASS
+                              metaData: {}
+                            documentBW:
+                              id: documentBW
+                              outcome: PASS
+                              metaData: {}
+                watchlistResult:
+                  id: watchlistResult
+                  nested:
+                    face1:
+                      id: face1
+                      outcome: PASS
+                      metaData: {}
+                faceQuality:
+                  id: faceQuality
+                  nested:
+                    face1:
+                      id: face1
+                      outcome: PASS
+                      metaData: {}
+                documentProcessing:
+                  id: documentProcessing
+                  nested:
+                    doc1:
+                      id: doc1
+                      outcome: PASS
+                      metaData: {}
+                acceptableDocument:
+                  id: acceptableDocument
+                  nested:
+                    doc1:
+                      id: doc1
+                      outcome: PASS
+                      metaData: {}
+                doc2FaceMatch:
+                  id: doc2FaceMatch
+                  nested:
+                    face1:
+                      id: face1
+                      nested:
+                        doc1:
+                          id: doc1
+                          nested:
+                            front:
+                              id: front
+                              nested:
+                                visual:
+                                  id: visual
+                                  nested:
+                                    PORTRAIT:
+                                      id: PORTRAIT
+                                      outcome: PASS
+                                      metaData: {}
+                faceLiveness:
+                  id: faceLiveness
+                  nested:
+                    face1:
+                      id: face1
+                      outcome: PASS
+                      metaData: {}
+                cloudFunctions:
+                  id: cloudFunctions
+                  nested:
+                    CF1305:
+                      id: CF1305
+                      outcome: PASS
+                      metaData: {}
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/UserDataSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthorizationSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#UserDataServer:getChecksByKey
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/getdata:
+    get:
+      tags:
+      - userdata-controller
+      summary: Get Image
+      description: 'Get base64 encoded representation of user data such as a document or face image.
+
+
+        API Permissions: `TNT#{tenantid}#UserDataServer:getProcessInstanceImages`'
+      operationId: getProcessInstanceImages
+      parameters:
+      - name: processDefnId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: path
+        in: query
+        description: The path to the user data. For example, a captured document image.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          description: The path to the user data. For example, a captured document image.
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Data'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/UserDataSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthorizationSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#UserDataServer:getProcessInstanceImages
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata:
+    get:
+      tags:
+      - userdata-controller
+      summary: Get User Data
+      description: 'Get the Process Instance information as User Data.
+
+
+        API Permissions: `TNT#{tenantid}#UserDataServer:getProcessInstanceUserData`'
+      operationId: getProcessInstanceUserData
+      parameters:
+      - name: processDefnId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: optimized
+        in: query
+        description: Set to true to get an optimized response that excludes large data, such as images. Defaults to false.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: Set to true to get an optimized response that excludes large data, such as images. Defaults to false.
+      - name: includeKeyedAdditionalDocs
+        in: query
+        description: 'When true, include keyed additional documents in the response of unoptimized call. When false, exclude keyed additional documents. If not provided, the default behavior depends on the ''optimized'' flag. Note: the combination optimized=true and includeKeyedAdditionalDocs=false is not supported and will result in a requestParametersNotValid error.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          description: 'When true, include keyed additional documents in the response of unoptimized call. When false, exclude keyed additional documents. If not provided, the default behavior depends on the ''optimized'' flag. Note: the combination optimized=true and includeKeyedAdditionalDocs=false is not supported and will result in a requestParametersNotValid error.'
+      - name: includeInitParams
+        in: query
+        description: When true, include the merged initialization parameters that were passed when the process instance was created. Defaults to false.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: When true, include the merged initialization parameters that were passed when the process instance was created. Defaults to false.
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDataResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/UserDataSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthorizationSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#UserDataServer:getProcessInstanceUserData
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdataarchive:
+    post:
+      tags:
+      - userdata-controller
+      summary: Get Summary Archive
+      description: 'Get Summary Archive. This file contains PII information - it is the responsibility of the consumer of the API to provide the apprioprate protections for the data.
+
+
+        API Permissions: `TNT#{tenantid}#UserDataServer:getProcessInstanceUserDataArchive`'
+      operationId: getProcessInstanceUserDataArchive
+      parameters:
+      - name: processDefnId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: processInstanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveConfig'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StreamingResponseBody'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/UserDataSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthorizationSkyError'
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#UserDataServer:getProcessInstanceUserDataArchive
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProductRawDeviceAttributes:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RawDeviceAttribute'
+          description: 'It includes 35+ raw browser identification attributes to provide Fingerprint users with even more information than our standard visitor ID provides. This enables Fingerprint users to not have to run our open-source product in conjunction with Fingerprint Pro Plus and Enterprise to get those additional attributes. Warning: The raw signals data can change at any moment as we improve the product. We cannot guarantee the internal shape of raw device attributes to be stable, so typical semantic versioning rules do not apply here. Use this data with caution without assuming a specific structure beyond the generic type provided here. '
+        error:
+          $ref: '#/components/schemas/Error'
+    IPInfoV6:
+      type: object
+      properties:
+        address:
+          type: string
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        asn:
+          $ref: '#/components/schemas/IPInfoASN'
+        datacenter:
+          $ref: '#/components/schemas/IPInfoDataCenter'
+      required:
+      - address
+      - geolocation
+    IdentificationConfidence:
+      type: object
+      properties:
+        score:
+          type: number
+          format: double
+          description: The confidence score is a floating-point number between 0 and 1 that represents the probability of accurate identification.
+        revision:
+          type: string
+          description: The revision name of the method used to calculate the Confidence score. This field is only present for customers who opted in to an alternative calculation method.
+        comment:
+          type: string
+      required:
+      - score
+    UserDataQueryResponseAlgorithmDto:
+      type: object
+      description: Algorithm configuration for fuzzy matching
+      properties:
+        type:
+          type: string
+          description: Type of algorithm used
+          example: LEVENSHTEIN_DISTANCE
+        parameters:
+          $ref: '#/components/schemas/UserDataQueryResponseParametersDto'
+          description: Algorithm-specific parameters
+    ProductFactoryReset:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/FactoryReset'
+        error:
+          $ref: '#/components/schemas/Error'
+    TrendQueryDto:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+        documentType:
+          type: string
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        trendGroup:
+          type: string
+        region:
+          type: string
+        normalize:
+          type: boolean
+    UserDataVisitorIdTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractTrendRecordDto'
+      description: Trend record for visitor ID trends, representing occurrences of specific visitor IDs in user data
+    ProductIdentification:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Identification'
+        error:
+          $ref: '#/components/schemas/Error'
+    IPv4AddressTrendCard:
+      allOf:
+      - $ref: '#/components/schemas/TrendCheckCard'
+      - type: object
+        properties:
+          ipAddress:
+            type: string
+            description: The IPv4 address that was searched against the trend records.
+            example: 192.168.1.100
+      description: Watchlist check result for IPv4 address searches. Contains the IPv4 address that was searched in the watchlist.
+      required:
+      - checkOutcome
+      - ipAddress
+      - recordCount
+      - trendGroup
+      - trendType
+    StreamingResponseBody: {}
+    ProductEmulator:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Emulator'
+        error:
+          $ref: '#/components/schemas/Error'
+    ProductVPN:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/VPN'
+        error:
+          $ref: '#/components/schemas/Error'
+    IdentificationSeenAt:
+      type: object
+      properties:
+        global:
+          type: string
+          format: date-time
+        subscription:
+          type: string
+          format: date-time
+      required:
+      - global
+      - subscription
+    RawDeviceAttribute:
+      type: object
+      properties:
+        value: {}
+        error:
+          $ref: '#/components/schemas/RawDeviceAttributeError'
+    CloudFunctions:
+      type: object
+      properties:
+        reports:
+          $ref: '#/components/schemas/AbstractReports'
+    PrivacySettings:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if the request is from a privacy aware browser (e.g. Tor) or from a browser in which fingerprinting is blocked. Otherwise `false`. '
+      required:
+      - result
+    UserDataDocumentNumberTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractTrendRecordDto'
+      - type: object
+        properties:
+          documentType:
+            type: string
+      description: Trend record for document number trends, including document type information
+    PhoneNumberTrendCard:
+      allOf:
+      - $ref: '#/components/schemas/TrendCheckCard'
+      - type: object
+        properties:
+          phoneNumber:
+            type: string
+            description: The phone number that was searched against the trend records.
+            example: '+353875547894'
+      description: Phone number trend check result. Contains the phone number that was searched against trend records.
+      required:
+      - checkOutcome
+      - phoneNumber
+      - recordCount
+      - trendGroup
+      - trendType
+    Data:
+      type: object
+      properties:
+        contentType:
+          type: string
+        data:
+          type: string
+          format: binary
+      required:
+      - data
+    UserDataLinkDto:
+      type: object
+      description: Navigation link to a related resource
+      properties:
+        href:
+          type: string
+          description: URL to the related resource
+          example: /api/watchlist-manager/watchlists/{watchlistId}/entries/{entryId}
+    UserDataAbstractTrendRecordDto:
+      type: object
+      description: Base class for trend record DTOs with common fields for all trend types
+      discriminator:
+        propertyName: type
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+        recordedDtm:
+          type: string
+          format: date-time
+        processInfo:
+          $ref: '#/components/schemas/ProcessInfo'
+        trendGroup:
+          type: string
+        expiresAfterDays:
+          type: integer
+          format: int32
+        expiresAfter:
+          type: string
+          format: date-time
+        attributes:
+          type: object
+          additionalProperties: {}
+        get_links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/UserDataLinkDto'
+          description: 'Navigation links for this trend record. Example relation: self -> /trends/{id}'
+    WatchlistMemberCandidate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+        score:
+          type: number
+          format: double
+    Incognito:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if we detected incognito mode used in the browser, `false` otherwise. '
+      required:
+      - result
+    Identification:
+      type: object
+      properties:
+        visitorId:
+          type: string
+          description: String of 20 characters that uniquely identifies the visitor's browser or mobile device.
+        requestId:
+          type: string
+          description: Unique identifier of the user's request.
+        browserDetails:
+          $ref: '#/components/schemas/BrowserDetails'
+        incognito:
+          type: boolean
+          description: Flag if user used incognito session.
+        ip:
+          type: string
+          description: IP address of the requesting browser or bot.
+        ipLocation:
+          $ref: '#/components/schemas/DeprecatedGeolocation'
+          deprecated: true
+        linkedId:
+          type: string
+          description: A customer-provided id that was sent with the request.
+        suspect:
+          type: boolean
+          description: Field is `true` if you have previously set the `suspect` flag for this event using the [Server API Update event endpoint](https://dev.fingerprint.com/reference/updateevent).
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp of the event with millisecond precision in Unix time.
+        time:
+          type: string
+          format: date-time
+          description: Time expressed according to ISO 8601 in UTC format, when the request from the JS agent was made. We recommend to treat requests that are older than 2 minutes as malicious. Otherwise, request replay attacks are possible.
+        url:
+          type: string
+          description: Page URL from which the request was sent.
+        tag:
+          type: object
+          additionalProperties: {}
+          description: A customer-provided value or an object that was sent with identification request.
+        confidence:
+          $ref: '#/components/schemas/IdentificationConfidence'
+        visitorFound:
+          type: boolean
+          description: Attribute represents if a visitor had been identified before.
+        firstSeenAt:
+          $ref: '#/components/schemas/IdentificationSeenAt'
+        lastSeenAt:
+          $ref: '#/components/schemas/IdentificationSeenAt'
+        components:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/RawDeviceAttribute'
+          description: 'It includes 35+ raw browser identification attributes to provide Fingerprint users with even more information than our standard visitor ID provides. This enables Fingerprint users to not have to run our open-source product in conjunction with Fingerprint Pro Plus and Enterprise to get those additional attributes. Warning: The raw signals data can change at any moment as we improve the product. We cannot guarantee the internal shape of raw device attributes to be stable, so typical semantic versioning rules do not apply here. Use this data with caution without assuming a specific structure beyond the generic type provided here. '
+        replayed:
+          type: boolean
+          description: '`true` if we determined that this payload was replayed, `false` otherwise. '
+        sdk:
+          $ref: '#/components/schemas/SDK'
+        environmentId:
+          type: string
+          description: Environment ID associated with the event
+      required:
+      - browserDetails
+      - firstSeenAt
+      - incognito
+      - ip
+      - lastSeenAt
+      - replayed
+      - requestId
+      - tag
+      - time
+      - timestamp
+      - url
+      - visitorFound
+      - visitorId
+    UserDataSliceAbstractTrendRecordDto:
+      type: object
+      description: Paginated slice of trend records, containing metadata about pagination and sorting
+      properties:
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+        content:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/UserDataDocumentNumberTrendRecordDto'
+            - $ref: '#/components/schemas/UserDataEmailTrendRecordDto'
+            - $ref: '#/components/schemas/UserDataIpv4AddressTrendRecordDto'
+            - $ref: '#/components/schemas/UserDataPhoneNumberTrendRecordDto'
+            - $ref: '#/components/schemas/UserDataVisitorIdTrendRecordDto'
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+    IPInfoASN:
+      type: object
+      properties:
+        asn:
+          type: string
+        name:
+          type: string
+        network:
+          type: string
+      required:
+      - asn
+      - name
+      - network
+    CallAction:
+      type: object
+      properties:
+        operationId:
+          type: string
+        executionKey:
+          type: string
+        startDtm:
+          type: string
+          format: date-time
+        endDtm:
+          type: string
+          format: date-time
+        completeReason:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - RequestCannotBeParsed
+          - TokenRequired
+          - TokenNotFound
+          - SubscriptionNotActive
+          - WrongRegion
+          - FeatureNotEnabled
+          - RequestNotFound
+          - VisitorNotFound
+          - TooManyRequests
+          - 429 Too Many Requests
+          - StateNotReady
+          - Failed
+        message:
+          type: string
+      required:
+      - code
+      - message
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    DeveloperTools:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if the browser is Chrome with DevTools open or Firefox with Developer Tools open, `false` otherwise. '
+      required:
+      - result
+    UserDataPhoneNumberTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractTrendRecordDto'
+      - type: object
+        properties:
+          region:
+            type: string
+      description: Trend record for phone number trends, representing occurrences of specific phone numbers in user data, with optional region information
+    Call:
+      type: object
+      properties:
+        id:
+          type: string
+        agentId:
+          type: string
+        audioSourceName:
+          type: string
+        audioFileHash:
+          type: string
+        status:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: {}
+        callActions:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/CallAction'
+    VisitorIDWatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          visitorId:
+            type: string
+            description: The visitor ID that was searched against the trend records
+            example: visitor_ABC123XYZ789
+      description: Watchlist check result for visitor ID searches. Contains the visitor ID (device/browser fingerprint) that was searched in the watchlist.
+      required:
+      - checkOutcome
+      - matchCount
+      - visitorId
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    ProductTor:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Tor'
+        error:
+          $ref: '#/components/schemas/Error'
+    ProductClonedApp:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ClonedApp'
+        error:
+          $ref: '#/components/schemas/Error'
+    CustomFormDatas:
+      type: object
+      properties:
+        formDataName:
+          type: string
+        formDataValues:
+          type: array
+          items: {}
+    UserDataEmailWatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      - type: object
+        properties:
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            description: Maximum number of match results requested per query
+            example: 10
+      description: Response for email address watchlist queries
+      required:
+      - queries
+      - type
+    UserDataTrendRecordsListResponseDto:
+      type: object
+      description: Response DTO for a list of trend records, including pagination and the query value used
+      properties:
+        records:
+          $ref: '#/components/schemas/UserDataSliceAbstractTrendRecordDto'
+        queryValue:
+          type: string
+    AdditionalDocumentResponse:
+      type: object
+      properties:
+        version:
+          type: integer
+          format: int32
+        documents:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalDocument'
+    VisitorIDTrendCard:
+      allOf:
+      - $ref: '#/components/schemas/TrendCheckCard'
+      - type: object
+        properties:
+          visitorId:
+            type: string
+            description: The visitor ID that was searched against the trend records
+            example: visitor_ABC123XYZ789
+      description: Trend check result for visitor ID searches against trends.
+      required:
+      - checkOutcome
+      - recordCount
+      - trendGroup
+      - trendType
+      - visitorId
+    UserDataQueryResultDto:
+      type: object
+      description: Result of a single query within the overall query request
+      properties:
+        query:
+          type: string
+          description: The specific value that was queried
+          example: 123456789
+        matches:
+          type: array
+          description: Array of matching entries found for this query
+          items:
+            $ref: '#/components/schemas/UserDataMatchDto'
+      required:
+      - matches
+    UserDataResponse:
+      type: object
+      properties:
+        documents:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Document'
+          description: Documents which were captured during the execution of the process instance.
+        additionalDocuments:
+          $ref: '#/components/schemas/AdditionalDocumentResponse'
+          description: AdditionalDocuments which were captured during the execution of the process instance.
+        faces:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Face'
+          description: Faces which were captured during the execution of the process instance.
+        cloudFunctions:
+          $ref: '#/components/schemas/CloudFunctions'
+          description: The results of any cloud function executions as part of the execution of the process instance.
+        customDataforms:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFormDatas'
+          description: The contents CustomFormDatas which were captured during the execution of the process instance.
+        customPages:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPageData'
+          description: The results of any CustomPages which were displayed during the execution of the process instance.
+        review:
+          $ref: '#/components/schemas/ReviewResponse'
+        keyedAdditionalDocuments:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AdditionalDocumentResponse'
+          description: Keyed AdditionalDocuments which were captured during the execution of the process instance.
+          properties:
+            empty:
+              type: boolean
+        watchlists:
+          type: array
+          description: If any face watchlist matches were performed the results are available as part of `watchlists`.
+          items:
+            $ref: '#/components/schemas/WatchlistResponse'
+        error:
+          $ref: '#/components/schemas/Error'
+          description: An error object containing details of any incidents that may occurred during the process execution that would have prevented execution from completing.
+        signals:
+          $ref: '#/components/schemas/Signals'
+          description: Signals captured during the execution of the process instance.
+        watchlistV2:
+          type: object
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentNumberWatchlistCard'
+            - $ref: '#/components/schemas/EmailWatchlistCard'
+            - $ref: '#/components/schemas/FaceV6WatchlistCard'
+            - $ref: '#/components/schemas/IPv4AddressWatchlistCard'
+            - $ref: '#/components/schemas/PhoneNumberWatchlistCard'
+            - $ref: '#/components/schemas/VisitorIDWatchlistCard'
+          description: Watchlist (version 2) matching results captured during the execution of the process instance.
+        initParams:
+          type: object
+          additionalProperties: {}
+          description: The merged initialization parameters passed when the process instance was created.
+        trendChecks:
+          type: object
+          additionalProperties:
+            oneOf:
+            - $ref: '#/components/schemas/DocumentNumberTrendCard'
+            - $ref: '#/components/schemas/EmailTrendCard'
+            - $ref: '#/components/schemas/IPv4AddressTrendCard'
+            - $ref: '#/components/schemas/PhoneNumberTrendCard'
+            - $ref: '#/components/schemas/VisitorIDTrendCard'
+          description: Trend check results captured during the execution of the process instance.
+        calls:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Call'
+          description: Calls which were captured during the execution of the process instance.
+    CheckResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifier for the check
+        displayName:
+          type: string
+          description: A human readable display name. This value is typically used in user interface and should not be relied upon for application logic.
+        description:
+          type: string
+          description: A human readable description. This value is typically used in user interface and should not be relied upon for application logic.
+        outcome:
+          type: string
+          description: The outcome of a check.
+        moreInfo:
+          type: string
+          description: More information about the outcome of a check if avaialble
+        nested:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CheckResponse'
+        metaData:
+          type: object
+          additionalProperties: {}
+          description: Please note that the contents of the metadata are unstructured data and may change without prior notice..
+    Jailbroken:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'iOS specific jailbreak detection. There are 2 values:    * `true` - Jailbreak detected.   * `false` - No signs of jailbreak or the client is not iOS. '
+      required:
+      - result
+    ProductHighActivity:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/HighActivity'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataQueryParametersDto:
+      type: object
+      description: Parameters for the matching algorithm
+      properties:
+        maxDistance:
+          type: integer
+          format: int32
+          description: Maximum Levenshtein distance for fuzzy matching (0 = exact match)
+          example: 0
+          maximum: 5
+    ProxyDetails:
+      type: object
+      description: Proxy detection details (present if proxy is detected)
+      properties:
+        proxyType:
+          type: string
+          description: 'Residential proxies use real user IP addresses to appear as legitimate traffic,  while data center proxies are public proxies hosted in data centers '
+          enum:
+          - residential
+          - data_center
+        lastSeenAt:
+          type: string
+          format: date-time
+          description: 'ISO 8601 formatted timestamp in UTC with hourly resolution of when this IP was last seen as a proxy when available. '
+      required:
+      - proxyType
+    UserDataPhoneNumberWatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      - type: object
+        properties:
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            description: Maximum number of match results requested per query
+            example: 10
+      description: Response for phone number watchlist queries
+      required:
+      - queries
+      - type
+    ProductBotd:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Botd'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataAbstractWatchlistQueryResponseDto:
+      type: object
+      description: Base class for watchlist query responses with type-specific matching results
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: Type of query response (matches the watchlist type)
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - facev6
+          - email
+          - phoneNumber
+          example: documentNumber
+        value:
+          type: string
+          description: Original query value that was searched
+          example: 123456789,987654321
+        queries:
+          type: array
+          description: Array of query results, one for each value in the original query
+          items:
+            $ref: '#/components/schemas/UserDataQueryResultDto'
+      required:
+      - queries
+      - type
+    ProductIPInfo:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/IPInfo'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataQueryAlgorithmDto:
+      type: object
+      description: Algorithm configuration for document number matching
+      properties:
+        type:
+          type: string
+          description: Type of matching algorithm
+          enum:
+          - exactMatch
+          - levenshteinDistance
+          example: exactMatch
+        parameters:
+          $ref: '#/components/schemas/UserDataQueryParametersDto'
+          description: Algorithm-specific parameters
+    ReviewResponse:
+      type: object
+      properties:
+        url:
+          type: string
+        status:
+          type: string
+        comment:
+          type: string
+        reviewer:
+          type: string
+        email:
+          type: string
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/DecisionOutcome'
+    ProductSuspectScore:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SuspectScore'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataQueryResponseParametersDto:
+      type: object
+      description: Algorithm parameters for fuzzy matching
+      properties:
+        maxDistance:
+          type: integer
+          format: int32
+          description: Maximum Levenshtein distance allowed for matches
+          example: 2
+    KeyBiographicData:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+        fieldName:
+          type: string
+        fieldId:
+          type: string
+        source:
+          type: string
+    ProcessInfo:
+      type: object
+      properties:
+        processDefnId:
+          type: string
+        processDefnName:
+          type: string
+        processDefnVersion:
+          type: integer
+          format: int32
+        processInstanceId:
+          type: string
+    Products:
+      type: object
+      description: Contains all information about the request identified by `requestId`, depending on the pricing plan (Pro, Pro Plus, Enterprise)
+      properties:
+        identification:
+          $ref: '#/components/schemas/ProductIdentification'
+        botd:
+          $ref: '#/components/schemas/ProductBotd'
+        rootApps:
+          $ref: '#/components/schemas/ProductRootApps'
+        emulator:
+          $ref: '#/components/schemas/ProductEmulator'
+        ipInfo:
+          $ref: '#/components/schemas/ProductIPInfo'
+        ipBlocklist:
+          $ref: '#/components/schemas/ProductIPBlocklist'
+        tor:
+          $ref: '#/components/schemas/ProductTor'
+        vpn:
+          $ref: '#/components/schemas/ProductVPN'
+        proxy:
+          $ref: '#/components/schemas/ProductProxy'
+        incognito:
+          $ref: '#/components/schemas/ProductIncognito'
+        tampering:
+          $ref: '#/components/schemas/ProductTampering'
+        clonedApp:
+          $ref: '#/components/schemas/ProductClonedApp'
+        factoryReset:
+          $ref: '#/components/schemas/ProductFactoryReset'
+        jailbroken:
+          $ref: '#/components/schemas/ProductJailbroken'
+        frida:
+          $ref: '#/components/schemas/ProductFrida'
+        privacySettings:
+          $ref: '#/components/schemas/ProductPrivacySettings'
+        virtualMachine:
+          $ref: '#/components/schemas/ProductVirtualMachine'
+        rawDeviceAttributes:
+          $ref: '#/components/schemas/ProductRawDeviceAttributes'
+        highActivity:
+          $ref: '#/components/schemas/ProductHighActivity'
+        locationSpoofing:
+          $ref: '#/components/schemas/ProductLocationSpoofing'
+        suspectScore:
+          $ref: '#/components/schemas/ProductSuspectScore'
+        remoteControl:
+          $ref: '#/components/schemas/ProductRemoteControl'
+          deprecated: true
+        velocity:
+          $ref: '#/components/schemas/ProductVelocity'
+        developerTools:
+          $ref: '#/components/schemas/ProductDeveloperTools'
+        mitmAttack:
+          $ref: '#/components/schemas/ProductMitMAttack'
+        proximity:
+          $ref: '#/components/schemas/ProductProximity'
+    ProductIncognito:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Incognito'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataIPv4AddressWatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      - type: object
+        properties:
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            description: Maximum number of match results requested per query
+            example: 10
+      description: Response for IPv4 address watchlist queries with range matching support
+      required:
+      - queries
+      - type
+    Frida:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '[Frida](https://frida.re/docs/) detection for Android and iOS devices. There are 2 values:   * `true` - Frida detected   * `false` - No signs of Frida or the client is not a mobile device. '
+      required:
+      - result
+    ProductDeveloperTools:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DeveloperTools'
+        error:
+          $ref: '#/components/schemas/Error'
+    IPBlocklistDetails:
+      type: object
+      properties:
+        emailSpam:
+          type: boolean
+          description: IP address was part of a known email spam attack (SMTP).
+        attackSource:
+          type: boolean
+          description: IP address was part of a known network attack (SSH/HTTPS).
+      required:
+      - attackSource
+      - emailSpam
+    SuspectScore:
+      type: object
+      properties:
+        result:
+          type: integer
+          format: int32
+          description: 'Suspect Score is an easy way to integrate Smart Signals into your fraud protection work flow.  It is a weighted representation of all Smart Signals present in the payload that helps identify suspicious activity. The value range is [0; S] where S is sum of all Smart Signals weights.  See more details here: https://dev.fingerprint.com/docs/suspect-score '
+      required:
+      - result
+    VelocityIntervals:
+      type: object
+      description: 'Is absent if the velocity data could not be generated for the visitor ID. '
+      properties:
+        5m:
+          type: integer
+          format: int32
+        1h:
+          type: integer
+          format: int32
+        24h:
+          type: integer
+          format: int32
+          description: 'The `24h` interval of `distinctIp`, `distinctLinkedId`, `distinctCountry`, `distinctIpByLinkedId` and `distinctVisitorIdByLinkedId` will be omitted if the number of `events`` for the visitor ID in the last 24 hours (`events.intervals.[''24h'']`) is higher than 20.000. '
+      required:
+      - 1h
+      - 5m
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        classification:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        captures:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/ImageHref'
+        upload:
+          $ref: '#/components/schemas/UserDataDocumentUpload'
+        segmentedImages:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SegmentedImage'
+        keyBiographicData:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/KeyBiographicData'
+        biographicData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiographicData'
+        portraitImage:
+          $ref: '#/components/schemas/PortraitImage'
+        reports:
+          $ref: '#/components/schemas/AbstractReports'
+    BotdBot:
+      type: object
+      description: Stores bot detection result
+      properties:
+        result:
+          type: string
+          enum:
+          - notDetected
+          - good
+          - bad
+        type:
+          type: string
+      required:
+      - result
+    ProductProxy:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Proxy'
+        error:
+          $ref: '#/components/schemas/Error'
+    BiographicDataValues:
+      type: object
+      properties:
+        visualZoneValue:
+          type: string
+        barcodeValue:
+          type: string
+        mrzValue:
+          type: string
+        nfcValue:
+          type: string
+    UserDataFaceV6WatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            format: byte
+            description: Face image to search for (base64 in JSON)
+          template:
+            type: string
+            format: byte
+            description: Face template to search for (base64 in JSON)
+          matchThreshold:
+            type: number
+            format: double
+            default: '0.205245'
+            description: Score based matches threshold for matches (0.0 to 1.0)
+            example: 0.205245
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for face recognition watchlists with similarity matching
+      required:
+      - type
+    UserDataVisitorIdWatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      description: Response for visitor ID watchlist queries with exact matching
+      required:
+      - queries
+      - type
+    AdditionalDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        title:
+          $ref: '#/components/schemas/ValuesHolder'
+        captures:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/ImageHref'
+    RemoteControl:
+      type: object
+      description: 'This signal is deprecated. '
+      properties:
+        result:
+          type: boolean
+          description: '`true` if the request came from a machine being remotely controlled (e.g. TeamViewer), `false` otherwise. '
+      required:
+      - result
+    UserDataMatchDto:
+      type: object
+      description: A single match found in the watchlist
+      properties:
+        entryId:
+          type: string
+          description: Unique identifier of the matching entry
+          example: 01HZ123456789ABCDEFGHIJKLMN
+        value:
+          type: string
+          description: The value of the matching entry
+          example: 123456789
+        fullName:
+          type: string
+          description: Full name associated with the matching entry (FaceV6 queries only)
+          example: Jane Doe
+        score:
+          type: number
+          format: double
+          description: Match score for fuzzy matching algorithms (0.0 to 1.0)
+          example: 0.95
+        get_links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/UserDataLinkDto'
+          description: Navigation links for related resources
+    AbstractWatchlistQueryDto:
+      type: object
+      description: Base class for watchlist query requests with type-specific matching parameters
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: Type of query (must match the watchlist type)
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - facev6
+          - email
+          - phoneNumber
+          example: documentNumber
+      required:
+      - type
+    Tor:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if the request IP address is a known tor exit node, `false` otherwise. '
+      required:
+      - result
+    PortraitImage:
+      type: object
+      properties:
+        id:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        capture:
+          $ref: '#/components/schemas/ImageHref'
+    Proximity:
+      type: object
+      description: 'Proximity ID represents a fixed geographical zone in a discrete global grid within which the device is observed. '
+      properties:
+        id:
+          type: string
+          description: 'A stable privacy-preserving identifier for a given proximity zone. '
+        precisionRadius:
+          type: integer
+          format: int32
+          description: 'The radius of the proximity zone?s precision level, in meters. '
+          enum:
+          - 10
+          - 25
+          - 65
+          - 175
+          - 450
+          - 1200
+          - 3300
+          - 8500
+          - 22500
+        confidence:
+          type: number
+          format: float
+          description: 'A value between `0` and `1` representing the likelihood that the true device location lies within the mapped proximity zone.   * Scores closer to `1` indicate high confidence that the location is inside the mapped proximity zone.   * Scores closer to `0` indicate lower confidence, suggesting the true location may fall in an adjacent zone. '
+      required:
+      - confidence
+      - id
+      - precisionRadius
+    ProductRemoteControl:
+      type: object
+      description: 'This product is deprecated. '
+      properties:
+        data:
+          $ref: '#/components/schemas/RemoteControl'
+          deprecated: true
+        error:
+          $ref: '#/components/schemas/Error'
+    CustomPageData:
+      type: object
+      properties:
+        customPageId:
+          type: string
+        customPageName:
+          type: string
+        customPageVersion:
+          type: integer
+          format: int32
+        parameters:
+          type: object
+          additionalProperties: {}
+    IPBlocklist:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if request IP address is part of any database that we use to search for known malicious actors, `false` otherwise. '
+        details:
+          $ref: '#/components/schemas/IPBlocklistDetails'
+      required:
+      - details
+      - result
+    Proxy:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'IP address was used by a public proxy provider or belonged to a known recent residential proxy '
+        confidence:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+        details:
+          $ref: '#/components/schemas/ProxyDetails'
+      required:
+      - confidence
+      - result
+    Face:
+      type: object
+      properties:
+        id:
+          type: string
+        external:
+          type: boolean
+        lastModified:
+          type: string
+          format: date-time
+        capture:
+          $ref: '#/components/schemas/ImageHref'
+        reports:
+          $ref: '#/components/schemas/AbstractReports'
+    IPv4AddressWatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          ipAddress:
+            type: string
+            description: The IPv4 address that was searched in the watchlist. Can be a single address or part of a range.
+            example: 192.168.1.100
+      description: Watchlist check result for IPv4 address searches. Contains the IPv4 address that was searched in the watchlist.
+      required:
+      - checkOutcome
+      - ipAddress
+      - matchCount
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    ProductProximity:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Proximity'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataIPv4AddressWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: IPv4 address(es) to search for (will match against ranges and individual addresses). Can be a comma-separated list of IPv4 addresses.
+            example: 192.168.1.100,10.0.0.1
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for IPv4 address watchlists with range matching capabilities
+      required:
+      - type
+      - value
+    ProductMitMAttack:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MitMAttack'
+        error:
+          $ref: '#/components/schemas/Error'
+    EmailWatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          emailAddress:
+            type: string
+            description: The email address that was searched in the watchlist
+            example: user@example.com
+      description: Watchlist check result for email address searches. Contains the email address that was searched in the watchlist.
+      required:
+      - checkOutcome
+      - emailAddress
+      - matchCount
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    DeprecatedGeolocation:
+      type: object
+      description: This field is **deprecated** and will not return a result for **applications created after January 23rd, 2024**.  Please use the [IP Geolocation Smart signal](https://dev.fingerprint.com/docs/smart-signals-overview#ip-geolocation) for geolocation information.
+      properties:
+        accuracyRadius:
+          type: integer
+          format: int32
+          description: The IP address is likely to be within this radius (in km) of the specified location.
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        postalCode:
+          type: string
+        timezone:
+          type: string
+        city:
+          $ref: '#/components/schemas/GeolocationCity'
+        country:
+          $ref: '#/components/schemas/GeolocationCountry'
+        continent:
+          $ref: '#/components/schemas/GeolocationContinent'
+        subdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeolocationSubdivision'
+    UseDataFaceV6WatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      - type: object
+        properties:
+          matchThreshold:
+            type: number
+            format: double
+            description: Match threshold used for face recognition
+            example: 0.85
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            description: Maximum number of match results requested per query
+            example: 10
+      description: Response for FaceV6 watchlist queries with biometric matching support
+      required:
+      - queries
+      - type
+    UserDataIpv4AddressTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractTrendRecordDto'
+      description: Trend record for IPv4 address trends, representing occurrences of specific IPv4 addresses in user data
+    ValuesHolder:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    WatchlistResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        hits:
+          type: integer
+          format: int32
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchlistMemberCandidate'
+        liveFaceKey:
+          type: string
+        liveFaceImageHref:
+          type: string
+    Config:
+      type: object
+      properties:
+        password:
+          type: string
+    GeolocationCity:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    TrendCheckCard:
+      type: object
+      description: Base class for trend check results. Contains common fields for all trend types (document number, IPv4 address, visitor ID, email, and phone number).
+      discriminator:
+        propertyName: trendType
+      properties:
+        trendGroup:
+          type: string
+          description: Optional trend group that was searched
+          example: Sanctions List
+        trendType:
+          type: string
+          description: Type of trend check performed
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - email
+          - phoneNumber
+          example: documentNumber
+        recordCount:
+          type: integer
+          format: int32
+          description: Number of records that matched against the trend
+          example: 2
+        checkOutcome:
+          type: string
+          description: Overall outcome of the trend check
+          enum:
+          - PASS
+          - FAIL
+          - NA
+          - REVIEW
+          example: FAIL
+        query:
+          $ref: '#/components/schemas/TrendQueryDto'
+          description: The original query request that was used to search the trend records
+        queryResponse:
+          $ref: '#/components/schemas/UserDataTrendRecordsListResponseDto'
+          description: Detailed response from the trend query, including matching records
+      required:
+      - checkOutcome
+      - recordCount
+      - trendGroup
+      - trendType
+    ImageHref:
+      type: object
+      properties:
+        imageHref:
+          type: string
+          readOnly: true
+        contentType:
+          type: string
+          readOnly: true
+        data:
+          type: string
+          format: binary
+          readOnly: true
+    ProductJailbroken:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Jailbroken'
+        error:
+          $ref: '#/components/schemas/Error'
+    IPInfoDataCenter:
+      type: object
+      properties:
+        result:
+          type: boolean
+        name:
+          type: string
+      required:
+      - name
+      - result
+    RootApps:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'Android specific root management apps detection. There are 2 values:    * `true` - Root Management Apps detected (e.g. Magisk).   * `false` - No Root Management Apps detected or the client isn''t Android. '
+      required:
+      - result
+    VelocityData:
+      type: object
+      properties:
+        intervals:
+          $ref: '#/components/schemas/VelocityIntervals'
+    UserDataDocumentUpload:
+      type: object
+      properties:
+        href:
+          type: string
+    EmailTrendCard:
+      allOf:
+      - $ref: '#/components/schemas/TrendCheckCard'
+      - type: object
+        properties:
+          email:
+            type: string
+            description: The email address that was searched against the trend records.
+            example: user@example.com
+      description: Email trend check result. Contains the email address that was searched against trend records.
+      required:
+      - checkOutcome
+      - email
+      - recordCount
+      - trendGroup
+      - trendType
+    Geolocation:
+      type: object
+      properties:
+        accuracyRadius:
+          type: integer
+          format: int32
+          description: The IP address is likely to be within this radius (in km) of the specified location.
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        postalCode:
+          type: string
+        timezone:
+          type: string
+        city:
+          $ref: '#/components/schemas/GeolocationCity'
+        country:
+          $ref: '#/components/schemas/GeolocationCountry'
+        continent:
+          $ref: '#/components/schemas/GeolocationContinent'
+        subdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeolocationSubdivision'
+    VPN:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: VPN or other anonymizing service has been used when sending the request.
+        confidence:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+        originTimezone:
+          type: string
+          description: Local timezone which is used in timezoneMismatch method.
+        originCountry:
+          type: string
+          description: Country of the request (only for Android SDK version >= 2.4.0, ISO 3166 format or unknown).
+        methods:
+          $ref: '#/components/schemas/VPNMethods'
+      required:
+      - confidence
+      - methods
+      - originCountry
+      - originTimezone
+      - result
+    UserDataVisitorIdWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Visitor ID(s) to search for. Can be a comma-separated list of visitor IDs.
+            example: visitor_12345,visitor_67890
+            minLength: 1
+            readOnly: true
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 1
+            description: Maximum number of matches per query to return. If not specified, defaults to 1. Capped at 100.
+            example: 1
+            maximum: 100
+            minimum: 1
+      description: Query for visitor ID watchlists with exact matching
+      required:
+      - type
+      - value
+    UserDataDocumentNumberWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Document number(s) to search for. Can be a comma-separated list of document numbers.
+            example: ABC123456789,DEF987654321
+            minLength: 1
+          documentType:
+            type: string
+            description: 'Optional document type filter (e.g., ''Austria - Id Card (2021)'', ''Serbia - Id Card (2009-2014) #1''). If omitted, the query searches across all document types.'
+            example: Austria - Id Card (2021)
+          algorithm:
+            $ref: '#/components/schemas/UserDataQueryAlgorithmDto'
+            description: Matching algorithm configuration
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for document number watchlists with fuzzy matching capabilities
+      required:
+      - type
+      - value
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    UserDataSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    WatchlistCard:
+      type: object
+      description: Base class for watchlist check results. Contains common fields for all watchlist types (face, document number, IPv4 address, and visitor ID).
+      discriminator:
+        propertyName: watchlistType
+      properties:
+        watchlistName:
+          type: string
+          description: Name of the watchlist that was searched
+          example: Sanctions List
+        watchlistType:
+          type: string
+          description: Type of watchlist check performed
+          enum:
+          - facev6
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - email
+          - phoneNumber
+          example: documentNumber
+        watchlistId:
+          type: string
+          description: Unique identifier of the watchlist
+          example: 01HZ123456789ABCDEFGHIJKLMN
+        matchCount:
+          type: integer
+          format: int32
+          description: Number of matches found in the watchlist
+          example: 2
+        searchBehavior:
+          type: string
+          description: Search behavior configuration that determines how matches are handled
+          enum:
+          - BLOCK
+          - ALLOW
+          - BLOCK_REVIEW
+          - ALLOW_REVIEW
+          example: BLOCK
+        checkOutcome:
+          type: string
+          description: Overall outcome of the watchlist check
+          enum:
+          - PASS
+          - FAIL
+          - NA
+          - REVIEW
+          example: FAIL
+        query:
+          description: The original query request that was used to search the watchlist
+          oneOf:
+          - $ref: '#/components/schemas/UserDataDocumentNumberWatchlistQueryDto'
+          - $ref: '#/components/schemas/UserDataEmailWatchlistQueryDto'
+          - $ref: '#/components/schemas/UserDataFaceV6WatchlistQueryDto'
+          - $ref: '#/components/schemas/UserDataIPv4AddressWatchlistQueryDto'
+          - $ref: '#/components/schemas/UserDataPhoneNumberWatchlistQueryDto'
+          - $ref: '#/components/schemas/UserDataVisitorIdWatchlistQueryDto'
+        queryResponse:
+          description: Detailed response from the watchlist query, including match results
+          oneOf:
+          - $ref: '#/components/schemas/UseDataFaceV6WatchlistQueryResponseDto'
+          - $ref: '#/components/schemas/UserDataDocumentNumberWatchlistQueryResponseDto'
+          - $ref: '#/components/schemas/UserDataEmailWatchlistQueryResponseDto'
+          - $ref: '#/components/schemas/UserDataIPv4AddressWatchlistQueryResponseDto'
+          - $ref: '#/components/schemas/UserDataPhoneNumberWatchlistQueryResponseDto'
+          - $ref: '#/components/schemas/UserDataVisitorIdWatchlistQueryResponseDto'
+      required:
+      - checkOutcome
+      - matchCount
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    PhoneNumberWatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          phoneNumber:
+            type: string
+            description: The phone number that was searched in the watchlist
+            example: '+1234567890'
+      description: Watchlist check result for phone number searches. Contains the phone number that was searched in the watchlist.
+      required:
+      - checkOutcome
+      - matchCount
+      - phoneNumber
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    ProductPrivacySettings:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PrivacySettings'
+        error:
+          $ref: '#/components/schemas/Error'
+    MitMAttack:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '* `true` - When requests made from your users'' mobile devices to Fingerprint servers have been intercepted and potentially modified.  * `false` - Otherwise or when the request originated from a browser. See [MitM Attack Detection](https://dev.fingerprint.com/docs/smart-signals-reference#mitm-attack-detection) to learn more about this Smart Signal. '
+      required:
+      - result
+    ProductFrida:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Frida'
+        error:
+          $ref: '#/components/schemas/Error'
+    LocationSpoofing:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: Flag indicating whether the request came from a mobile device with location spoofing enabled.
+      required:
+      - result
+    IPV4Record:
+      type: object
+      properties:
+        ipv4:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        region:
+          type: string
+        capturedDtm:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/Location'
+    SDK:
+      type: object
+      description: Contains information about the SDK used to perform the request.
+      properties:
+        platform:
+          type: string
+          description: Platform of the SDK.
+        version:
+          type: string
+          description: SDK version string.
+      required:
+      - platform
+      - version
+    SegmentedImage:
+      type: object
+      properties:
+        id:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        capture:
+          $ref: '#/components/schemas/ImageHref'
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    GeolocationSubdivision:
+      type: object
+      properties:
+        isoCode:
+          type: string
+        name:
+          type: string
+      required:
+      - isoCode
+      - name
+    BrowserDetails:
+      type: object
+      properties:
+        browserName:
+          type: string
+        browserMajorVersion:
+          type: string
+        browserFullVersion:
+          type: string
+        os:
+          type: string
+        osVersion:
+          type: string
+        device:
+          type: string
+        userAgent:
+          type: string
+      required:
+      - browserFullVersion
+      - browserMajorVersion
+      - browserName
+      - device
+      - os
+      - osVersion
+      - userAgent
+    UserDataDocumentNumberWatchlistQueryResponseDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractWatchlistQueryResponseDto'
+      - type: object
+        properties:
+          documentType:
+            type: string
+            description: Document type that was searched
+            example: Austria - Id Card (2021)
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            description: Maximum number of match results requested per query
+            example: 10
+          algorithm:
+            $ref: '#/components/schemas/UserDataQueryResponseAlgorithmDto'
+            description: Algorithm used for matching (if fuzzy matching was requested)
+      description: Response for document number watchlist queries with fuzzy matching support
+      required:
+      - queries
+      - type
+    ProductRootApps:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RootApps'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataPhoneNumberWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Phone number(s) to search for. Can be a comma-separated list.
+            example: '+1234567890'
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for phone number watchlists
+      required:
+      - type
+      - value
+    Velocity:
+      type: object
+      description: 'Sums key data points for a specific `visitorId`, `ipAddress` and `linkedId` at three distinct time intervals: 5 minutes, 1 hour, and 24 hours as follows:   - Number of distinct IP addresses associated to the visitor ID. - Number of distinct linked IDs associated with the visitor ID. - Number of distinct countries associated with the visitor ID. - Number of identification events associated with the visitor ID. - Number of identification events associated with the detected IP address. - Number of distinct IP addresses associated with the provided linked ID. - Number of distinct visitor IDs associated with the provided linked ID.  The `24h` interval of `distinctIp`, `distinctLinkedId`, `distinctCountry`, `distinctIpByLinkedId` and `distinctVisitorIdByLinkedId` will be omitted  if the number of `events` for the visitor ID in the last 24 hours (`events.intervals.[''24h'']`) is higher than 20.000. '
+      properties:
+        distinctIp:
+          $ref: '#/components/schemas/VelocityData'
+        distinctLinkedId:
+          $ref: '#/components/schemas/VelocityData'
+        distinctCountry:
+          $ref: '#/components/schemas/VelocityData'
+        events:
+          $ref: '#/components/schemas/VelocityData'
+        ipEvents:
+          $ref: '#/components/schemas/VelocityData'
+        distinctIpByLinkedId:
+          $ref: '#/components/schemas/VelocityData'
+        distinctVisitorIdByLinkedId:
+          $ref: '#/components/schemas/VelocityData'
+      required:
+      - distinctCountry
+      - distinctIp
+      - distinctIpByLinkedId
+      - distinctLinkedId
+      - distinctVisitorIdByLinkedId
+      - events
+      - ipEvents
+    Botd:
+      type: object
+      description: Contains all the information from Bot Detection product
+      properties:
+        bot:
+          $ref: '#/components/schemas/BotdBot'
+        meta:
+          type: object
+          additionalProperties: {}
+          description: A customer-provided value or an object that was sent with identification request.
+        linkedId:
+          type: string
+          description: A customer-provided id that was sent with the request.
+        url:
+          type: string
+          description: Page URL from which the request was sent.
+        ip:
+          type: string
+          description: IP address of the requesting browser or bot.
+        time:
+          type: string
+          format: date-time
+          description: Time in UTC when the request from the JS agent was made. We recommend to treat requests that are older than 2 minutes as malicious. Otherwise, request replay attacks are possible.
+        userAgent:
+          type: string
+        requestId:
+          type: string
+          description: Unique identifier of the user's request.
+      required:
+      - bot
+      - ip
+      - requestId
+      - time
+      - url
+      - userAgent
+    ProductTampering:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Tampering'
+        error:
+          $ref: '#/components/schemas/Error'
+    RawDeviceAttributeError:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    FaceV6WatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          matchThreshold:
+            type: number
+            format: double
+            description: Match threshold used for face recognition. Values range from 0.0 to 1.0, where higher values indicate stricter matching requirements.
+            example: 0.85
+          templateUsed:
+            type: boolean
+            description: Indicates whether a face template was used for searching (true) or a raw image was used (false)
+            example: true
+          faceKey:
+            type: string
+            description: Unique identifier (key) of the face image used for the search
+            example: face_01HZ123456789ABCDEFGHIJKLMN
+          faceHref:
+            type: string
+            description: URL or path to the face image that was used for the search
+            example: /api/data/faces/01HZ123456789ABCDEFGHIJKLMN
+      description: Watchlist check result for face recognition searches. Contains face matching threshold, template usage, and face image information.
+      required:
+      - checkOutcome
+      - matchCount
+      - watchlistId
+      - watchlistName
+      - watchlistType
+    ProductVirtualMachine:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/VirtualMachine'
+        error:
+          $ref: '#/components/schemas/Error'
+    Signals:
+      type: object
+      properties:
+        ipv4s:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IPV4Record'
+        deviceIntegritySignals:
+          $ref: '#/components/schemas/DeviceIntegritySignals'
+    ProductIPBlocklist:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/IPBlocklist'
+        error:
+          $ref: '#/components/schemas/Error'
+    Emulator:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'Android specific emulator detection. There are 2 values:    * `true` - Emulated environment detected (e.g. launch inside of AVD).    * `false` - No signs of emulated environment detected or the client is not Android. '
+      required:
+      - result
+    VirtualMachine:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: '`true` if the request came from a browser running inside a virtual machine (e.g. VMWare), `false` otherwise. '
+      required:
+      - result
+    Location:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+    IPInfo:
+      type: object
+      description: Details about the request IP address. Has separate fields for v4 and v6 IP address versions.
+      properties:
+        v4:
+          $ref: '#/components/schemas/IPInfoV4'
+        v6:
+          $ref: '#/components/schemas/IPInfoV6'
+    IPInfoV4:
+      type: object
+      properties:
+        address:
+          type: string
+        geolocation:
+          $ref: '#/components/schemas/Geolocation'
+        asn:
+          $ref: '#/components/schemas/IPInfoASN'
+        datacenter:
+          $ref: '#/components/schemas/IPInfoDataCenter'
+      required:
+      - address
+      - geolocation
+    GeolocationCountry:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - name
+    ProductLocationSpoofing:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/LocationSpoofing'
+        error:
+          $ref: '#/components/schemas/Error'
+    UserDataEmailTrendRecordDto:
+      allOf:
+      - $ref: '#/components/schemas/UserDataAbstractTrendRecordDto'
+      description: Trend record for email trends, representing occurrences of specific email addresses in user data
+    GeolocationContinent:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - name
+    UserDataEmailWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Email address(es) to search for. Can be a comma-separated list.
+            example: user@example.com
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for email address watchlists
+      required:
+      - type
+      - value
+    AuthorizationSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    DocumentNumberTrendCard:
+      allOf:
+      - $ref: '#/components/schemas/TrendCheckCard'
+      - type: object
+        properties:
+          documentNumber:
+            type: string
+            description: The document number that was searched in the trend records
+            example: ABC123456789
+          documentType:
+            type: string
+            description: The document type that was used as a filter for the search
+            example: Austria - Id Card (2021)
+      description: Watchlist check result for document number searches. Contains document number, document type, and matching algorithm information.
+      required:
+      - checkOutcome
+      - documentNumber
+      - recordCount
+      - trendGroup
+      - trendType
+    EventsGetResponse:
+      type: object
+      description: Contains results from all activated products - Fingerprint Pro, Bot Detection, and others.
+      properties:
+        products:
+          $ref: '#/components/schemas/Products'
+      required:
+      - products
+    FactoryReset:
+      type: object
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: 'Indicates the time (in UTC) of the most recent factory reset that happened on the **mobile device**.  When a factory reset cannot be detected on the mobile device or when the request is initiated from a browser,  this field will correspond to the *epoch* time (i.e 1 Jan 1970 UTC). See [Factory Reset Detection](https://dev.fingerprint.com/docs/smart-signals-overview#factory-reset-detection) to learn more about this Smart Signal. '
+        timestamp:
+          type: integer
+          format: int64
+          description: 'This field is just another representation of the value in the `time` field. The time of the most recent factory reset that happened on the **mobile device** is expressed as Unix epoch time.        '
+      required:
+      - time
+      - timestamp
+    VPNMethods:
+      type: object
+      properties:
+        timezoneMismatch:
+          type: boolean
+          description: The browser timezone doesn't match the timezone inferred from the request IP address.
+        publicVPN:
+          type: boolean
+          description: Request IP address is owned and used by a public VPN service provider.
+        auxiliaryMobile:
+          type: boolean
+          description: This method applies to mobile devices only. Indicates the result of additional methods used to detect a VPN in mobile devices.
+        osMismatch:
+          type: boolean
+          description: The browser runs on a different operating system than the operating system inferred from the request network signature.
+        relay:
+          type: boolean
+          description: 'Request IP address belongs to a relay service provider, indicating the use of relay services like [Apple Private relay](https://support.apple.com/en-us/102602) or [Cloudflare Warp](https://developers.cloudflare.com/warp-client/).   * Like VPNs, relay services anonymize the visitor''s true IP address. * Unlike traditional VPNs, relay services don''t let visitors spoof their location by choosing an exit node in a different country.  This field allows you to differentiate VPN users and relay service users in your fraud prevention logic. '
+      required:
+      - auxiliaryMobile
+      - osMismatch
+      - publicVPN
+      - relay
+      - timezoneMismatch
+    ProductVelocity:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Velocity'
+        error:
+          $ref: '#/components/schemas/Error'
+    DecisionOutcome:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+    Tampering:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'Indicates if an identification request from a browser or an Android SDK has been tampered with. Not supported in the iOS SDK, is always `false` for iOS requests.   * `true` - If the request meets either of the following conditions:     * Contains anomalous browser or device attributes that could not have been legitimately produced by the JavaScript agent or the Android SDK (see `anomalyScore`).     * Originated from an anti-detect browser like Incognition (see `antiDetectBrowser`).   * `false` - If the request is considered genuine or was generated by the iOS SDK. '
+        anomalyScore:
+          type: number
+          format: double
+          description: 'A score that indicates the extent of anomalous data in the request. This field applies to requests originating from **both** browsers and Android SDKs.    * Values above `0.5` indicate that the request has been tampered with.   * Values below `0.5` indicate that the request is genuine. '
+        antiDetectBrowser:
+          type: boolean
+          description: 'Anti-detect browsers try to evade identification by masking or manipulating their fingerprint to imitate legitimate browser configurations. This field does not apply to requests originating from mobile SDKs.   * `true` - The browser resembles a known anti-detect browser, for example, Incognition.   * `false` - The browser does not resemble an anti-detect browser or the request originates from a mobile SDK. '
+      required:
+      - anomalyScore
+      - antiDetectBrowser
+      - result
+    ArchiveConfig:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/Config'
+    DeviceIntegritySignals:
+      type: object
+      properties:
+        v3:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/EventsGetResponse'
+    ClonedApp:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 'Android specific cloned application detection. There are 2 values:    * `true` - Presence of app cloners work detected (e.g. fully cloned application found or launch of it inside of a not main working profile detected).   * `false` - No signs of cloned application detected or the client is not Android. '
+      required:
+      - result
+    AbstractReports: {}
+    BiographicData:
+      type: object
+      properties:
+        label:
+          type: string
+        fieldId:
+          type: string
+        fieldName:
+          type: string
+        values:
+          $ref: '#/components/schemas/BiographicDataValues'
+    HighActivity:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: Flag indicating if the request came from a high-activity visitor.
+        dailyRequests:
+          type: integer
+          format: int64
+          description: Number of requests from the same visitor in the previous day.
+      required:
+      - result
+    DocumentNumberWatchlistCard:
+      allOf:
+      - $ref: '#/components/schemas/WatchlistCard'
+      - type: object
+        properties:
+          documentNumber:
+            type: string
+            description: The document number that was searched in the watchlist
+            example: ABC123456789
+          documentType:
+            type: string
+            description: The document type that was used as a filter for the search
+            example: Austria - Id Card (2021)
+          matchAlgorithm:
+            type: string
+            description: The matching algorithm used for the search
+            enum:
+            - EXACT
+            - LEVENSHTEIN
+            example: EXACT
+      description: Watchlist check result for document number searches. Contains document number, document type, and matching algorithm information.
+      required:
+      - checkOutcome
+      - documentNumber
+      - matchCount
+      - watchlistId
+      - watchlistName
+      - watchlistType
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

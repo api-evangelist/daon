@@ -1,0 +1,613 @@
+openapi: 3.2.0
+info:
+  title: Daon Archive Policies API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Archive Policies across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Archive Policies
+paths:
+  /api/process-manager/archivePolicies:
+    get:
+      tags:
+      - Archive Policies
+      summary: List Archive Policies
+      description: 'Returns a paginated list of Archive Policies for a tenant. Results can be filtered by name using a wildcard prefix search via the `nameLike` parameter. Supports standard Spring Pageable query parameters: `page`, `size`, and `sort`. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:listArchivePolicies`'
+      operationId: listArchivePolicies
+      parameters:
+      - name: nameLike
+        in: query
+        description: Wildcard name filter. Returns policies whose name contains the given value (case-insensitive). E.g. 'archive' matches 'my-archive-policy'.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Page of Archive Policies returned successfully.
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Tenant not found.
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:listArchivePolicies
+    post:
+      tags:
+      - Archive Policies
+      summary: Create an Archive Policy
+      description: 'Creates a new Archive Policy for a tenant. Either a passphrase or a public key (with publicKeyFormat) must be provided ? they are mutually exclusive. The version is assigned server-side and is auto-incremented per (tenantId, name). Returns HTTP 201 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:createArchivePolicy`'
+      operationId: createArchivePolicy
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArchivePolicyRequest'
+        required: true
+      responses:
+        '201':
+          description: Archive Policy created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchivePolicyResponse'
+        '400':
+          description: 'Invalid request body. Possible reasons: name is missing or invalid (code 400); neither passphrase nor publicKey provided (code 806); both passphrase and publicKey provided (code 807); publicKey provided without publicKeyFormat or vice versa (code 805); publicKey is not a valid 256-bit EC P-256 PEM X.509 key (code 804); retentionDays is not a positive integer (code 803); cloudFunctionName provided without cloudFunctionVersion or vice versa (code 808); referenced cloud function does not exist or is not active (code 809).'
+          content:
+            application/json: {}
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Tenant not found.
+          content: {}
+        '409':
+          description: Conflict. Either Archive Policy name & version already exists for this tenant (code 800), or the tenant usage limit has been exceeded (code 801).
+          content:
+            application/json: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:createArchivePolicy
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archivePolicies/name/{name}/versions/{version}:
+    get:
+      tags:
+      - Archive Policies
+      summary: Get an Archive Policy by name and version
+      description: 'Retrieves a single Archive Policy by its name and version for a given tenant. Returns the same response as get-by-ID. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchivePolicyByNameAndVersion`'
+      operationId: getArchivePolicyByNameAndVersion
+      parameters:
+      - name: name
+        in: path
+        description: The archive policy name.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        description: The archive policy version.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Archive Policy returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchivePolicyResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Archive Policy or Tenant not found (code 802).
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchivePolicyByNameAndVersion
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archivePolicies/name/{name}/versions:
+    get:
+      tags:
+      - Archive Policies
+      summary: List all versions of an Archive Policy by name
+      description: 'Returns a paginated list of all versions of an Archive Policy identified by name for a given tenant, ordered by version ascending. Passphrases are redacted in the response. Returns an empty page if no versions exist for the given name. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:listArchivePolicyVersions`'
+      operationId: listArchivePolicyVersions
+      parameters:
+      - name: name
+        in: path
+        description: The archive policy name.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Page of Archive Policy versions returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchivePolicyResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Tenant not found.
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:listArchivePolicyVersions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archivePolicies/usage:
+    get:
+      tags:
+      - Archive Policies
+      summary: Get Archive Policy usage
+      description: 'Retrieves usage statistics for Archive Policies for a tenant, including the maximum allowed, total currently in use, and remaining capacity. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchivePolicyUsage`'
+      operationId: getArchivePolicyUsage
+      parameters: []
+      responses:
+        '200':
+          description: Archive Policy usage statistics returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchivePolicyUsageResponse'
+        '400':
+          description: Invalid tenantId.
+          content: {}
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Tenant not found.
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchivePolicyUsage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/archivePolicies/{id}:
+    get:
+      tags:
+      - Archive Policies
+      summary: Get an Archive Policy
+      description: 'Retrieves a single Archive Policy by its ID for a given tenant. If the policy was created with a passphrase, the passphrase is returned in plaintext. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchivePolicy`'
+      operationId: getArchivePolicy
+      parameters:
+      - name: id
+        in: path
+        description: The Archive Policy ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Archive Policy returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchivePolicyResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Archive Policy or Tenant not found (code 802).
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchivePolicy
+    delete:
+      tags:
+      - Archive Policies
+      summary: Delete an Archive Policy
+      description: 'Deletes an Archive Policy by its ID for a given tenant. The usage count for the tenant is decremented. The version number of the deleted policy is never reused. Returns HTTP 200 on success.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:deleteArchivePolicy`'
+      operationId: deleteArchivePolicy
+      parameters:
+      - name: id
+        in: path
+        description: The Archive Policy ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Archive Policy deleted successfully.
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized ? authentication required.
+        '403':
+          description: Forbidden ? insufficient tenant permissions.
+        '404':
+          description: Archive Policy or Tenant not found (code 802).
+          content: {}
+        '500':
+          description: Unexpected internal server error.
+          content: {}
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:deleteArchivePolicy
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    CreateArchivePolicyRequest:
+      type: object
+      description: The create request body for creating Archive Policies.
+      properties:
+        name:
+          type: string
+          description: The Archive Policy name. May only contain alphanumeric characters and underscores.
+          maxLength: 50
+          minLength: 0
+          pattern: ^[A-Za-z0-9_]+$
+        description:
+          type: string
+          description: The Archive Policy description (optional).
+          maxLength: 255
+          minLength: 0
+        publicKey:
+          type: string
+          description: Base64 encoded public key data.
+        publicKeyFormat:
+          type: string
+          description: Public key format. Only PEM is supported. Value is case-sensitive.
+          enum:
+          - PEM
+        passphrase:
+          type: string
+          description: Archive Policy passphrase.
+          maxLength: 255
+          minLength: 6
+          pattern: ^[\x20-\x7E]+$
+        cloudFunctionName:
+          type: string
+          description: Optional cloud function name.
+        cloudFunctionVersion:
+          type: integer
+          format: int32
+          description: Optional cloud function version.
+          minimum: 1
+        retentionDays:
+          type: integer
+          format: int32
+          description: The number of days to retain archived data. If not provided, retention is unlimited.
+      required:
+      - name
+    ArchivePolicyUsageResponse:
+      type: object
+      description: Usage statistics for Archive Policies belonging to a tenant.
+      properties:
+        maxAllowed:
+          type: integer
+          format: int32
+          description: The maximum number of Archive Policies allowed for the tenant.
+        total:
+          type: integer
+          format: int32
+          description: The total number of Archive Policies currently in use.
+        remaining:
+          type: integer
+          format: int32
+          description: The remaining number of Archive Policies that can be created.
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    ArchivePolicyResponse:
+      type: object
+      description: The Archive Policy.
+      properties:
+        id:
+          type: string
+          description: The autogenerated id of the Archive Policy.
+        name:
+          type: string
+          description: The Archive Policy name.
+        version:
+          type: integer
+          format: int32
+          description: The Archive Policy version.
+        description:
+          type: string
+          description: The Archive Policy description.
+        publicKey:
+          type: string
+          description: Base64 encoded public key data.
+        publicKeyFormat:
+          type: string
+          description: Public key format.
+        passphrase:
+          type: string
+          description: Archive Policy passphrase.
+        cloudFunctionId:
+          type: string
+          description: Optional cloud function id.
+        cloudFunctionName:
+          type: string
+          description: Optional cloud function name.
+        cloudFunctionVersion:
+          type: integer
+          format: int32
+          description: Optional cloud function version.
+        retentionDays:
+          type: integer
+          format: int32
+          description: The number of days to retain archived data.
+        createdDtm:
+          type: string
+          format: date-time
+          description: The created date time.
+        createdBy:
+          type: string
+          description: The creator of the Archive Policy.
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: The last updated date time.
+        lastUpdatedBy:
+          type: string
+          description: The last updater of the Archive Policy.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

@@ -1,0 +1,21 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.trustx.com/trust/preview-environment.md
+description: TrustX includes a preview environment for testing upcoming releases before they reach production. Preview tenants are invite-only and located in the EU region.
+docs: https://docs.trustx.com/trust/preview-environment.md
+features:
+- Preview environment for testing upcoming releases
+- Separate administration realm from production
+- Early access to new features and APIs
+- Updated preview documentation synchronized with preview releases
+- Release notifications with details of new features, bug fixes, and deprecations
+limits:
+- API invocations limited to 10 per second
+- Process Instance creation limited to 3 per second
+- Audit records retained for maximum 30 days
+- Process Instance records retained for maximum 30 days
+- No disaster recovery system
+- No SLAs
+- No preview notification of upgrades
+- Not suitable for performance or scale testing
+note: Preview tenants cannot be converted to production tenants and vice versa. Preview is intended for validation testing only, not for live environments.

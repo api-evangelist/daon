@@ -1,0 +1,887 @@
+openapi: 3.2.0
+info:
+  title: Daon Tenant Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Tenant Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Tenant Management
+paths:
+  /api/identity-store/events/queries/{executionId}/result:
+    get:
+      tags:
+      - Tenant Management
+      summary: Get the results of a store event query
+      description: 'Event querying may take a long time and so is implemented using three APIs:
+
+        1. Start a query
+
+        2. Get the query status. Poll until a result is available.
+
+        3. Get the query results. **this API**
+
+
+        **NOTE**: If there are too many results to return in this response then a token is returned which may be supplied in the request to this API get the next set of results.
+
+
+        Refer to Daon documentation for more details on how to query identity store events.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getStoreEventsQueryResults` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getStoreEventsQueryResults`'
+      operationId: getStoreEventsQueryResults
+      parameters:
+      - name: executionId
+        in: path
+        description: Unique ID of the query execution provided when the query execution was started.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: nextToken
+        in: query
+        description: If there are too many results to return in this response then this token may be supplied in a further call to this API to get the next set of results
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        '200':
+          description: Query results returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericEventQueryResponseStoreEvent'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **824**: Failed to get query results from Athena
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getStoreEventsQueryResults
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/events/queries/{executionId}/status:
+    get:
+      tags:
+      - Tenant Management
+      summary: Get the status of a store event query
+      description: 'Event querying may take a long time and so is implemented using three APIs:
+
+        1. Start a query
+
+        2. Get the query status. Poll until a result is available. **this API**
+
+        3. Get the query results.
+
+
+        The API typically returns HTTP status 200 and response containing the status, for example QUEUED or SUCCEEDED.The API returns HTTP status 400 if the query failed to execute for some reason.Refer to Daon documentation for more details on how to query identity store events.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getStoreEventsQueryStatus` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getStoreEventsQueryStatus`'
+      operationId: getStoreEventsQueryStatus
+      parameters:
+      - name: executionId
+        in: path
+        description: Unique ID of the query execution provided when the query execution was started.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: 'Query status returned successfully.
+
+
+            The response is a string indiciating the state of an identity store event query in Athena. Possible values:
+
+            - **QUEUED**: the query has been submitted to the service and Athena will execute the query as soon as resources are available.
+
+            - **RUNNING**: the query is in execution phase.
+
+            - **SUCCEEDED**: the query completed without errors.
+
+            - **FAILED**: the query experienced an error and did not complete processing.
+
+            - **CANCELLED**: a user input interrupted query execution.
+
+            '
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **823**: The Athena query failed to execute
+
+            - **825**: An unsupported column name was provided in a sort parameter
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getStoreEventsQueryStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stats:
+    get:
+      tags:
+      - Tenant Management
+      summary: Get tenant statistics (key rollover, configured limits, identity store events…
+      description: 'Returns:
+
+        - configured limits set for the tenant such as maximum number of stores and users
+
+        - the overall number of users added and deleted for this tenant
+
+        - the statistics for each store defined for this tenant. For details of how stats data is populated for different types of store event, refer to Daon documentation
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getTenantStats` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getTenantStats`'
+      operationId: getTenantStats
+      parameters: []
+      responses:
+        '200':
+          description: Tenant stats retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantStats'
+              example:
+                info:
+                - name: Next Data Key Rotation Date/Time
+                  description: The date/time the data key will be rotated
+                  value: 2025-06-18T11:21:29.609+0000
+                - name: Next CA Key Rotation Date/Time
+                  description: The date/time the CA key will be rotated
+                  value: 2029-12-16T11:21:29.609+0000
+                - name: Next Key Encryption Key Rotation Date/Time
+                  description: The date/time the Key Encryption Key will be rotated
+                  value: 2025-06-15T11:21:29.609+0000
+                limits:
+                - name: Maximum Stores Allowed
+                  description: The maximum number of stores allowed. Please contact TrustX for this limit to be increased.
+                  counter: 3
+                - name: Maximum Users Allowed
+                  description: The maximum number of users allowed across all stores.  Please contact TrustX for this limit to be increased.
+                  counter: 1000
+                - name: Max Passkeys per User Allowed
+                  description: The maximum number of passkeys allowed per user.  Please contact TrustX for this limit to be increased.
+                  counter: 10
+                - name: Max Appkeys per User Allowed
+                  description: The maximum number of appkeys allowed per user.  Please contact TrustX for this limit to be increased.
+                  counter: 10
+                stats:
+                - name: user_added
+                  counter: 1
+                - name: user_deleted
+                  counter: 0
+                storeStats:
+                  testStore:
+                  - storeId: X2WLCGY46WWX2NMPPGYHG7EIUE
+                    name: user_added
+                    counter: 1
+                    createdDtm: {}
+                    lastUpdatedDtm: {}
+                  - storeId: X2WLCGY46WWX2NMPPGYHG7EIUE
+                    name: store_added
+                    counter: 1
+                    createdDtm: {}
+                    lastUpdatedDtm: {}
+                  - storeId: X2WLCGY46WWX2NMPPGYHG7EIUE
+                    name: store_updated
+                    counter: 1
+                    createdDtm: {}
+                    lastUpdatedDtm: {}
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getTenantStats
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/events/queries/start:
+    post:
+      tags:
+      - Tenant Management
+      summary: Start a store event query
+      description: 'Event querying may take a long time and so is implemented using three APIs:
+
+        1. Start a query **this API**
+
+        2. Get the query status. Poll until a result is available.
+
+        3. Get the query results.
+
+        Refer to Daon documentation for more details on how to query identity store events.
+
+
+        The optional `info` query criteria match the info field name (map key) case insensitively, while the match value is compared as stored. In query results the `info` map keys are returned in lower case.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:startStoreEventQuery` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:startStoreEventQuery`'
+      operationId: startStoreEventQuery
+      parameters: []
+      requestBody:
+        description: The query to execute
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreEventQueryRequest'
+        required: true
+      responses:
+        '201':
+          description: 'Query created successfully.
+
+
+            The response is a string containing the unique ID of the query execution which must be provided to the APIs which get the query status and results.'
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **822**: Error trying to start the Athena query
+
+            - **826**: Invalid info query criteria - both matchType and matchValue must be supplied
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '90'
+                message: The specified tenant could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:startStoreEventQuery
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    TenantLimit:
+      type: object
+      description: A limit set on the tenant, for example maximum number of identity stores.
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        counter:
+          type: integer
+          format: int64
+    StoreEvent:
+      type: object
+      description: Identity store event information resulting from a query
+      properties:
+        id:
+          type: string
+          description: A unique event UUID.
+        tenantId:
+          type: string
+          description: The tenant ID.
+        createdDtm:
+          type: string
+          format: date-time
+        storeId:
+          type: string
+          description: The database store ID.
+        storeName:
+          type: string
+          description: The store name.
+        userId:
+          type: string
+          description: The database user ID.
+        userExtId:
+          type: string
+          description: The external user ID.
+        eventType:
+          type: string
+          description: The event type, for example `user_added`.
+        processDefnId:
+          type: string
+          description: The process definition ID.
+        processDefnName:
+          type: string
+          description: The process definition name.
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: The process definition version.
+        processInstanceId:
+          type: string
+          description: The process instance ID.
+        parentProcessDefnId:
+          type: string
+          description: The parent process definition ID.
+        parentProcessDefnName:
+          type: string
+          description: The parent process definition name.
+        parentProcessDefnVersion:
+          type: integer
+          format: int32
+          description: The parent process definition version.
+        parentProcessInstanceId:
+          type: string
+          description: The parent process instance ID.
+        childProcessDefnName:
+          type: string
+          description: The child process definition name.
+        childProcessDefnVersion:
+          type: integer
+          format: int32
+          description: The child process definition version.
+        childProcessDefnTag:
+          type: string
+          description: The child process definition tag.
+        type:
+          type: string
+          description: Additional type qualifier. The contents of this field value depends on the `eventType`.
+        subtype:
+          type: string
+          description: Additional subtype qualifier. The contents of this field value depends on the `eventType`.
+        requestId:
+          type: string
+          description: The request ID.
+        requestor:
+          type: string
+          description: The requestor.
+        description:
+          type: string
+          description: The event description. The contents of this field value depends on the `eventType`.
+        count:
+          type: integer
+          format: int32
+          description: 'The event count.
+
+            For example if a user is deleted with 2 appkeys then an `appkey_deleted` event is created with a `count` value of `2`.'
+        referenceFile:
+          type: string
+          description: The event audit file reference.
+        info:
+          type: object
+          additionalProperties:
+            type: string
+          description: A map of additional info strings. The contents of this field value depends on the `eventType`. The map keys are returned in lower case, for example a value stored under `New Last Name` is returned under `new last name`.
+    TenantStats:
+      type: object
+      description: A set of identity store related statistics for a tenant.
+      properties:
+        info:
+          type: array
+          description: A list of information about the tenant
+          items:
+            $ref: '#/components/schemas/TenantInfo'
+        limits:
+          type: array
+          description: A list of limits set on the tenant
+          items:
+            $ref: '#/components/schemas/TenantLimit'
+        stats:
+          type: array
+          description: A list of statistics about the tenant
+          items:
+            $ref: '#/components/schemas/TenantStat'
+        storeStats:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/StoreStat'
+          description: A map of statistics about this tenant's identity stores, keyed by the store name
+    StoreStat:
+      type: object
+      description: 'A statistic about an identity store. For examples how many users have been added to date.
+
+        For examples of how this data is populated for different types of store event, refer to Daon documentation'
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        storeId:
+          type: string
+          description: The unique ID of the store in the database.
+        name:
+          type: string
+          description: Identifies the type of statistic, for example biometric_added, store_deleted, passkey_authentication_success.
+        qual1:
+          type: string
+          description: The first of three possible qualifying pieces of information regarding this statistic, for example the type of an added biometric.
+        qual2:
+          type: string
+          description: The second of three possible qualifying pieces of information regarding this statistic, for example the subtype of an added biometric.
+        qual3:
+          type: string
+          description: The third of three possible qualifying pieces of information regarding this statistic.
+        counter:
+          type: integer
+          format: int64
+          description: The cumulative number of events of this type that have taken place to date for this store.
+      required:
+      - name
+      - storeId
+    InfoMatch:
+      type: object
+      description: Describes how to match against the value of an info field.
+      properties:
+        matchType:
+          type: string
+          description: Whether to perform an exact match or a like match on the info field value. A `LIKE` match is added to the query as `LIKE %{matchValue}%`.
+          enum:
+          - EXACT
+          - LIKE
+        matchValue:
+          type: string
+          description: The value to match against the info field value. The match value is compared as stored (an `EXACT` match requires the whole value to match, a `LIKE` match is a substring match). Note that the info field name used as the map key is matched case insensitively.
+      required:
+      - matchType
+      - matchValue
+    StoreEventQueryRequest:
+      type: object
+      description: 'A store event query.
+
+
+        Setting fields on the query will filter the query to those results which match the fields that are set.
+
+
+        These mandatory request fields define the time period for which events will be queried, all other fields are optional:
+
+        - fromTime
+
+        - toTime
+
+
+        Fields whose values must exactly match the returned events:
+
+        - storeId
+
+        - userId
+
+        - id
+
+        - processDefnId
+
+        - processDefnVersion
+
+        - processInstanceId
+
+        - parentProcessDefnId
+
+        - parentProcessDefnVersion
+
+        - parentProcessInstanceId
+
+        - childProcessDefnVersion
+
+
+        Fields whose values must be *like* those in the returned events - these fields will be added to the query as `LIKE %{value}%`:
+
+        - eventType
+
+        - storeName
+
+        - userExtId
+
+        - processDefnName
+
+        - parentProcessDefnName
+
+        - childProcessDefnName
+
+        - childProcessDefnTag
+
+        - type
+
+        - subtype
+
+        - requestId
+
+        - requestor
+
+        - description
+
+        - referenceFile
+
+
+        The `info` field allows the contents of the event `info` map to be queried. Each entry''s key is the info field name to match on, and its value specifies whether to perform an `EXACT` or `LIKE` match. A `LIKE` match is added to the query as `LIKE %{matchValue}%`. The info field name is matched case insensitively, while the match value is compared as stored.
+
+
+        The default sort order is by `createdDtm` in descending order, so most recent first. This can be overridden by supplying `sortParameters`. See the parameter description for an example.'
+      properties:
+        tenantId:
+          type: string
+          description: The tenant ID. Set internally when a query is started. Not a query field.
+        id:
+          type: string
+          description: The unique event UUID. Query value must exactly match the event value.
+        storeId:
+          type: string
+          description: The database store ID. Query value must exactly match the event value.
+        storeName:
+          type: string
+          description: The store name. Query value is matched as being LIKE the event value.
+        eventType:
+          type: string
+          description: The event type, for example `user_added`. Query value is matched as being LIKE the event value.
+        userId:
+          type: string
+          description: The database user ID. Query value must exactly match the event value.
+        userExtId:
+          type: string
+          description: The external user ID. Query value is matched as being LIKE the event value.
+        processDefnId:
+          type: string
+          description: The process definition ID. Query value must exactly match the event value.
+        processDefnName:
+          type: string
+          description: The process definition name. Query value is matched as being LIKE the event value.
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: The process definition version. Query value must exactly match the event value.
+        processInstanceId:
+          type: string
+          description: The process instance ID. Query value must exactly match the event value.
+        parentProcessDefnId:
+          type: string
+          description: The parent process definition ID. Query value must exactly match the event value.
+        parentProcessDefnName:
+          type: string
+          description: The parent process definition name. Query value is matched as being LIKE the event value.
+        parentProcessDefnVersion:
+          type: integer
+          format: int32
+          description: The parent process definition version. Query value must exactly match the event value.
+        parentProcessInstanceId:
+          type: string
+          description: The parent process instance ID. Query value must exactly match the event value.
+        childProcessDefnName:
+          type: string
+          description: The child process definition name. Query value is matched as being LIKE the event value.
+        childProcessDefnVersion:
+          type: integer
+          format: int32
+          description: The child process definition version. Query value must exactly match the event value.
+        childProcessDefnTag:
+          type: string
+          description: The child process definition tag. Query value is matched as being LIKE the event value.
+        type:
+          type: string
+          description: The event type. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value.
+        subtype:
+          type: string
+          description: The event subtype. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value.
+        requestId:
+          type: string
+          description: The request ID. Query value is matched as being LIKE the event value.
+        requestor:
+          type: string
+          description: The requestor. Query value is matched as being LIKE the event value.
+        description:
+          type: string
+          description: The event description. The contents of this field value depends on the `eventType`. Query value is matched as being LIKE the event value.
+        referenceFile:
+          type: string
+          description: The event audit file reference. Query value is matched as being LIKE the event value.
+        fromTime:
+          type: string
+          description: The start time for returned events.
+          example: {}
+        toTime:
+          type: string
+          description: The end time for returned events.
+          example: {}
+        sortParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortParameter'
+        size:
+          type: integer
+          format: int32
+          description: Optional page size - number of elements that will be returned per page.
+        info:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/InfoMatch'
+          description: 'Optional criteria to query the contents of the event `info` map. Each map key is the name of the info field to match on, and the value specifies the match type and value. The info field name (map key) is matched case insensitively. The match value is compared as stored: an `EXACT` match requires the whole value to match, a `LIKE` match is added to the query as `LIKE %{matchValue}%`.'
+          example:
+            New Last Name:
+              matchType: LIKE
+              matchValue: someValue
+        recordType:
+          type: string
+      required:
+      - fromTime
+      - toTime
+    TenantStat:
+      type: object
+      description: A tenant event statistic, for example how many users have been added to this tenant.
+      properties:
+        name:
+          type: string
+          description: Describes the statistic type, for example user_added.
+        counter:
+          type: integer
+          format: int64
+          description: The cumulative of events of this type that have taken place to date on this tenant.
+    TenantInfo:
+      type: object
+      description: A piece of information about a tenant, for example a key rollover time.
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        value:
+          type: object
+    SortParameter:
+      type: object
+      description: A sort parameter for an event query request.
+      properties:
+        field:
+          type: string
+          description: The name of the field to sort by.
+        ascending:
+          type: boolean
+          description: Whether to sort in ascending order.
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    GenericEventQueryResponseStoreEvent:
+      type: object
+      description: An event query response from Athena
+      properties:
+        results:
+          type: array
+          description: A list of results
+          items:
+            $ref: '#/components/schemas/StoreEvent'
+        nextToken:
+          type: string
+          description: If there are too many results to return in this response then this token is returned. It may be supplied in a subequent API call to get the next set of results
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

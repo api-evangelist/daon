@@ -1,0 +1,157 @@
+generated: '2026-10-18'
+method: searched
+probe: true
+source: https://www.daon.com/privacy-policy/
+pages_read:
+- url: https://www.daon.com/privacy-policy/
+  http_status: 200
+- url: https://www.daon.com/terms-of-use/
+  http_status: 200
+  note: Terms of Use carried no regulatory-signal language beyond site navigation text.
+signals:
+  data_subject_request:
+    url: https://www.daon.com/privacy-policy/
+    section: '13. DATA SUBJECT RIGHTS'
+    channel: email (address obfuscated on page) or the Data Subject Access Request Form
+    escalation: Information Commissioner's Office (ICO), https://ico.org.uk/make-a-complaint/
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        If you wish to request access to, rectification, erasure or restriction of your personal information,
+        or object to the processing of your personal information, please email us at
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'We will respond to reasonable requests in accordance with relevant data protection laws.'
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'To exercise any of the foregoing rights, you may use our Data Subject Access Request Form or contact us via email us at'
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'We will acknowledge your complaint within 30 days and investigate it without undue delay.'
+    note: >-
+      A documented DSR channel (email plus a request form) covering access, rectification, erasure,
+      restriction and objection; no fixed response SLA for rights requests is stated, only a 30-day
+      acknowledgement for complaints, with ICO escalation.
+  data_retention:
+    url: https://www.daon.com/privacy-policy/
+    section: '8. DATA RETENTION'
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        We will retain your personal information in accordance with our Record Retention and Protection Policy
+        and only for as long as necessary for the purposes of providing access to the Services and related
+        services to you, to comply with our legal obligations, resolve disputes, enforce our agreements or for
+        carrying out scientific research.
+    note: Purpose-bound retention under an internal (unpublished) policy; no concrete retention periods are given.
+  global_privacy_control:
+    url: https://www.daon.com/privacy-policy/
+    section: Additional Data Processing Disclosures for California Residents
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        To the extent required by law, we will honor opt-out preference signals sent in a format commonly used and
+        recognized by businesses, such as an HTTP header field or JavaScript object.
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'We will process opt-out preference signals at the browser level.'
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'You may disable cookies through your browser settings, but Daon does not change the way it responds to a “Do-Not-Track” signal.'
+    note: >-
+      Honors opt-out preference signals (GPC-style) where legally required, at browser level; explicitly does
+      not respond to Do-Not-Track. GPC is not named by name.
+  data_residency:
+    url: https://www.daon.com/privacy-policy/
+    section: INTERNATIONAL USERS & DATA
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        As a global organisation, where legally permissible, Daon may collect, use, disclose, and otherwise
+        process your personal information in countries outside of the country of your residence, which may
+        have different data protection rules.
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Standard Contractual Clauses : We utilise standard contractual clauses approved by the European
+        Commission (and the equivalent standard contractual clauses for the UK, where appropriate) for
+        transfers to the United States, the UK and Australia.
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Daon complies with the EU-U.S., UK Extension to the EU-U.S., and Swiss-U.S. Data Privacy Frameworks.
+    note: >-
+      Cross-border transfer posture (SCCs to US/UK/Australia, UK adequacy, EU-US DPF participation) rather
+      than a customer-selectable residency commitment; no in-region hosting promise appears on these pages.
+  ai_transparency:
+    url: https://www.daon.com/privacy-policy/
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Customer and end user grants to Daon a limited, non-exclusive, worldwide license to access and use
+        certain of the data provided by Customer and its end-users (“Training Data”) for the purposes of
+        configuring, updating, testing, creating, and improving the Documentation, software, and the algorithms
+        or machine learning (AI) that underpins such software (“Improvements”).
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Please note that Automated Decision-Making currently does not take place on our Web Services or any of
+        the processing included in this notice.
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Automated Individual Decision-Making: If you choose to share your personal information with us, or for
+        third parties to share your data with us directly, and you have not opted out you consent to our use of
+        individual automated decision making using your special category data, to determine whether you have
+        met the requirements.
+    note: >-
+      Discloses that customer/end-user data ("Training Data") may be used to train and improve Daon's ML/AI,
+      and addresses automated decision-making — stating none occurs on its web services in one place, while the
+      California section describes consent-based automated decisions on special-category data. Not a training
+      data summary in the EU AI Act sense.
+  transparency_report:
+    url: https://www.daon.com/privacy-policy/
+    section: Information Sharing
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: >-
+        Where possible and legally permissible, we will consult you in advance of any such disclosure. We will
+        reject any third-party requests for personal information that are not legally binding.
+    note: >-
+      A government/legal-request handling commitment only; no published transparency report with request
+      counts was found on the pages read.
+  age_assurance:
+    url: https://www.daon.com/privacy-policy/
+    section: CHILDREN'S PRIVACY
+    evidence:
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'Our Services are for a business audience and intended for persons above the age of majority.'
+    - source: https://www.daon.com/privacy-policy/
+      http_status: 200
+      fetched: '2026-10-18'
+      quote: 'We do not knowingly request or collect personal information from any person under the age of 16.'
+    note: >-
+      Audience restriction by policy statement only; no age-assurance mechanism for its own services is
+      described (Daon sells age verification as a product, which is not the same thing).

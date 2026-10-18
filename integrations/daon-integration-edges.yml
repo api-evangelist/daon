@@ -1,0 +1,28 @@
+generated: '2026-10-18'
+method: searched
+source:
+- https://zapier.com/apps/daon/integrations
+- https://n8n.io/integrations/daon/
+- https://composio.dev/toolkits/daon
+- https://monid.ai/tools/daon
+checked:
+- https://composio.dev/toolkits/daon
+- https://docs.trustx.com/trust
+- https://make.com/en/integrations/daon
+- https://monid.ai/tools/daon
+- https://n8n.io/integrations/daon
+- https://n8n.io/integrations/daon/
+- https://workato.com/integrations/daon
+- https://www.daon.com/partners/
+- https://zapier.com/apps/daon/integrations
+summary: null
+marketplace_apps: []
+edges:
+- partner: fido-alliance
+  partner_name: FIDO Alliance
+  type: claimed
+  direction: unknown
+  evidence: https://www.daon.com/
+templates: []
+note: No marketplace integrations found on Zapier, Make, Workato, or n8n. Partners page describes partnership program
+  but does not list specific partners. Daon is a member of the FIDO Alliance.

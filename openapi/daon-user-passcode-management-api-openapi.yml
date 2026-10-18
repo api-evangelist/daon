@@ -1,0 +1,2886 @@
+openapi: 3.2.0
+info:
+  title: Daon User Passcode Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged User Passcode Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: User Passcode Management
+paths:
+  /api/identity-store/stores/{storeName}/passcodes/renewals/sessions/{sessionId}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Complete a passcode renewal
+      description: 'This API is used to complete a passcode renewal for the session created when the renewal was created.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasscodeRenewal` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasscodeRenewal`'
+      operationId: completePasscodeRenewal
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The session ID returned by the server when the authentication was requested
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The client renewal response message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPasscodeRenewalResponse'
+        required: true
+      responses:
+        '200':
+          description: Passcode renewal completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletePasscodeRenewalResponse'
+        '400':
+          description: "An error occurred during renewal:\n- **xxxx**: \n"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasscodeRenewal
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passcodes/registrations/sessions/{sessionId}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Complete a passcode registration
+      description: 'Complete a passcode registration for the session created when the registration was created.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasscodeRegistration` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasscodeRegistration`'
+      operationId: completePasscodeRegistration
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The session ID returned by the server when the registration was requested
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The client registration response message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPasscodeRegistrationResponse'
+        required: true
+      responses:
+        '200':
+          description: Passcode registration completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletePasscodeRegistrationResponse'
+        '400':
+          description: 'An error occurred during registration:
+
+            - **2603**: No registration session corresponding to the supplied session ID was found
+
+            - **2606**: Registration blocked because of the user''s status
+
+            - **2607**: A passcode is already registered for this user and policy
+
+            - **2609**: The maximum number of passcodes for the user has been reached
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found by supplied user ID in session data
+
+            - **2601**: Passcode policy not found
+
+            - **2603**: Passcode registration session not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasscodeRegistration
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/registrations/{policyName}/ext:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start a registration for a client-validated password belonging to an existing…
+      description: 'This API returns the passcode validation requirements to the client and information specific to the passcode algorithm.It also returns a session ID which is returned to the server when completing the registration.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUserByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUserByExtUserId`'
+      operationId: createPasscodeRegistrationForUserByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode registration started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeRegistrationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2606**: Passcode Registration disallowed for non-active user
+
+            - **2607**: Passcode already registered for the user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUserByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/ext:
+    get:
+      tags:
+      - User Passcode Management
+      summary: List registered passcodes for a user (identified by external ID)
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPasscodesByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPasscodesByExtUserId`'
+      operationId: listUserPasscodesByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcodes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/UserPasscode'
+              example: "[\n  {\n    \"id\": \"7NWPL7KIMGAPSXKTP4TRHNTPXM\",\n    \"storeId\": \"V4HY243RDEQJMT62OF6I7VVFQE\",\n    \"userId\": \"M5CKIGYEK7FWGD76ZY3D7Q6X6U\",\n    \"policyName\": \"passcodePolicy1\",\n    \"status\": \"ACTIVE\",\n    \"createdDtm\": \"2025-09-11T16:15:23.651Z\",\n    \"lastUpdatedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastUsedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastRenewedDtm\": \"2025-09-11T16:30:23.651Z\",\n    \"expirationDate\": \"2025-11-11\"\n  },\n  {\n    \"id\": \"SBNKFCEC5NTX65LIBTJZMOJARE\",\n    \"storeId\": \"V4HY243RDEQJMT62OF6I7VVFQE\",\n    \"userId\": \"M5CKIGYEK7FWGD76ZY3D7Q6X6U\",\n    \"policyName\": \"passcodePolicy2\",\n    \"status\": \"ACTIVE\",\n    \"createdDtm\": \"2025-09-11T16:15:23.651Z\",\n    \"lastUpdatedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastUsedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastRenewedDtm\": \"2025-09-11T16:20:23.651Z\"\n    \"expirationDate\": \"2025-11-11\"\n  }\n]"
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPasscodesByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/authentications/{policyName}/ext:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start an authentication for a client-validated password belonging to an…
+      description: 'This API returns information specific to the passcode algorithm and a session ID which is returned to the server when completing the authentication.
+
+
+        **Note:** When SRP user enumeration protection is enabled, this endpoint returns a valid-looking response even for non-existent or invalid users.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUserByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUserByExtUserId`'
+      operationId: createPasscodeAuthenticationForUserByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode authentication started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeAuthenticationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2100**: Passcode authentication disallowed for locked user
+
+            - **2101**: Passcode authentication disallowed for locked modality
+
+            - **2611**: Passcode authentication disallowed for non-active user
+
+            - **2612**: User has no registered passcode for this policy
+
+            - **2613**: The passcode is not active
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUserByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes/authentications/{policyName}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start an authentication for a client-validated password belonging to an…
+      description: 'This API returns information specific to the passcode algorithm and a session ID which is returned to the server when completing the authentication.
+
+
+        **Note:** When SRP user enumeration protection is enabled, this endpoint returns a valid-looking response even for non-existent or invalid users.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUser`'
+      operationId: createPasscodeAuthenticationForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode authentication started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeAuthenticationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2100**: Passcode authentication disallowed for locked user
+
+            - **2101**: Passcode authentication disallowed for locked modality
+
+            - **2611**: Passcode authentication disallowed for non-active user
+
+            - **2612**: User has no registered passcode for this policy
+
+            - **2613**: The passcode is not active
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeAuthenticationForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes/{id}:
+    get:
+      tags:
+      - User Passcode Management
+      summary: Get a passcode for a user identified by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasscode` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasscode`'
+      operationId: getUserPasscode
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+              example:
+                id: 7NWPL7KIMGAPSXKTP4TRHNTPXM
+                storeId: V4HY243RDEQJMT62OF6I7VVFQE
+                userId: M5CKIGYEK7FWGD76ZY3D7Q6X6U
+                policyName: passcodePolicy1
+                status: ACTIVE
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                lastUsedDtm: {}
+                lastRenewedDtm: {}
+                expirationDate: {}
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasscode
+    post:
+      tags:
+      - User Passcode Management
+      summary: Update an existing passcode's status or expiration date by internal user ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserPasscode` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserPasscode`'
+      operationId: updateUserPasscode
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user passcode update information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasscodeRequest'
+        required: true
+      responses:
+        '200':
+          description: User passcode updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **1114**: No update information provided
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserPasscode
+    delete:
+      tags:
+      - User Passcode Management
+      summary: Delete a user passcode by internal user ID and user passcode ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserPasscode` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserPasscode`'
+      operationId: deleteUserPasscode
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the User passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserPasscode
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/{id}/ext:
+    get:
+      tags:
+      - User Passcode Management
+      summary: Get a passcode for a user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPasscodeByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPasscodeByExtUserId`'
+      operationId: getUserPasscodeByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+              example:
+                id: 7NWPL7KIMGAPSXKTP4TRHNTPXM
+                storeId: V4HY243RDEQJMT62OF6I7VVFQE
+                userId: M5CKIGYEK7FWGD76ZY3D7Q6X6U
+                policyName: passcodePolicy1
+                status: ACTIVE
+                createdDtm: {}
+                lastUpdatedDtm: {}
+                lastUsedDtm: {}
+                lastRenewedDtm: {}
+                expirationDate: {}
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPasscodeByExtUserId
+    post:
+      tags:
+      - User Passcode Management
+      summary: Update an existing passcode's status or expiration date by external user ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserPasscodeByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserPasscodeByExtUserId`'
+      operationId: updateUserPasscodeByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user passcode update information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasscodeRequest'
+        required: true
+      responses:
+        '200':
+          description: User passcode updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **1114**: No update information provided
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserPasscodeByExtUserId
+    delete:
+      tags:
+      - User Passcode Management
+      summary: Delete a user passcode by external user ID and user passcode ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserPasscodeByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserPasscodeByExtUserId`'
+      operationId: deleteUserPasscodeByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the User passcode
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2610**: Passcode not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserPasscodeByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes:
+    get:
+      tags:
+      - User Passcode Management
+      summary: List registered passcodes for a user (identified by internal ID)
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPasscodes` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPasscodes`'
+      operationId: listUserPasscodes
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcodes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/UserPasscode'
+              example: "[\n  {\n    \"id\": \"7NWPL7KIMGAPSXKTP4TRHNTPXM\",\n    \"storeId\": \"V4HY243RDEQJMT62OF6I7VVFQE\",\n    \"userId\": \"M5CKIGYEK7FWGD76ZY3D7Q6X6U\",\n    \"policyName\": \"passcodePolicy1\",\n    \"status\": \"ACTIVE\",\n    \"createdDtm\": \"2025-09-11T16:15:23.651Z\",\n    \"lastUpdatedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastUsedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastRenewedDtm\": \"2025-09-11T16:30:23.651Z\",\n    \"expirationDate\": \"2025-11-11\"\n  },\n  {\n    \"id\": \"SBNKFCEC5NTX65LIBTJZMOJARE\",\n    \"storeId\": \"V4HY243RDEQJMT62OF6I7VVFQE\",\n    \"userId\": \"M5CKIGYEK7FWGD76ZY3D7Q6X6U\",\n    \"policyName\": \"passcodePolicy2\",\n    \"status\": \"ACTIVE\",\n    \"createdDtm\": \"2025-09-11T16:15:23.651Z\",\n    \"lastUpdatedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastUsedDtm\": \"2025-09-11T16:20:23.651Z\",\n    \"lastRenewedDtm\": \"2025-09-11T16:20:23.651Z\"\n    \"expirationDate\": \"2025-11-11\"\n  }\n]"
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPasscodes
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/deregistrations/{policyName}/ext:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Deregister a passcode for user identified by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deregisterPasscodeForUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deregisterPasscodeForUserByExtId`'
+      operationId: deregisterPasscodeForUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: Passcode policy Name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: TX_PII
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode deregistered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregisterPasscodeResponse'
+        '400':
+          description: 'An error occurred. Possible error code:
+
+            - **2612**: User has no registered passcode for this policy
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deregisterPasscodeForUserByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes/renewals/{policyName}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start a renewal for a client-validated password belonging to an existing user…
+      description: 'This API returns information specific to the passcode algorithm and a session ID which is returned to the server when completing the renewal.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeRenewalForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeRenewalForUser`'
+      operationId: createPasscodeRenewalForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode renewal started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeRenewalResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **xxxx**: Passcode renewal disallowed for non-active user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeRenewalForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/registrations/{policyName}/ext:
+    get:
+      tags:
+      - User Passcode Management
+      summary: Get a user passcode by external user ID and policy
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getPasscodeForUserByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getPasscodeForUserByExtUserId`'
+      operationId: getPasscodeForUserByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: Passcode policy name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+        '400':
+          description: 'An error occurred. Possible error code:
+
+            - **2612**: User has no registered passcode for this policy
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2601**: Policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getPasscodeForUserByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/passcodes/authentications/sessions/{sessionId}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Complete a passcode authentication
+      description: 'This API is used to complete a passcode authentication for the session created when the authentication was created.
+
+
+        **Note:** To prevent user enumeration attacks, authentication failures return a generic error code (2615) regardless of the specific reason (invalid user, wrong password, expired passcode, etc.).
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:completePasscodeAuthentication` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:completePasscodeAuthentication`'
+      operationId: completePasscodeAuthentication
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: sessionId
+        in: path
+        description: The session ID returned by the server when the authentication was requested
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The client authentication response message.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPasscodeAuthenticationResponse'
+        required: true
+      responses:
+        '200':
+          description: Passcode authentication completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletePasscodeAuthenticationResponse'
+        '400':
+          description: 'An error occurred during authentication:
+
+            - **2615**: Authentication failed. Either the username or password is incorrect.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '2615'
+                message: Authentication failed. Either the username or password is incorrect.
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **2601**: Passcode policy not found
+
+            - **2604**: Passcode authentication session not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '100'
+                message: The specified store could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:completePasscodeAuthentication
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/renewals/{policyName}/ext:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start a renewal for a client-validated password belonging to an existing user…
+      description: 'This API returns information specific to the passcode algorithm and a session ID which is returned to the server when completing the renewal.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeRenewalForUserByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeRenewalForUserByExtUserId`'
+      operationId: createPasscodeRenewalForUserByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extUserId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode renewal started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeRenewalResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **xxxx**: Passcode renewal disallowed for non-active user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeRenewalForUserByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes/registrations/{policyName}:
+    get:
+      tags:
+      - User Passcode Management
+      summary: Get a user passcode by internal user ID and policy
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getPasscodeForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getPasscodeForUser`'
+      operationId: getPasscodeForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: Passcode policy name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPasscode'
+        '400':
+          description: 'An error occurred. Possible error code:
+
+            - **2612**: User has no registered passcode for this policy
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2601**: Policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getPasscodeForUser
+    post:
+      tags:
+      - User Passcode Management
+      summary: Start a registration for a client-validated password belonging to an existing…
+      description: 'This API returns the passcode validation requirements to the client and information specific to the passcode algorithm.It also returns a session ID which is returned to the server when completing the registration.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUser`'
+      operationId: createPasscodeRegistrationForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: The name of the passcode policy
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: passcode registration started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartPasscodeRegistrationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **2606**: Passcode Registration disallowed for non-active user
+
+            - **2607**: Passcode already registered for the user
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createPasscodeRegistrationForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/passcodes/deregistrations/{policyName}:
+    post:
+      tags:
+      - User Passcode Management
+      summary: Deregister a passcode for user identified by ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deregisterPasscodeForUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deregisterPasscodeForUser`'
+      operationId: deregisterPasscodeForUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: policyName
+        in: path
+        description: Passcode policy Name
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: TX_PII
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User passcode deregistered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeregisterPasscodeResponse'
+        '400':
+          description: 'An error occurred. Possible error code:
+
+            - **2612**: User has no registered passcode for this policy
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2601**: Passcode policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deregisterPasscodeForUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    PasscodeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        policyName:
+          type: string
+          description: Identifies the identity store passcode policy.
+        status:
+          type: string
+          description: The status of the user passcode.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastRenewedDtm:
+          type: string
+          format: date-time
+          description: The last time the passcode was renewed. Only present if a renewal has occurred.
+        expirationDate:
+          type: string
+          format: date
+          description: Expiration date for a passcode. Only required if regular renewals are enforced.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passcode has not been used for authentication then this field is not present.
+    UpdatePasscodeRequest:
+      type: object
+      description: A request structure for updating user passcode record status.
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+      required:
+      - status
+    PasscodeRequirements:
+      type: object
+      description: Passcode requirements for client-validated passcode registration.
+      properties:
+        minimumLength:
+          type: integer
+          format: int32
+          description: An optional passcode minimum length.
+        maximumLength:
+          type: integer
+          format: int32
+          description: An optional passcode maximum length.
+        digitCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of digits within the passcode.
+        symbolCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of symbols within the passcode.
+        lowerCaseCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of lower case characters within the passcode.
+        upperCaseCount:
+          type: integer
+          format: int32
+          description: Optional minimum number of upper case characters within the passcode.
+        characterVariety:
+          type: integer
+          format: int32
+          description: Optional minimum number of different classes of character that the passcode must contain, where the classes are symbols, digits, upper case and lower case.
+        passcodeHistory:
+          type: integer
+          format: int32
+          description: Optional passcode history. A submitted passcode is checked against a configurable number of previously submitted passcodes to see if it matches.
+        requiredRegExes:
+          type: array
+          description: Optional list of required regular expressions, all of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+        allowedRegExes:
+          type: array
+          description: Optional list of allowed regular expressions, at least one of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+        disallowedRegExes:
+          type: array
+          description: Optional list of disallowed regular expressions, none of which must be matched for the passcode to be accepted as valid.
+          items:
+            $ref: '#/components/schemas/PasscodeRegex'
+    SrpRegistrationData:
+      type: object
+      description: The SRP registration data generated by a client.
+      properties:
+        salt:
+          type: string
+          format: byte
+          description: Salt used in the SRP protocol. The SRP protocol suggests that this is generated by the client. In our implementation, the server generates it and sends it to the client to allow for a consistent salt across historical passcodes.
+        verifier:
+          type: string
+          format: byte
+          description: Verifier used in the SRP protocol, derived by the client from the user's passcode.
+    StartPasscodeRegistrationResponse:
+      type: object
+      description: The response from the create passcode registration API
+      properties:
+        passcodeRequirements:
+          $ref: '#/components/schemas/PasscodeRequirements'
+        algorithmInfo:
+          $ref: '#/components/schemas/PasscodeAlgorithmInfo'
+        sessionId:
+          type: string
+          description: The session ID which must be supplied to the server when completing client-validated passcode registration.
+    DeviceSummary:
+      type: object
+      description: 'Summary information about a device containing keys registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: 'A unique identifier of the device on which the keys are installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        rpId:
+          type: string
+          description: The relying party ID.
+        os:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        name:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        keys:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/AppkeySummary'
+          description: 'A map of appkey types to list of key summary information where the key types are:
+
+            - **DEVICE**: A device appkey which authenticates the device without user input.
+
+            - **BIOMETRIC**: A biometric appkey which authenticates the user using a biometric.
+
+            List is here to support "more than one app keys of the same type" concept, but in most cases we expect the size of it will be one.'
+    CompletePasscodeRenewalResponse:
+      type: object
+      description: The response from the complete renewal API. Includes the updated user information and output from the passcode algorithm for the client to validate.
+      properties:
+        algorithmInfo:
+          $ref: '#/components/schemas/PasscodeAlgorithmInfo'
+        user:
+          $ref: '#/components/schemas/UserDto'
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    TrustXLocale:
+      type: object
+      description: Locale information. Exposes the language, country and variant locale components, for example `en_US_UNIX` contains these components as `en`, `US` and `UNIX` respectively.
+      properties:
+        language:
+          type: string
+          description: The mandatory locale language component
+        country:
+          type: string
+          description: The optional locale country component
+        variant:
+          type: string
+          description: The optional locale variant component
+    UserLocks:
+      type: object
+      description: 'User lock information.
+
+
+        Describes locks at the user level and modality level. A user can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this user.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the user is *permanently* locked then this is the time at which the lock came into effect.
+        userModalityLocks:
+          type: array
+          description: 'Locking information related to particular authentication modalities.
+
+
+            **Not supported in this release**'
+          items:
+            $ref: '#/components/schemas/UserModalityLock'
+    DeregisterPasscodeResponse:
+      type: object
+      description: The response from the deregister passcode API. Includes the updated user information.
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDto'
+    SrpVerificationData:
+      type: object
+      description: The SRP verification data generated by a client.
+      properties:
+        clientPublicKey:
+          type: string
+          format: byte
+          description: The client's public key.
+        m1:
+          type: string
+          format: byte
+    StartPasscodeRenewalResponse:
+      type: object
+      description: The response from the create passcode renewal API
+      properties:
+        passcodeRequirements:
+          $ref: '#/components/schemas/PasscodeRequirements'
+        algorithmInfo:
+          $ref: '#/components/schemas/PasscodeAlgorithmInfo'
+        sessionId:
+          type: string
+          description: The session ID which must be supplied to the server when completing client-validated passcode renewal.
+    AppkeySummary:
+      type: object
+      description: 'Summary information about an appkey registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        deviceId:
+          type: string
+          description: 'A unique identifier of the device on which the appkey is installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        deviceOs:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device make and model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceName:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        rpId:
+          type: string
+          description: The relying party ID.
+        aaid:
+          type: string
+          description: A unique identifier of the appkey type.
+        keyId:
+          type: string
+          description: A unique identifier of the particular appkey credential.
+        status:
+          type: string
+          description: The status of the appkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this appkey has not been used for authentication then this field is not present.
+    CompletePasscodeAuthenticationResponse:
+      type: object
+      description: The response from the complete authentication API. Includes the updated user information and output from the passcode algorithm for the client to validate.
+      properties:
+        algorithmInfo:
+          $ref: '#/components/schemas/PasscodeAlgorithmInfo'
+        user:
+          $ref: '#/components/schemas/UserDto'
+    UserDtoSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, device keys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSummary'
+        totps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    UserModalityLock:
+      type: object
+      description: 'Modality lock information.
+
+
+        Describes locks at the modality level. A modality can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this modality.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *permanently* locked then this is the time at which the lock came into effect.
+        type:
+          type: string
+          description: The modality type, for example `Face`.
+    StartPasscodeAuthenticationResponse:
+      type: object
+      description: The response from the create passcode authentication API
+      properties:
+        algorithmInfo:
+          $ref: '#/components/schemas/PasscodeAlgorithmInfo'
+        sessionId:
+          type: string
+          description: The session ID which must be supplied to the server when completing client-validated passcode authentication.
+    UserDto:
+      type: object
+      description: A user in an identity store.
+      properties:
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+        type:
+          type: string
+          description: A user type supplied by the customer.
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+        lastName:
+          type: string
+          description: The user's last name.
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\n\nOne attribute, which is set **internally** by the server on a user during passkey registration, is `passkeyUsers`. A specific user handle may be provided via the passkey registration request, if not it is set to a random ID when the first passkey is created for the user. The attribute value looks like this:.\n\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserDtoSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    ClientPasscodeAuthenticationResponse:
+      type: object
+      description: The passcode authentication response returned from the client.
+      properties:
+        srpVerificationData:
+          $ref: '#/components/schemas/SrpVerificationData'
+    ClientPasscodeRenewalResponse:
+      type: object
+      description: The passcode renewal response returned from the client.
+      properties:
+        srpVerificationData:
+          $ref: '#/components/schemas/SrpVerificationData'
+        srpRegistrationData:
+          $ref: '#/components/schemas/SrpRegistrationData'
+    TOTPSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: The status of the user TOTP.
+          enum:
+          - ACTIVE
+          - PENDING
+          - DISABLED
+        issuer:
+          type: string
+          description: The issuer of the user TOTP.
+        username:
+          type: string
+          description: The user name label used for registering TOTP.
+        policyName:
+          type: string
+          description: TOTP Policy name
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code.
+        activatedDtm:
+          type: string
+          format: date-time
+          description: Date and time of the TOTP activation - this is time when first auth with TOTP happened and marked TOTP as active.
+        expirationDtm:
+          type: string
+          format: date-time
+          description: Expiration dtm for the pending TOTPs - this is time before which is possible to activate pending TOTP.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this TOTP has not been used for authentication then this field is not present.
+    PasscodeAlgorithmInfo:
+      type: object
+      description: Passcode algorithm information for client-validated passcode registration.
+      properties:
+        type:
+          type: string
+          description: Identifies the passcode algorithm.
+          enum:
+          - SRP
+        parameters:
+          type: object
+          additionalProperties:
+            type: object
+          description: The algorithm parameters required by the client.
+    ClientPasscodeRegistrationResponse:
+      type: object
+      description: The passcode registration response returned from the client.
+      properties:
+        srpRegistrationData:
+          $ref: '#/components/schemas/SrpRegistrationData'
+    CompletePasscodeRegistrationResponse:
+      type: object
+      description: The response from the complete registration API. Includes the updated user information.
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDto'
+    PasscodeRegex:
+      type: object
+      description: A regular expression matched against a passcode.
+      properties:
+        pattern:
+          type: string
+          description: The regex pattern.
+        error:
+          type: string
+          description: An error which will be displayed if the regex check fails.
+      required:
+      - error
+      - pattern
+    PasskeySummary:
+      type: object
+      description: Summary information about a passkey registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        credentialId:
+          type: string
+          description: A unique identifier of the particular passkey credential.
+        status:
+          type: string
+          description: The status of the passkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passkey has not been used for authentication then this field is not present.
+        name:
+          type: string
+          description: The name of the passkey supplied when the passkey was registered.
+    UserPasscode:
+      type: object
+      description: 'A user passcode record, contains passcode verification data and historical data. A user is allowed one current passcode per passcode policy.
+
+
+        '
+      properties:
+        permittedOperations:
+          type: array
+          items:
+            type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeId:
+          type: string
+          description: Unique 26-character database store ID.
+        userId:
+          type: string
+          description: Unique 26-character database user ID.
+        status:
+          type: string
+          description: 'The passcode status: ACTIVE or DISABLED.'
+          enum:
+          - ACTIVE
+          - DISABLED
+        policyName:
+          type: string
+          description: The passcode policy name, used as a key to the passcode policies map in the store configuration.
+        lastUsedDtm:
+          type: string
+          format: date-time
+          description: If the passcode has been used for authentication this field indicates the last time this occurred
+        lastRenewedDtm:
+          type: string
+          format: date-time
+          description: If the passcode has been renewed this field indicates the last time this occurred
+        expirationDate:
+          type: string
+          format: date
+          description: Expiration date for a passcode. Only required if regular renewals are enforced.
+        typeId:
+          type: string
+        expired:
+          type: boolean
+      required:
+      - id
+      - policyName
+      - status
+      - storeId
+      - userId
+    BiometricSummary:
+      type: object
+      description: Summary information about a biometric registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+          description: The biometric type, for example `Face`
+        subtype:
+          type: string
+          description: The biometric subtype, for example an algorithm identifier like `DFV6E`
+        status:
+          type: string
+          description: The biometric status
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this biometric has not been used for authentication then this field is not present.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

@@ -1,0 +1,434 @@
+generated: '2026-10-18'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/daon-trustx-openapi.yml
+vocabulary:
+  name: Daon Domain Vocabulary
+  description: 'Terms declared by Daon''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions. Derived,
+    not authored.'
+  version: '2026-10-18'
+  terms:
+  - term: ASVTIServiceConfig
+    definition: ASV TI service configuration
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ASVTIServiceConfig
+  - term: ASVThreshold
+    definition: ASV verification score thresholds for different amounts of speech captured during voice enrolment or verification
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ASVThreshold
+  - term: ASVVerificationScoreThresholds
+    definition: ASV threshold configuration. Different thresholds can be set for different locales. If a locale does not have a specific value,
+      the `defaultLocale` value will be used.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ASVVerificationScoreThresholds
+  - term: AaidOptions
+    definition: AAID deregistration options.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AaidOptions
+  - term: AbstractSkyError
+    definition: 'Object declared by the contract with fields: code, message, extraDetail.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AbstractSkyError
+  - term: AbstractTrendRecordDto
+    definition: Base class for trend records with common metadata fields
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AbstractTrendRecordDto
+  - term: AbstractWatchlistEntryDto
+    definition: Base class for watchlist entries with common metadata fields
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AbstractWatchlistEntryDto
+  - term: AbstractWatchlistQueryDto
+    definition: Base class for watchlist query requests with type-specific matching parameters
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AbstractWatchlistQueryDto
+  - term: AbstractWatchlistQueryResponseDto
+    definition: Base class for watchlist query responses with type-specific matching results
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AbstractWatchlistQueryResponseDto
+  - term: AddUserBiometricAndCreateUserRequest
+    definition: A request to enrol a biometric, creating the user to hold the enrolment if one does not already exist.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AddUserBiometricAndCreateUserRequest
+  - term: AddUserBiometricAndCreateUserResponse
+    definition: The result of enrolling a biometric and creating or retrieving the user that holds it.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AddUserBiometricAndCreateUserResponse
+  - term: AdditionalDocument
+    definition: 'Object declared by the contract with fields: id, lastModified, title, captures.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AdditionalDocument
+  - term: AdditionalDocumentResponse
+    definition: 'Object declared by the contract with fields: version, documents.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AdditionalDocumentResponse
+  - term: AlgorithmDto
+    definition: Algorithm configuration for fuzzy matching
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AlgorithmDto
+  - term: ApiKey
+    definition: 'Object declared by the contract with fields: permittedOperations, createdDtm, lastUpdatedDtm, createdBy, lastUpdatedBy, id, type,
+      code, name, description, status, permissions. (2 more)'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ApiKey
+  - term: ApnsConfig
+    definition: 'Object declared by the contract with fields: appBundleId, teamId, keyId, sandboxEnabled, soundEnabled, tokenSigningKey, tokenSigningKeyEnc.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ApnsConfig
+  - term: AppKeyAuditDisplayDto
+    definition: An authentication audit dto, 1 to 1 mapped to what should be shown in UI for app key authentication audit.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppKeyAuditDisplayDto
+  - term: AppkeyAuthRequestHolder
+    definition: Response from the APIs which create an appkey authentication request. Contains the client request message and session information
+      If in the appkey configuration `sessionManagementExternal` is set to `false` then session data are managed internally by the server and
+      this object will contain a session ID which must be provided when the authentication is completed. Otherwise if `sessionManagementExte
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyAuthRequestHolder
+  - term: AppkeyAuthResponseHolder
+    definition: Request to the API which copmletes appkey authentication when session management is external. Contains the client response message
+      and session data object In this case the appkey configuration `sessionManagementExternal` is set to `true` so the session data is returned
+      by the server when appkey authentication is requested an must be provided back the server when the registration is completed.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyAuthResponseHolder
+  - term: AppkeyAuthenticationPolicy
+    definition: A relying party's appkey authentication policy
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyAuthenticationPolicy
+  - term: AppkeyClientError
+    definition: Information about an appkey error which happened on the client.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyClientError
+  - term: AppkeyRegistrationPolicy
+    definition: A relying party's appkey registration policy
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyRegistrationPolicy
+  - term: AppkeyRegistrationRequestHolder
+    definition: Response from the APIs which create an appkey registration request. Contains the client request message and session information
+      If in the appkey configuration `sessionManagementExternal` is set to `false` then session data are managed internally by the server and
+      this object will contain a session ID which must be provided when the registration is completed. Otherwise if `sessionManagementExternal
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyRegistrationRequestHolder
+  - term: AppkeyRegistrationResponseHolder
+    definition: Request to the API which completes appkey registration when session management is external. Contains the client response and session
+      data object In this case the appkey configuration `sessionManagementExternal` is set to `true` so the session data is returned by the server
+      when appkey registration is requested an must be provided back the server when the registration is completed.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyRegistrationResponseHolder
+  - term: AppkeyRelyingPartyConfig
+    definition: A relying party's appkey configuration
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyRelyingPartyConfig
+  - term: AppkeySessionData
+    definition: Session data specific to an appkey operation in progress.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeySessionData
+  - term: AppkeySummary
+    definition: Summary information about an appkey registered to the user. **NOTE** The device information is only available if the `DEVICE_INFO`
+      extension is enabled in the appkey registration policy.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeySummary
+  - term: AppkeyTypeOptions
+    definition: Appkey type deregistration options.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AppkeyTypeOptions
+  - term: ArchiveConfig
+    definition: 'Object declared by the contract with fields: config.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveConfig
+  - term: ArchiveEntry
+    definition: Archive of a process instance under a single policy.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveEntry
+  - term: ArchiveEntryDto
+    definition: 'Object declared by the contract with fields: path, sizeBytes, contentType.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveEntryDto
+  - term: ArchiveFilter
+    definition: Selector describing which process instances to archive.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveFilter
+  - term: ArchiveInflightResponse
+    definition: Current archive in-flight load and remaining capacity for a tenant.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveInflightResponse
+  - term: ArchivePolicyResponse
+    definition: The Archive Policy.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchivePolicyResponse
+  - term: ArchivePolicyUsageResponse
+    definition: Usage statistics for Archive Policies belonging to a tenant.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchivePolicyUsageResponse
+  - term: ArchiveProcessInstancesRequest
+    definition: Batch archive submission request.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveProcessInstancesRequest
+  - term: ArchiveProcessInstancesResponse
+    definition: Throttling summary for a batch archive submission.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArchiveProcessInstancesResponse
+  - term: ArthrSkyError
+    definition: 'Object declared by the contract with fields: code, message, extraDetail.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ArthrSkyError
+  - term: Attributes
+    definition: 'Object declared by the contract with fields: searchable.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/Attributes
+  - term: AuditDisplayDto
+    definition: An authentication audit dto, containing structures for app keys, pass keys, biometrics and TOTPs.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuditDisplayDto
+  - term: AuditMessageQueryRequestDto
+    definition: 'Object declared by the contract with fields: httpMethod, httpResponseCode, subject, sessionId, service, method, errorCode, fromTime,
+      toTime.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuditMessageQueryRequestDto
+  - term: AuditMessageQueryResponseDto
+    definition: 'Object declared by the contract with fields: results, nextToken.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuditMessageQueryResponseDto
+  - term: AuthOptionResponse
+    definition: The public key assertion generation options to be supplied to the user agent to generate an authentication assertion for a passkey
+      credential. See the [webauthn specification](https://www.w3.org/TR/webauthn-2/) for details
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthOptionResponse
+  - term: AuthOptionResponseHolder
+    definition: Response from the APIs which create a passkey authentication request. Contains the information required by the user agent to generate
+      an authenticator assertion and the session information If in the passkey configuration `sessionManagementExternal` is set to `false` then
+      session data are managed internally by the server and this object will contain a session ID which must be provided when the auth
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthOptionResponseHolder
+  - term: AuthenticateAppkeyResult
+    definition: Appkey authentication complete response.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticateAppkeyResult
+  - term: AuthenticatedAppkey
+    definition: Summary information about an appkey which was authenticated when an authentication is completed
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticatedAppkey
+  - term: AuthenticationAppkeyInfo
+    definition: 'Object declared by the contract with fields: id, rpId, authPolicyName, authenticationResponse, authenticationRequest, authFailureErrorCode,
+      metadata, context, publicKey, registrationDtm.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationAppkeyInfo
+  - term: AuthenticationAudit
+    definition: 'An authentication audit record An authentication record contains common fields such as the type and references to the tenant,
+      store and user and specific information depending on the type: appkey/passkey/biometric/TOTP.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationAudit
+  - term: AuthenticationAuditDto
+    definition: An audit dto, structure returned from getRegistrationAudit or getAuthenticationAudit call. Contains what is stored on s3 + UI
+      aligned structure.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationAuditDto
+  - term: AuthenticationError
+    definition: 'Object declared by the contract with fields: message, extraDetail, code, user, biometricSourceReference, score, threshold.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationError
+  - term: AuthenticationExtensionsClientInputs
+    definition: 'Object declared by the contract with fields: appid, txAuthSimple, txAuthGeneric, authnSel, line_authnSel, exts, uvi, loc, biometricPerfBounds,
+      credProps, credentialProtectionPolicy, enforceCredentialProtectionPolicy.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationExtensionsClientInputs
+  - term: AuthenticationExtensionsClientOutputs
+    definition: 'Object declared by the contract with fields: appid, txAuthSimple, txAuthGeneric, authnSel, exts, uvi, loc, biometricPerfBounds,
+      credProps.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationExtensionsClientOutputs
+  - term: AuthenticationPasscodeInfo
+    definition: 'Object declared by the contract with fields: id, policyName, registrationDtm.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationPasscodeInfo
+  - term: AuthenticationPasskeyInfo
+    definition: 'Object declared by the contract with fields: id, rpId, authPolicyName, verifyCredential, passkeyAuthRequest, metadata, context,
+      publicKey, registrationDtm.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationPasskeyInfo
+  - term: AuthenticationPolicy
+    definition: A relying party's passkey authentication policy
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationPolicy
+  - term: AuthenticationSummary
+    definition: A summary of a user authentication
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationSummary
+  - term: AuthenticationTOTPInfo
+    definition: 'Object declared by the contract with fields: id, policyName, algorithm, registrationCreatedDtm, registrationActivatedDtm.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticationTOTPInfo
+  - term: AuthenticatorBiometricPerfBounds
+    definition: 'Object declared by the contract with fields: far, frr.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticatorBiometricPerfBounds
+  - term: AuthenticatorRegistrationAssertion
+    definition: 'Object declared by the contract with fields: assertionScheme, assertion, tcDisplayPNGCharacteristics, exts.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticatorRegistrationAssertion
+  - term: AuthenticatorSelectionCriteria
+    definition: Defines what sort of authenticators may be selected for registration.**See field descriptions for recommended values.**
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticatorSelectionCriteria
+  - term: AuthenticatorSignAssertion
+    definition: 'Object declared by the contract with fields: assertionScheme, assertion, exts.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthenticatorSignAssertion
+  - term: AuthorizationSkyError
+    definition: 'Object declared by the contract with fields: code, message, extraDetail.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/AuthorizationSkyError
+  - term: BiographicData
+    definition: 'Object declared by the contract with fields: label, fieldId, fieldName, values.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiographicData
+  - term: BiographicDataValues
+    definition: 'Object declared by the contract with fields: visualZoneValue, barcodeValue, mrzValue, nfcValue.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiographicDataValues
+  - term: BiometricAuditDisplayDto
+    definition: An authentication audit dto containing extra details required by the UI for a face authentication audit.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiometricAuditDisplayDto
+  - term: BiometricAuthenticationFailureRequest
+    definition: A request to record a biometric authentication failure. Contains information about the type of biometric which failed, the reason
+      for failure and an optional biometric sample, configuration and client context data.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiometricAuthenticationFailureRequest
+  - term: BiometricServiceConfig
+    definition: Biometric service configuration for an Identity Store
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiometricServiceConfig
+  - term: BiometricSummary
+    definition: Summary information about a biometric registered to the user.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BiometricSummary
+  - term: Botd
+    definition: Contains all the information from Bot Detection product
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/Botd
+  - term: BotdBot
+    definition: Stores bot detection result
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BotdBot
+  - term: BrowserDetails
+    definition: 'Object declared by the contract with fields: browserName, browserMajorVersion, browserFullVersion, os, osVersion, device, userAgent.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/BrowserDetails
+  - term: Call
+    definition: 'Object declared by the contract with fields: id, agentId, audioSourceName, audioFileHash, status, errorCode, errorMessage, metadata,
+      callActions.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/Call
+  - term: CallAction
+    definition: 'Object declared by the contract with fields: operationId, executionKey, startDtm, endDtm, completeReason, errorCode, errorMessage.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/CallAction
+  - term: CallMetadata
+    definition: 'Object declared by the contract with fields: callId, numChannels, callerChannel, agentChannel, audioFrequencyHz, audioBitsPerSample,
+      chunkFormat, chunkLengthMs, agentPhoneNumber, callerPhoneNumber, callStartDtm, callEndDtm.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/CallMetadata
+  - term: CheckResponse
+    definition: 'Object declared by the contract with fields: id, displayName, description, outcome, moreInfo, nested, metaData.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/CheckResponse
+  - term: ChildTrustXProcess
+    definition: Information about the TrustX process which is executed as the push notification action.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ChildTrustXProcess
+  - term: ClearUserAppkeyPreferredDeviceResponseDto
+    definition: The response from the clear user appkey preferred device operation.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ClearUserAppkeyPreferredDeviceResponseDto
+  - term: ClientAuthenticationResponse
+    definition: The appkey authentication response returned from the client.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ClientAuthenticationResponse
+  - term: ClientDataRequest
+    definition: 'Object declared by the contract with fields: name, value, evaluationRules.'
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ClientDataRequest
+  - term: ClientPasscodeAuthenticationResponse
+    definition: The passcode authentication response returned from the client.
+    tags:
+    - Object
+    source: openapi/daon-trustx-openapi.yml#/components/schemas/ClientPasscodeAuthenticationResponse

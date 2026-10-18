@@ -1,0 +1,97 @@
+overlay: 1.0.0
+info:
+  title: Daon TrustX API overlay (API Evangelist enhancements)
+  version: 1.0.0
+extends: ../openapi/_original/daon-trustx-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: Daon
+    x-apis-json: https://raw.githubusercontent.com/api-evangelist/daon/refs/heads/main/apis.yml
+    x-documentation: https://docs.trustx.com/trustx-api-reference
+    x-changelog: https://docs.trustx.com/trust/api-changelog
+    x-llms-txt: https://docs.trustx.com/llms.txt
+- target: $
+  update:
+    tags:
+    - name: API Keys
+      x-operation-count: 6
+    - name: Admin Sessions
+      x-operation-count: 3
+    - name: Process Instance
+      x-operation-count: 2
+    - name: Process Instances
+      x-operation-count: 12
+    - name: Process Archive Search
+      x-operation-count: 6
+    - name: Process Definition Tags
+      x-operation-count: 3
+    - name: Process Definitions
+      x-operation-count: 1
+    - name: Archive Policies
+      x-operation-count: 7
+    - name: Cloud Secrets
+      x-operation-count: 5
+    - name: Process Tokens
+      x-operation-count: 5
+    - name: Process Instance Archiving
+      x-operation-count: 3
+    - name: Audits
+      x-operation-count: 3
+    - name: userdata-controller
+      x-operation-count: 4
+    - name: Custom Pages
+      x-operation-count: 11
+    - name: Watchlist V2
+      x-operation-count: 9
+    - name: Trends
+      x-operation-count: 6
+    - name: Watchlist Member Management (Deprecated)
+      x-operation-count: 5
+    - name: Watchlist Management (Deprecated)
+      x-operation-count: 5
+    - name: Watchlist Entry V2
+      x-operation-count: 4
+    - name: Tenant Management
+      x-operation-count: 4
+    - name: User Biometric Management
+      x-operation-count: 32
+    - name: User Appkey Management
+      x-operation-count: 32
+    - name: User Passkey Management
+      x-operation-count: 20
+    - name: Tenant Key Management
+      x-operation-count: 2
+    - name: User Passcode Management
+      x-operation-count: 21
+    - name: User Push Notification Management
+      x-operation-count: 6
+    - name: User Management
+      x-operation-count: 16
+    - name: User TOTP Management
+      x-operation-count: 18
+    - name: Store Appkey Configuration Management
+      x-operation-count: 4
+    - name: Store Passcode Policy Management
+      x-operation-count: 4
+    - name: Store TOTP Policy Management
+      x-operation-count: 4
+    - name: Store Push Notification Policy Management
+      x-operation-count: 5
+    - name: Store Management
+      x-operation-count: 6
+    - name: Store Passkey Configuration Management
+      x-operation-count: 4
+  description: The spec declares no top-level tags array; list the operation tags actually used (names only, counts derived from the spec).
+- target: $.paths['/api/arthr/apiKeys/issue'].post
+  update:
+    x-agent-flow: authentication
+- target: $.paths['/api/process-manager/processInstances/create'].post
+  update:
+    x-agent-flow: identity-verification-process
+- target: $.paths['/api/process-server/startProcess'].post
+  update:
+    x-agent-flow: identity-verification-process
+- target: $.paths['/api/process-server/processes/{processDefinitionName}/businessKeys/{businessKey}/topicName/{topicName}/continue'].post
+  update:
+    x-agent-flow: identity-verification-process

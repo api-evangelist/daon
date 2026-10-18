@@ -1,0 +1,73 @@
+generated: '2026-10-18'
+method: searched
+source: https://github.com/daoninc/sdk-packages
+sources:
+- https://github.com/daoninc/sdk-packages
+- https://github.com/daoninc
+- https://docs.trustx.com/trust
+packages:
+- name: face-sdk-android
+  registry: maven
+  url: https://maven.pkg.github.com/daoninc/sdk-packages/com/daon/sdk/face/
+  language: kotlin
+  official: true
+  version: '5.3.4'
+  published: null
+  note: Android Face SDK for liveness detection, quality analysis, and face matching. Requires license bound to application identifier.
+- name: fido-sdk-android
+  registry: maven
+  url: https://maven.pkg.github.com/daoninc/sdk-packages/com/daon/sdk/fido/
+  language: kotlin
+  official: true
+  version: null
+  published: null
+  note: FIDO multi-factor authentication SDK for Android
+- name: fido-sdk-ios
+  registry: github
+  url: https://github.com/daoninc/fido-sdk-ios
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: FIDO multi-factor authentication SDK for iOS
+- name: xproof-sdk-ios
+  registry: github
+  url: https://github.com/daoninc/xproof-sdk-ios
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: xProof Document SDK for iOS
+- name: nfc-sdk-ios
+  registry: github
+  url: https://github.com/daoninc/nfc-sdk-ios
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: iOS NFC Reader SDK
+- name: nfc-sdk-android
+  registry: github
+  url: https://github.com/daoninc/nfc-sdk-android
+  language: kotlin
+  official: true
+  version: null
+  published: null
+  note: Android NFC Reader SDK
+- name: trust-sdk-ios
+  registry: github
+  url: https://github.com/daoninc/trust-sdk-ios
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: iOS Trust SDK
+- name: fido-sdk-react
+  registry: github
+  url: https://github.com/daoninc/fido-sdk-react
+  language: javascript
+  official: true
+  version: null
+  published: null
+  note: xAuth FIDO React Native sample
+note: Daon maintains SDK packages in a private Maven repository (https://maven.pkg.github.com/daoninc/sdk-packages/) requiring GitHub authentication. SDKs are also available as source code on GitHub. Packages require licenses bound to application identifiers.

@@ -1,0 +1,19 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/daon-trustx-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Access to the APIs is restricted by bearer auth
+- name: X-Api-Key
+  type: apiKey
+  in: header
+  description: An API key is required to create a token

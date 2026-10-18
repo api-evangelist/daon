@@ -1,0 +1,464 @@
+openapi: 3.2.0
+info:
+  title: Daon Process Instance Archiving API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Process Instance Archiving across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Process Instance Archiving
+paths:
+  /api/process-manager/processInstances/{processInstanceId}/archive/status:
+    get:
+      tags:
+      - Process Instance Archiving
+      summary: Get the archive status of a process instance
+      description: 'Returns per-policy archive entries for the process instance. When no tracking records exist, falls back to discovering completed archives directly from S3 and includes download URLs for the archive and its signature.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchiveStatus`'
+      operationId: getArchiveStatus
+      parameters:
+      - name: processInstanceId
+        in: path
+        description: Process instance ID.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Archive status returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessInstanceArchiveStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant or process instance not found (code 130).
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchiveStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/archive/inflight:
+    get:
+      tags:
+      - Process Instance Archiving
+      summary: Get the tenant's current archive in-flight load
+      description: 'Returns the number of archives currently in-flight (PENDING or RETRYING), the tenant''s maximum in-flight limit and the remaining capacity. Intended to be queried before a batch archive submission to avoid hitting the in-flight throttle.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:getArchiveInflight`'
+      operationId: getArchiveInflight
+      parameters: []
+      responses:
+        '200':
+          description: In-flight summary returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveInflightResponse'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:getArchiveInflight
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/process-manager/processInstances/archive:
+    post:
+      tags:
+      - Process Instance Archiving
+      summary: Submit process instances for archiving
+      description: 'Resolves the process instances selected by the filter and submits each one that is not already archived or in-flight for the given archive policy. Idempotent per instance. Subject to a per-tenant in-flight throttle.
+
+
+        API Permissions: `TNT#{tenantid}#ProcessManager:archiveProcessInstances`'
+      operationId: archiveProcessInstances
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveProcessInstancesRequest'
+        required: true
+      responses:
+        '202':
+          description: Submission accepted ? throttling summary returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveProcessInstancesResponse'
+        '400':
+          description: Invalid or unsupported filter.
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ProcessManagerSkyError'
+                - $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Tenant or archive policy not found.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '429':
+          description: In-flight archive limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveProcessInstancesResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ProcessManager:archiveProcessInstances
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    ArchiveEntry:
+      type: object
+      description: Archive of a process instance under a single policy.
+      properties:
+        archivePolicyId:
+          type: string
+          description: Archive policy id.
+          example: pol123
+        archivePolicyName:
+          type: string
+          description: Archive policy name.
+          example: policy_a
+        archivePolicyVersion:
+          type: integer
+          format: int32
+          description: Archive policy version. Null if the policy has since been deleted.
+          example: 1
+        status:
+          type: string
+          description: Lifecycle status.
+          enum:
+          - QUEUED
+          - PENDING
+          - COMPLETED
+          - FAILED
+          - RETRYING
+          example: COMPLETED
+        createdDtm:
+          type: string
+          format: date-time
+          description: When the archive record was created (DB records only).
+        completedDtm:
+          type: string
+          format: date-time
+          description: When the archive completed (COMPLETED records only).
+        location:
+          type: string
+          description: Relative storage location of the written archive (e.g. processArchives/{policyName}/{date}/{file}.zip). Populated for COMPLETED entries only. This is the handle passed to the archive download/restore flow.
+        expiresAfterDate:
+          type: string
+          format: date-time
+          description: When the tracking record (and its underlying archive) is scheduled to expire and be purged.
+        failureReason:
+          type: string
+          description: Human-readable reason for the last failed or retrying attempt. Populated for FAILED/RETRYING entries; cleared when the archive later completes.
+          example: 'ARCHIVE_NOT_READY: MISSING_ACTIVITY_FILE'
+    ProcessInstanceArchiveStatusResponse:
+      type: object
+      description: Archive status of a process instance, per archive policy.
+      properties:
+        processInstanceId:
+          type: string
+          description: The process instance id.
+          example: abc123
+        archives:
+          type: array
+          description: Per-policy archive entries. Empty when the instance has not been archived.
+          items:
+            $ref: '#/components/schemas/ArchiveEntry'
+    ProcessManagerSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    IdFilter:
+      allOf:
+      - $ref: '#/components/schemas/ArchiveFilter'
+      - type: object
+        properties:
+          processInstanceIds:
+            type: array
+            description: Explicit list of process instance ids to archive.
+            items:
+              type: string
+            minItems: 1
+      description: Selects process instances by explicit ids. Documented only ? not yet implemented.
+      required:
+      - filterType
+      - processInstanceIds
+    ArchiveInflightResponse:
+      type: object
+      description: Current archive in-flight load and remaining capacity for a tenant.
+      properties:
+        numInflight:
+          type: integer
+          format: int64
+          description: Number of archives currently in-flight for the tenant (PENDING or RETRYING).
+          example: 200
+        maxInflight:
+          type: integer
+          format: int32
+          description: The tenant's effective maximum number of concurrent in-flight archives.
+          example: 1000
+        availableCapacity:
+          type: integer
+          format: int64
+          description: Remaining in-flight capacity before the throttle rejects further submissions (max(0, maxInflightPerTenant - numInflight)).
+          example: 800
+    ArchiveProcessInstancesRequest:
+      type: object
+      description: Batch archive submission request.
+      properties:
+        archivePolicyName:
+          type: string
+          description: Name of an existing archive policy for the tenant.
+          example: my_policy
+          minLength: 1
+        archivePolicyVersion:
+          type: integer
+          format: int32
+          description: Version of the archive policy.
+          example: 1
+        filter:
+          $ref: '#/components/schemas/ArchiveFilter'
+          description: Selector describing which process instances to archive.
+        archiveKey:
+          type: string
+          description: Key used to derive the unique archive-tmp path passed to the archive policy's cloud function. Applied to every instance in the batch. Required when the archive policy has a cloud function configured; ignored otherwise. May only contain letters, digits, '_' and '-' (max 128 chars) so it forms a single, safe S3 path segment.
+          example: my_key
+          maxLength: 128
+          minLength: 0
+          pattern: ^[A-Za-z0-9_-]+$
+      required:
+      - archivePolicyName
+      - archivePolicyVersion
+      - filter
+    ArchiveProcessInstancesResponse:
+      type: object
+      description: Throttling summary for a batch archive submission.
+      properties:
+        numInflight:
+          type: integer
+          format: int64
+          description: Number of archives already in-flight for the tenant (PENDING or RETRYING) after this submission.
+          example: 200
+        batchSize:
+          type: integer
+          format: int64
+          description: Number of process instances submitted for archiving by this request (already-archived or in-flight instances are skipped).
+          example: 100
+        numThrottled:
+          type: integer
+          format: int64
+          description: Number of process instances in this request that were not submitted because the tenant's in-flight archive limit was reached mid-batch (e.g. a concurrent submission consumed the remaining capacity). Resubmit these later.
+          example: 0
+        queuedProcessInstanceIds:
+          type: array
+          description: The process instance ids that were actually queued for archiving by this request. Size equals batchSize.
+          example:
+          - 7Y6KDGBLOANG3MJJEJE7ZMUHPE
+          items:
+            type: string
+    ArchiveFilter:
+      type: object
+      description: Selector describing which process instances to archive.
+      discriminator:
+        propertyName: filterType
+      oneOf:
+      - $ref: '#/components/schemas/DateFilter'
+      - $ref: '#/components/schemas/IdFilter'
+      properties:
+        filterType:
+          type: string
+          description: Discriminator selecting the concrete filter type.
+          enum:
+          - date
+          - id
+          example: date
+          minLength: 1
+      required:
+      - filterType
+    DateFilter:
+      allOf:
+      - $ref: '#/components/schemas/ArchiveFilter'
+      - type: object
+        properties:
+          createdDtmFrom:
+            type: string
+            format: date-time
+            description: Inclusive lower bound of the process instance createdDtm.
+            example: {}
+          createdDtmTo:
+            type: string
+            format: date-time
+            description: Inclusive upper bound of the process instance createdDtm.
+            example: {}
+          processDefinitionId:
+            type: string
+            description: Process definition id. Mutually exclusive with processDefinitionName.
+            example: PROCESSDEFN00000000000001A
+          processDefinitionName:
+            type: string
+            description: Process definition name. Mutually exclusive with processDefinitionId.
+            example: onboarding
+          processDefinitionVersion:
+            type: integer
+            format: int32
+            description: Process definition version. Only valid with processDefinitionName; all versions match when omitted.
+            example: 3
+      description: Selects process instances by created-date range and process definition.
+      required:
+      - createdDtmFrom
+      - createdDtmTo
+      - filterType
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

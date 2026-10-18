@@ -1,0 +1,735 @@
+openapi: 3.2.0
+info:
+  title: Daon Watchlist Entry V2 API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Watchlist Entry V2 across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Watchlist Entry V2
+paths:
+  /api/watchlist-manager/watchlists/{watchlistId}/entries/{entryId}:
+    get:
+      tags:
+      - Watchlist Entry V2
+      summary: Get a watchlist entry by ID
+      description: 'Retrieves detailed information about a specific watchlist entry. For face recognition entries, the face image can be optionally included in the response.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistEntry`'
+      operationId: getWatchlistEntry
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: entryId
+        in: path
+        description: Unique identifier for the entry
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Watchlist entry retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+        '400':
+          description: Bad Request - Unsupported watchlist type (Error Code 9 - INVALID_API_FIELD_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND), Watchlist member image not found (Error Code 30 - WATCHLIST_MEMBER_IMAGE_NOT_FOUND), Watchlist entry not found (Error Code 31 - WATCHLIST_ENTRY_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistEntry
+    delete:
+      tags:
+      - Watchlist Entry V2
+      summary: Delete a watchlist entry
+      description: 'Permanently removes an entry from the watchlist. This action cannot be undone.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:deleteWatchlistEntry`'
+      operationId: deleteWatchlistEntry
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: entryId
+        in: path
+        description: Unique identifier for the entry
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Watchlist entry deleted successfully
+        '400':
+          description: Bad Request - Unsupported watchlist type (Error Code 9 - INVALID_API_FIELD_ERROR), Inactive watchlist operation (Error Code 42 - INACTIVE_WATCHLIST_OPERATION_NOT_ALLOWED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND), Watchlist entry not found (Error Code 31 - WATCHLIST_ENTRY_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:deleteWatchlistEntry
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists/{watchlistId}/entries:
+    get:
+      tags:
+      - Watchlist Entry V2
+      summary: List watchlist entries
+      description: 'Retrieves a paginated list of entries in the watchlist. Supports filtering by date range, value, process definition name, process definition version, and process instance ID. For face recognition watchlists, the face image is not included in the list for performance reasons.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:listWatchlistEntries`'
+      operationId: listWatchlistEntries
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: Filter entries created after this date (ISO 8601 format with timezone, e.g., '2024-01-15T10:30:00Z' or '2024-01-15T10:30:00-05:00')
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: Filter entries created before this date (ISO 8601 format with timezone, e.g., '2024-01-20T14:45:00Z' or '2024-01-20T14:45:00-05:00')
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: valueLike
+        in: query
+        description: Filter entries by value containing this text (case-insensitive partial match)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: normalize
+        in: query
+        description: 'For phoneNumber and email watchlists only: when true, attempt best-effort normalization of valueLike before matching stored values; if normalization fails, valueLike is used as-is. Default is false. Ignored for other watchlist types.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: region
+        in: query
+        description: Optional region hint for phone number normalization when normalize is true
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefnName
+        in: query
+        description: Filter entries by process definition name (exact match)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: processDefnVersion
+        in: query
+        description: Filter entries by process definition version (exact match)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: processInstanceId
+        in: query
+        description: Filter entries by process instance ID (exact match)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Watchlist entries retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+        '400':
+          description: Bad Request - Unsupported watchlist type (Error Code 9 - INVALID_API_FIELD_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:listWatchlistEntries
+    post:
+      tags:
+      - Watchlist Entry V2
+      summary: Create a new watchlist entry
+      description: 'Adds a new entry to the watchlist. The entry type must match the watchlist type. Each entry value must be unique within the watchlist (for document numbers, the combination of value and document type must be unique).
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:createWatchlistEntry`'
+      operationId: createWatchlistEntry
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: normalize
+        in: query
+        description: 'For phoneNumber and email entries: when true (default), normalize before storage and return canonical value plus originalValue. When false, store the raw string in both value and original_value.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: region
+        in: query
+        description: Optional region for phone number normalization when normalize is true
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/DocumentNumberWatchlistEntryDto'
+              - $ref: '#/components/schemas/EmailWatchlistEntryDto'
+              - $ref: '#/components/schemas/FaceV6WatchlistEntryDto'
+              - $ref: '#/components/schemas/IPv4AddressWatchlistEntryDto'
+              - $ref: '#/components/schemas/PhoneNumberWatchlistEntryDto'
+              - $ref: '#/components/schemas/VisitorIdWatchlistEntryDto'
+        required: true
+      responses:
+        '201':
+          description: Watchlist entry created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 17 (VALIDATION_VALUE_REQUIRED), Error Code 18 (VALIDATION_VALUE_TOO_LONG), Error Code 19 (VALIDATION_DOCUMENT_TYPE_REQUIRED), Error Code 22 (MISSING_FACE_IMAGE), Error Code 23 (GENERATING_FACE_TEMPLATE_ERROR), Error Code 27 (GENERATING_FACE_TEMPLATE_INVALID_IMAGE_ERROR), Error Code 34 (INVALID_IPV4_ADDRESS), Error Code 35 (INVALID_DOCUMENT_NUMBER), Error Code 36 (INVALID_VISITOR_ID), Error Code 37 (INVALID_EXPIRATION_DATE), Error Code 40 (INVALID_WATCHLIST_TYPE), Error Code 41 (WATCHLIST_MAX_ENTRIES_EXCEEDED), Error Code 42 (INACTIVE_WATCHLIST_OPERATION_NOT_ALLOWED), Error Code 43 (VALIDATION_DOCUMENT_TYPE_TOO_LONG)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict - Entry already exists (Error Code 32 - WATCHLIST_ENTRY_ALREADY_EXISTS)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:createWatchlistEntry
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    PhoneNumberWatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: 'On create: the phone number supplied by the caller. On response: the stored value (E.164 when normalize=true was used on create, otherwise the raw string).'
+            example: +1 415 555 0100
+            maxLength: 255
+            minLength: 0
+          originalValue:
+            type: string
+            description: The original phone number as supplied by the caller before normalization (response only). When create used normalize=false, matches `value`.
+            example: +1 415 555 0100
+            maxLength: 255
+            minLength: 0
+            readOnly: true
+      description: Entry for phone number watchlists
+      required:
+      - type
+      - value
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    FaceV6WatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            format: binary
+            description: Base64-encoded face image data. One of template or value must be provided, but not both. Template is not returned on the response to create API.
+          template:
+            type: string
+            format: binary
+            description: Base64-encoded face template data. One of template or value must be provided, but not both. Template is not returned on the response to create API.
+          userId:
+            type: string
+            description: User ID associated with this face entry
+            example: user_12345
+            maxLength: 255
+            minLength: 0
+          storeSamples:
+            type: boolean
+            default: true
+            description: Whether to store sample images for this entry
+            example: true
+          fullName:
+            type: string
+            description: Full name for this face entry
+            example: John Doe
+            maxLength: 1024
+            minLength: 0
+          firstName:
+            type: string
+            description: First name of the person
+            example: John
+            maxLength: 255
+            minLength: 0
+          lastName:
+            type: string
+            description: Last name of the person
+            example: Doe
+            maxLength: 255
+            minLength: 0
+          extId:
+            type: string
+            description: External ID for this entry
+            example: ext_12345
+            maxLength: 255
+            minLength: 0
+          phoneNumber:
+            type: string
+            description: Phone number associated with this entry
+            example: '+1234567890'
+            maxLength: 255
+            minLength: 0
+          email:
+            type: string
+            description: Email address associated with this entry
+            example: john.doe@example.com
+            maxLength: 255
+            minLength: 0
+          attributes:
+            type: object
+            additionalProperties: {}
+            description: Additional custom attributes as key-value pairs
+      description: Entry for face recognition watchlists containing face template data and associated metadata
+      required:
+      - firstName
+      - lastName
+      - type
+    VisitorIdWatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The visitor ID to be monitored
+            example: visitor_12345
+            maxLength: 100
+            minLength: 0
+      description: Entry for visitor ID watchlists containing a visitor identifier
+      required:
+      - type
+      - value
+    EmailWatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: 'On create: the email supplied by the caller. On response: the stored canonical email when normalize=true on create, otherwise the raw string.'
+            example: User@Example.com
+            maxLength: 254
+            minLength: 0
+          originalValue:
+            type: string
+            description: The original email as supplied by the caller before normalization (response only). When create used normalize=false, matches `value`.
+            example: User@Example.com
+            maxLength: 255
+            minLength: 0
+            readOnly: true
+      description: Entry for email watchlists
+      required:
+      - type
+      - value
+    ProcessInfoDto:
+      type: object
+      description: Process information associated with a watchlist entry or trend record
+      properties:
+        processDefnId:
+          type: string
+          description: Unique identifier for the process definition
+          example: 01HZ123456789ABCDEFGHIJKLM
+          maxLength: 26
+          minLength: 26
+        processDefnName:
+          type: string
+          description: Human-readable name of the process definition
+          example: Identity Verification Process
+          maxLength: 50
+          minLength: 0
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: Version number of the process definition
+          example: 1
+          minimum: 1
+        processInstanceId:
+          type: string
+          description: Unique identifier for the process instance
+          example: 01HZ123456789ABCDEFGHIJKLM
+          maxLength: 26
+          minLength: 26
+      required:
+      - processDefnId
+      - processDefnName
+      - processDefnVersion
+      - processInstanceId
+    DocumentNumberWatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: The document number to be monitored (case-insensitive)
+            example: ABC123456789
+            maxLength: 100
+            minLength: 0
+          documentType:
+            type: string
+            description: 'Type of the document (e.g., ''Austria - Id Card (2021)'', ''Serbia - Id Card (2009-2014) #1'')'
+            example: Austria - Id Card (2021)
+            maxLength: 250
+            minLength: 0
+      description: Entry for document number watchlists containing a document number and its classification
+      required:
+      - documentType
+      - type
+      - value
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    AbstractWatchlistEntryDto:
+      type: object
+      description: Base class for watchlist entries with common metadata fields
+      discriminator:
+        propertyName: type
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the entry
+          example: 01HZ123456789ABCDEFGHIJKLMN
+          readOnly: true
+        type:
+          type: string
+          description: Type of the entry (determines which specific fields are available)
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - facev6
+          - phoneNumber
+          - email
+          example: documentNumber
+        note:
+          type: string
+          description: Optional note or description for this entry
+          example: Flagged for review
+        createdDtm:
+          type: string
+          format: date-time
+          description: Timestamp when the entry was created
+          example: {}
+          readOnly: true
+        createdBy:
+          type: string
+          description: User who created the entry
+          example: admin@company.com
+          readOnly: true
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: Timestamp when the entry was last updated
+          example: {}
+          readOnly: true
+        lastUpdatedBy:
+          type: string
+          description: User who last updated the entry
+          example: admin@company.com
+          readOnly: true
+        expireAtDtm:
+          type: string
+          format: date-time
+          description: Optional expiration date for this entry (overrides watchlist default)
+          example: {}
+        processInfo:
+          $ref: '#/components/schemas/ProcessInfoDto'
+          description: 'Optional process information associated with this entry. This field is optional as a group: if omitted entirely the entry is valid, but if provided all four fields (processDefnId, processDefnName, processDefnVersion, processInstanceId) are required.'
+      required:
+      - type
+    IPv4AddressWatchlistEntryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistEntryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: IPv4 address or CIDR range to be monitored (e.g., '192.168.1.1' or '192.168.1.0/24')
+            example: 192.168.1.0/24
+            maxLength: 18
+            minLength: 0
+      description: Entry for IPv4 address watchlists containing an IP address or CIDR range
+      required:
+      - type
+      - value
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

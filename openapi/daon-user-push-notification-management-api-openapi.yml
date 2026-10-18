@@ -1,0 +1,1153 @@
+openapi: 3.2.0
+info:
+  title: Daon User Push Notification Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged User Push Notification Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: User Push Notification Management
+paths:
+  /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications/relyingParties/{rpId}:
+    post:
+      tags:
+      - User Push Notification Management
+      summary: Send push notification to user devices with registered appkeys for the…
+      description: 'The push notification is sent asynchronously. Either a generic or a TrustX push notification can be requested. A TrustX push notification requires a TrustX process to be created which may have its status monitored so it can be polled and waited on.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:sendPushNotification` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:sendPushNotification`'
+      operationId: sendPushNotification
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose push notification policy will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: TX_PII
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: A push notification request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPushNotificationRequest'
+        required: true
+      responses:
+        '200':
+          description: Push notification request processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendPushNotificationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **2800**: No destinations are registered for this user
+
+            - **2801**: No valid destinations are available for this user
+
+            - **2802**: Failed to create a process token for the push notification TrustX process
+
+            - **2806**: Push notification policy is not configured to support all of the push notification destinations
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2701**: Push notification policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:sendPushNotification
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/relyingParties/{rpId}/ext:
+    post:
+      tags:
+      - User Push Notification Management
+      summary: Send push notification to user devices with registered appkeys for the…
+      description: 'The push notification is sent asynchronously. Either a generic or a TrustX push notification can be requested. A TrustX push notification requires a TrustX process to be created which may have its status monitored so it can be polled and waited on.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:sendPushNotificationByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:sendPushNotificationByExtUserId`'
+      operationId: sendPushNotificationByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: rpId
+        in: path
+        description: The ID of the relying party whose push notification policy will be used
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: TX_PII
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: A push notification request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPushNotificationRequest'
+        required: true
+      responses:
+        '200':
+          description: Push notification request processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendPushNotificationResponse'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **2800**: No destinations are registered for this user
+
+            - **2801**: No valid destinations are available for this user
+
+            - **2802**: Failed to create a process token for the push notification TrustX process
+
+            - **2806**: Push notification policy is not configured to support all of the push notification destinations
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2701**: Push notification policy not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:sendPushNotificationByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications:
+    get:
+      tags:
+      - User Push Notification Management
+      summary: List active push notifications grouped by relying party ID and device ID for…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPushNotifications` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPushNotifications`'
+      operationId: listUserPushNotifications
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeContent
+        in: query
+        description: 'Whether to include the push notification content in the response.
+
+
+          **NOTE** Use with caution as this will slow the API down. Recommended for use with appropriate filtering.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: rpId
+        in: query
+        description: Optional filter by relying party ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: deviceId
+        in: query
+        description: Optional filter by device ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Optional filter by push notification type
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - TRUSTX
+          - GENERIC
+      - name: notificationStatus
+        in: query
+        description: Optional filter by push notification status
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          description: Status of a push notification send operation
+          enum:
+          - SUCCESS
+          - FAIL
+      - name: processInstanceStatus
+        in: query
+        description: Optional filter by process instance status, only relevant for monitored TrustX push notifications
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - IN_PROGRESS
+          - TIMED_OUT
+          - COMPLETE_SUCCESS
+          - COMPLETE_FAILED
+      responses:
+        '200':
+          description: Push notifications listed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PushNotificationSummary'
+        '400':
+          description: 'An error occurred.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPushNotifications
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/{id}/ext:
+    get:
+      tags:
+      - User Push Notification Management
+      summary: Get a push notification record for a user.
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPushNotificationRecordByExtUserID` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPushNotificationRecordByExtUserID`'
+      operationId: getUserPushNotificationRecordByExtUserID
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the push notification record returned when listing push notifications for the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Push notification record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushNotificationRecord'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **2803**: Invalid record ID value - not zlib compressed
+
+            - **2804**: Badly formatted record ID value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2805**: Push notification record not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPushNotificationRecordByExtUserID
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/ext:
+    get:
+      tags:
+      - User Push Notification Management
+      summary: List active push notifications grouped by relying party ID and device ID for…
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserPushNotificationsByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserPushNotificationsByExtUserId`'
+      operationId: listUserPushNotificationsByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userExtId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeContent
+        in: query
+        description: 'Whether to include the push notification content in the response.
+
+
+          **NOTE** Use with caution as this will slow the API down. Recommended for use with appropriate filtering.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: rpId
+        in: query
+        description: Optional filter by relying party ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: deviceId
+        in: query
+        description: Optional filter by device ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Optional filter by push notification type
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - TRUSTX
+          - GENERIC
+      - name: notificationStatus
+        in: query
+        description: Optional filter by push notification status
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          description: Status of a push notification send operation
+          enum:
+          - SUCCESS
+          - FAIL
+      - name: processInstanceStatus
+        in: query
+        description: Optional filter by process instance status, only relevant for monitored TrustX push notifications
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - IN_PROGRESS
+          - TIMED_OUT
+          - COMPLETE_SUCCESS
+          - COMPLETE_FAILED
+      responses:
+        '200':
+          description: Push notifications listed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PushNotificationSummary'
+        '400':
+          description: 'An error occurred.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserPushNotificationsByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications/{id}:
+    get:
+      tags:
+      - User Push Notification Management
+      summary: Get a push notification record for a user.
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserPushNotificationRecord` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserPushNotificationRecord`'
+      operationId: getUserPushNotificationRecord
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID of the push notification record returned when listing push notifications for the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Push notification record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushNotificationRecord'
+        '400':
+          description: 'An error occurred. Possible error codes
+
+            - **2803**: Invalid record ID value - not zlib compressed
+
+            - **2804**: Badly formatted record ID value
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2805**: Push notification record not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserPushNotificationRecord
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    SendPushNotificationResponse:
+      type: object
+      description: The response from the API for sending a push notification to a user.
+      properties:
+        trustXPushResponseParams:
+          $ref: '#/components/schemas/TrustXPushResponseParams'
+    PushNotificationSummary:
+      type: object
+      description: Summary information about a push notification sent to a user.
+      properties:
+        id:
+          type: string
+          description: 'Push notification record identifier.
+
+            The base-64 encoding of the key compressed using the zlib deflate algorithm.'
+        notificationType:
+          type: string
+          description: The type of push notification
+          enum:
+          - TRUSTX
+          - GENERIC
+        notificationSubtype:
+          type: string
+          description: The subtype of push notification
+          enum:
+          - APPKEY
+        notificationStatus:
+          type: string
+          description: The status of the push notification, whether it sent successfully or failed
+          enum:
+          - SUCCESS
+          - FAIL
+        processInstanceId:
+          type: string
+          description: The process instance identifier associated with a TrustX push notification
+        processInstanceStatus:
+          type: string
+          description: The status of the process instance associated with a TrustX push notification if has its status monitored
+          enum:
+          - PENDING
+          - IN_PROGRESS
+          - TIMED_OUT
+          - COMPLETE_SUCCESS
+          - COMPLETE_FAILED
+        rpId:
+          type: string
+          description: The relying party ID associated with the push notification
+        deviceId:
+          type: string
+          description: The device ID to which the push notification was sent
+        deviceName:
+          type: string
+          description: The name of the device to which the push notification was sent
+        deviceModel:
+          type: string
+          description: The model of the device to which the push notification was sent
+        osType:
+          type: string
+          description: The operating system type of the device to which the push notification was sent
+        createdDtm:
+          type: string
+          format: date-time
+          description: The created date time of the push notification record
+        content:
+          $ref: '#/components/schemas/PushNotificationContent'
+          description: Optional content of the push notification. Returned only if specifically requested using the includeContent parameter.
+    TrustXPushRequestParams:
+      type: object
+      description: Information required to create a TrustX push notification which is managed using a TrustX process.
+      properties:
+        parentTrustXProcess:
+          $ref: '#/components/schemas/ParentTrustXProcess'
+          description: The mandatory TrustX process from which the push notification is requested.
+        childTrustXProcess:
+          $ref: '#/components/schemas/ChildTrustXProcess'
+          description: The mandatory TrustX process which is executed as the push notification action.
+      required:
+      - childTrustXProcess
+      - parentTrustXProcess
+    PushNotificationContent:
+      type: object
+      description: Contents of a push notification.
+      properties:
+        title:
+          type: string
+          description: A push notification title.
+        message:
+          type: string
+          description: A push notification message.
+        titleLocKey:
+          type: string
+          description: Optional key for a localisable push notification title.
+        titleLocArgs:
+          type: array
+          description: Optional arguments for a localisable push notification title.
+          items:
+            type: string
+        messageLocKey:
+          type: string
+          description: Optional key for a localisable push notification message.
+        messageLocArgs:
+          type: array
+          description: Optional arguments for a localisable push notification message.
+          items:
+            type: string
+        customProperties:
+          type: object
+          additionalProperties:
+            type: object
+          description: Optional custom properties to be included with the push notification.
+    ChildTrustXProcess:
+      type: object
+      description: Information about the TrustX process which is executed as the push notification action.
+      properties:
+        processDefnName:
+          type: string
+          description: Optional. The TrustX process definition name. Either name and version or a tag must be provided.
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: Optional. The TrustX process definition version. Either name and version or a tag must be provided.
+        processDefnTag:
+          type: string
+          description: Optional. The TrustX process definition tag. Either name and version or a tag must be provided.
+        monitorStatus:
+          type: boolean
+          description: 'If present and true then the status of the push notification TrustX process will be monitored.
+
+            A polling URL will be generated which facilitates polling of the process status to wait for its completion.'
+        initParams:
+          type: object
+          additionalProperties:
+            type: object
+          description: Optional parameters to be supplied to the TrustX process when it is started.
+    PushNotificationRecord:
+      type: object
+      description: A record of a push notification sent to a user's device application.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the push notification record.
+          minLength: 1
+        tenantId:
+          type: string
+          description: Identifier of the tenant associated with the push notification.
+          minLength: 1
+        storeId:
+          type: string
+          description: Identifier of the store associated with the push notification.
+          minLength: 1
+        userId:
+          type: string
+          description: Identifier of the user associated with the push notification.
+          minLength: 1
+        userExtId:
+          type: string
+          description: External identifier of the user associated with the push notification.
+          minLength: 1
+        status:
+          type: string
+          description: Push notification send status
+          enum:
+          - SUCCESS
+          - FAIL
+        rpId:
+          type: string
+          description: The relying party identifier associated with the push notification.
+          minLength: 1
+        type:
+          type: string
+          description: The push notification type.
+          enum:
+          - TRUSTX
+          - GENERIC
+        subtype:
+          type: string
+          description: The push notification subtype.
+          enum:
+          - APPKEY
+        createdDtm:
+          type: string
+          format: date-time
+          description: The time when the record was created.
+        expiryDtm:
+          type: string
+          format: date-time
+          description: The time when the push notification expires.
+        deviceId:
+          type: string
+          description: The device identifier to which the push notification was sent.
+          minLength: 1
+        cpiStatusId:
+          type: string
+          description: The optional process instance status identifier associated with a monitored TrustX push notification.
+        errorCode:
+          type: integer
+          format: int32
+          description: Error code if the push notification failed to send.
+        errorMessage:
+          type: string
+          description: Error message if the push notification failed to send.
+        content:
+          $ref: '#/components/schemas/PushNotificationContent'
+          description: Push notification content.
+        trustXPushRequestParams:
+          $ref: '#/components/schemas/TrustXPushRequestParams'
+          description: Additional parameters related to TrustX push requests.
+        deliveryInfo:
+          $ref: '#/components/schemas/PushNotificationDeliveryInfo'
+          description: Information about the push service and attempts made.
+      required:
+      - createdDtm
+      - expiryDtm
+      - status
+      - subtype
+      - type
+    TrustXPushResponseParams:
+      type: object
+      description: Information resulting from the creation of a TrustX push notification which is managed using a TrustX process.
+      properties:
+        redirectUrl:
+          type: string
+          description: The URL to which the user is redirected to start the push notification process.
+        pollingUrl:
+          type: string
+          description: If the push notification is monitored, this is the polling URL to get the status of the push notification.
+    PushNotificationAttempt:
+      type: object
+      description: Information about the destination of a push notification.
+      properties:
+        startDtm:
+          type: string
+          format: date-time
+        endDtm:
+          type: string
+          format: date-time
+        httpStatus:
+          type: integer
+          format: int32
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ParentTrustXProcess:
+      type: object
+      description: Information about the TrustX process which is executed as the push notification action.
+      properties:
+        processDefnId:
+          type: string
+          description: The TrustX process definition identifier.
+          minLength: 1
+        processDefnName:
+          type: string
+          description: The TrustX process definition name.
+          minLength: 1
+        processDefnVersion:
+          type: integer
+          format: int32
+          description: The TrustX process definition version.
+        processInstanceId:
+          type: string
+          description: The TrustX process instance ID.
+          minLength: 1
+    PushNotificationDeliveryInfo:
+      type: object
+      description: Content of a push notification.
+      properties:
+        service:
+          type: string
+          description: The service used to send the push notification.
+          enum:
+          - FCM
+          - APNS
+        attempts:
+          type: array
+          description: Attempts made to send the push notification.
+          items:
+            $ref: '#/components/schemas/PushNotificationAttempt'
+    SendPushNotificationRequest:
+      type: object
+      description: A request for sending a push notification for a user.
+      properties:
+        type:
+          type: string
+          description: A mandatory push notification type.
+          enum:
+          - TRUSTX
+          - GENERIC
+        ttlSeconds:
+          type: integer
+          format: int32
+          description: Mandatory time-to-live for the push notification in seconds.
+        retryDurationHintSeconds:
+          type: integer
+          format: int32
+          description: 'Optional length of time that the push notification will be retried if it fails to send. If not provided a default of 60 seconds is used.
+
+            This describes the minimum duration for which retries will be attempted and is not exact.'
+        content:
+          $ref: '#/components/schemas/PushNotificationContent'
+          description: Push notification content.
+        trustXPushRequestParams:
+          $ref: '#/components/schemas/TrustXPushRequestParams'
+          description: 'Parameters required for a push notification of type: TRUSTX.'
+      required:
+      - content
+      - type
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

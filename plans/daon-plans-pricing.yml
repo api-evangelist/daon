@@ -1,0 +1,12 @@
+generated: '2026-10-18'
+method: none
+name: Daon pricing
+audience: business-product
+pricing_basis: negotiated
+published: false
+delivery:
+  mode: managed
+  evidence: TrustX is a SaaS platform; IdentityX is a hosted platform
+plan_count: 0
+plans: []
+note: Daon does not publish public pricing for its identity verification and authentication platforms. Pricing is enterprise/negotiated based on requirements.

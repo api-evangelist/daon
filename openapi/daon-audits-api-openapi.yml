@@ -1,0 +1,334 @@
+openapi: 3.2.0
+info:
+  title: Daon Audits API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Audits across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Audits
+paths:
+  /api/metrics-server/auditMessages/queries/{executionId}/status:
+    get:
+      tags:
+      - Audits
+      summary: Query the status of an audit query
+      description: 'Query the status of an audit query based on the executionId.
+
+
+        The state of query execution. QUEUED indicates that the query has been submitted to the
+
+        service, and will execute the query as soon as resources are available. RUNNING
+
+        indicates that the query is in execution phase. SUCCEEDED indicates that the query completed
+
+        without errors. FAILED indicates that the query experienced an error and did not complete
+
+        processing. CANCELLED indicates that a user input interrupted query execution.
+
+
+        API Permissions: `TNT#{tenantid}#MetricsServer:getAuditQueryStatus`'
+      operationId: getAuditQueryStatus
+      parameters:
+      - name: executionId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - $ref: '#/components/schemas/AuthorizationSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - type: object
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#MetricsServer:getAuditQueryStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/metrics-server/auditMessages/queries/start:
+    post:
+      tags:
+      - Audits
+      summary: Create an audit query
+      description: 'Create an audit query for which the result must be collected later.
+
+
+        API Permissions: `TNT#{tenantid}#MetricsServer:startAuditQuery`'
+      operationId: startAuditQuery
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditMessageQueryRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - $ref: '#/components/schemas/AuthorizationSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - type: object
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#MetricsServer:startAuditQuery
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/metrics-server/auditMessages/queries/{executionId}/result:
+    get:
+      tags:
+      - Audits
+      summary: Get a query result
+      description: 'Get they query result based on the exeuctionId.
+
+
+        API Permissions: `TNT#{tenantid}#MetricsServer:getAuditQueryStatus`'
+      operationId: getAuditQueryResults
+      parameters:
+      - name: executionId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: nextToken
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuditMessageQueryResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - $ref: '#/components/schemas/AuthorizationSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AbstractSkyError'
+                - type: object
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#MetricsServer:getAuditQueryStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    AuditMessageQueryRequestDto:
+      type: object
+      properties:
+        httpMethod:
+          type: string
+        httpResponseCode:
+          type: integer
+          format: int32
+        subject:
+          type: string
+        sessionId:
+          type: string
+        service:
+          type: string
+        method:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        fromTime:
+          type: string
+          format: date-time
+        toTime:
+          type: string
+          format: date-time
+      required:
+      - fromTime
+      - toTime
+    ArrayNode: {}
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    AuditMessageQueryResponseDto:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/ArrayNode'
+        nextToken:
+          type: string
+    AuthorizationSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

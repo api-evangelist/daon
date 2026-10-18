@@ -1,0 +1,35 @@
+generated: '2026-10-18'
+method: derived
+source: openapi/daon-trustx-openapi.yml
+format: application/json
+envelope:
+  code: code
+  message: message
+  detail: extraDetail
+problems:
+- status: 400
+  title: Bad Request
+  type: ArthrSkyError
+  description: The request was invalid or cannot be served
+  remediation: Check request parameters and format
+- status: 401
+  title: Unauthorized
+  type: ArthrSkyError
+  description: Authentication failed or user lacks necessary permissions
+  remediation: Check API key or bearer token
+- status: 403
+  title: Forbidden
+  type: ArthrSkyError
+  description: Access denied - insufficient tenant permissions
+  remediation: Verify user has required permissions for the operation
+- status: 404
+  title: Not Found
+  type: ArthrSkyError
+  description: Resource not found
+  remediation: Check resource identifier and tenant context
+- status: 500
+  title: Internal Server Error
+  type: ArthrSkyError
+  description: Internal server error
+  remediation: Contact support if issue persists
+note: Error responses follow ArthrSkyError schema with code, message, and extraDetail fields. Specific error codes are not documented in the OpenAPI specification.

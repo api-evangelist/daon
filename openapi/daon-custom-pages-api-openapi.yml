@@ -1,0 +1,845 @@
+openapi: 3.2.0
+info:
+  title: Daon Custom Pages API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Custom Pages across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Custom Pages
+paths:
+  /api/theme-server/customPages:
+    get:
+      tags:
+      - Custom Pages
+      summary: List Custom Pages
+      description: 'List custom pages for a tenant. The list can be filtered by name and status.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:listCustomPages`'
+      operationId: listCustomPages
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: ''
+      - name: status
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCustomPageDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:listCustomPages
+    post:
+      tags:
+      - Custom Pages
+      summary: Create Custom Page
+      description: 'Create a custom page with the provided details.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:createCustomPage`'
+      operationId: createCustomPage
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomPageRequestDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPageCreateResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:createCustomPage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/{name}/{version}:
+    get:
+      tags:
+      - Custom Pages
+      summary: Get Custom Page By Name And Version
+      description: 'Get a custom page by name and version for the specified tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:getCustomPageByNameAndVersion`'
+      operationId: getCustomPageByNameAndVersion
+      parameters:
+      - name: name
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPageDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:getCustomPageByNameAndVersion
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/previews:
+    post:
+      tags:
+      - Custom Pages
+      summary: Create Custom Page Preview
+      description: 'Create a custom page preview by uploading a preview archive.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:createCustomPagePreview`'
+      operationId: createArchivePreview
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomPagePreviewCreateRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPagePreviewCreateResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:createCustomPagePreview
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/{id}/status/{status}:
+    post:
+      tags:
+      - Custom Pages
+      summary: Change Custom Page Status
+      description: 'Change the status of a custom page by id for the specified tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:changeCustomPageStatus`'
+      operationId: changeCustomPageStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: status
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPageDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:changeCustomPageStatus
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/{id}/archive:
+    get:
+      tags:
+      - Custom Pages
+      summary: Export Custom Page Archive
+      description: 'Download the custom page archive as a ZIP file.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:getCustomPage`'
+      operationId: exportCustomPageArchive
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:getCustomPage
+    delete:
+      tags:
+      - Custom Pages
+      summary: Delete Custom Page Archive
+      description: 'Delete a custom page archive by custom page ID.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:deleteCustomPageArchive`'
+      operationId: deleteCustomPageArchive
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:deleteCustomPageArchive
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/{id}:
+    get:
+      tags:
+      - Custom Pages
+      summary: Get Custom Page
+      description: 'Get a custom page by id.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:getCustomPage`'
+      operationId: getCustomPage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: includeGatewayUrl
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      - name: includeArchive
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPageDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:getCustomPage
+    post:
+      tags:
+      - Custom Pages
+      summary: Update Custom Page
+      description: 'Update a custom page by id.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:updateCustomPage`'
+      operationId: updateCustomPage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomPageUpdateRequestDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomPageDetailsDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:updateCustomPage
+    delete:
+      tags:
+      - Custom Pages
+      summary: Delete Custom Page
+      description: 'Delete a custom page by id.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:deleteCustomPage`'
+      operationId: deleteCustomPage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:deleteCustomPage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/theme-server/customPages/{name}/versions:
+    get:
+      tags:
+      - Custom Pages
+      summary: Get Custom Page Versions
+      description: 'Get custom page versions by name.
+
+
+        API Permissions: `TNT#{tenantid}#ThemeServer:getCustomPageVersions`'
+      operationId: getCustomPageVersions
+      parameters:
+      - name: name
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCustomPageDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#ThemeServer:getCustomPageVersions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    CustomPagePreviewCreateResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        archiveEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveEntryDto'
+        previewUrl:
+          type: string
+    CreateCustomPageRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 250
+          minLength: 0
+        description:
+          type: string
+          maxLength: 2000
+          minLength: 0
+        status:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+        archive:
+          type: string
+      required:
+      - name
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    CustomPageDto:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+        archiveHash:
+          type: string
+        previewUrl:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+    CustomPageCreateResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+        archiveHash:
+          type: string
+        archiveEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveEntryDto'
+        previewUrl:
+          type: string
+    CustomPageUpdateRequestDto:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 2000
+          minLength: 0
+        archive:
+          type: string
+    CustomPageDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - EDITABLE
+          - DEPLOYED_INACTIVE
+          - DEPLOYED_ACTIVE
+        archiveHash:
+          type: string
+        archiveEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArchiveEntryDto'
+        previewUrl:
+          type: string
+        previewGatewayUrl:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        lastUpdatedBy:
+          type: string
+        archive:
+          type: string
+    PageCustomPageDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/Sort'
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomPageDto'
+        empty:
+          type: boolean
+    CustomPagePreviewCreateRequestDto:
+      type: object
+      properties:
+        archive:
+          type: string
+          minLength: 1
+      required:
+      - archive
+    ArchiveEntryDto:
+      type: object
+      properties:
+        path:
+          type: string
+        sizeBytes:
+          type: integer
+          format: int64
+        contentType:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

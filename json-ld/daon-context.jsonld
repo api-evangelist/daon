@@ -1,0 +1,1391 @@
+{
+  "@context": {
+    "@vocab": "https://daon.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "daon": "https://daon.com/schema#",
+    "ASVThreshold": "daon:ASVThreshold",
+    "enrolmentSpeechSeconds": {
+      "@id": "daon:enrolmentSpeechSeconds",
+      "@type": "xsd:integer"
+    },
+    "verificationSpeechSeconds": {
+      "@id": "daon:verificationSpeechSeconds",
+      "@type": "xsd:integer"
+    },
+    "threshold": {
+      "@id": "daon:threshold",
+      "@type": "xsd:decimal"
+    },
+    "ASVVerificationScoreThresholds": "daon:ASVVerificationScoreThresholds",
+    "defaultLocale": {
+      "@id": "daon:defaultLocale",
+      "@type": "xsd:string"
+    },
+    "values": {
+      "@id": "daon:values"
+    },
+    "AaidOptions": "daon:AaidOptions",
+    "aaids": {
+      "@id": "daon:aaids",
+      "@container": "@list"
+    },
+    "requireAll": {
+      "@id": "daon:requireAll",
+      "@type": "xsd:boolean"
+    },
+    "AbstractSkyError": "daon:AbstractSkyError",
+    "code": {
+      "@id": "daon:code",
+      "@type": "xsd:integer"
+    },
+    "message": {
+      "@id": "daon:message",
+      "@type": "xsd:string"
+    },
+    "extraDetail": {
+      "@id": "daon:extraDetail",
+      "@type": "xsd:string"
+    },
+    "AbstractTrendRecordDto": "daon:AbstractTrendRecordDto",
+    "id": {
+      "@id": "daon:id",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "daon:type",
+      "@type": "xsd:string"
+    },
+    "recordedDtm": {
+      "@id": "daon:recordedDtm",
+      "@type": "xsd:dateTime"
+    },
+    "processInfo": {
+      "@id": "daon:processInfo",
+      "@type": "@id"
+    },
+    "trendGroup": {
+      "@id": "daon:trendGroup",
+      "@type": "xsd:string"
+    },
+    "expiresAfter": {
+      "@id": "daon:expiresAfter",
+      "@type": "xsd:dateTime"
+    },
+    "expiresAfterDays": {
+      "@id": "daon:expiresAfterDays",
+      "@type": "xsd:integer"
+    },
+    "attributes": {
+      "@id": "daon:attributes"
+    },
+    "value": {
+      "@id": "daon:value",
+      "@type": "xsd:string"
+    },
+    "AbstractWatchlistEntryDto": "daon:AbstractWatchlistEntryDto",
+    "note": {
+      "@id": "daon:note",
+      "@type": "xsd:string"
+    },
+    "createdDtm": {
+      "@id": "daon:createdDtm",
+      "@type": "xsd:dateTime"
+    },
+    "createdBy": {
+      "@id": "daon:createdBy",
+      "@type": "xsd:string"
+    },
+    "lastUpdatedDtm": {
+      "@id": "daon:lastUpdatedDtm",
+      "@type": "xsd:dateTime"
+    },
+    "lastUpdatedBy": {
+      "@id": "daon:lastUpdatedBy",
+      "@type": "xsd:string"
+    },
+    "expireAtDtm": {
+      "@id": "daon:expireAtDtm",
+      "@type": "xsd:dateTime"
+    },
+    "AbstractWatchlistQueryDto": "daon:AbstractWatchlistQueryDto",
+    "AbstractWatchlistQueryResponseDto": "daon:AbstractWatchlistQueryResponseDto",
+    "queries": {
+      "@id": "daon:queries",
+      "@container": "@list"
+    },
+    "AddUserBiometricAndCreateUserRequest": "daon:AddUserBiometricAndCreateUserRequest",
+    "userExtId": {
+      "@id": "daon:userExtId",
+      "@type": "xsd:string"
+    },
+    "userBiometric": {
+      "@id": "daon:userBiometric",
+      "@type": "@id"
+    },
+    "AddUserBiometricAndCreateUserResponse": "daon:AddUserBiometricAndCreateUserResponse",
+    "user": {
+      "@id": "daon:user",
+      "@type": "@id"
+    },
+    "AdditionalDocument": "daon:AdditionalDocument",
+    "lastModified": {
+      "@id": "daon:lastModified",
+      "@type": "xsd:dateTime"
+    },
+    "title": {
+      "@id": "daon:title",
+      "@type": "@id"
+    },
+    "captures": {
+      "@id": "daon:captures"
+    },
+    "AdditionalDocumentResponse": "daon:AdditionalDocumentResponse",
+    "version": {
+      "@id": "daon:version",
+      "@type": "xsd:integer"
+    },
+    "documents": {
+      "@id": "daon:documents"
+    },
+    "AlgorithmDto": "daon:AlgorithmDto",
+    "parameters": {
+      "@id": "daon:parameters",
+      "@type": "@id"
+    },
+    "ApiKey": "daon:ApiKey",
+    "permittedOperations": {
+      "@id": "daon:permittedOperations",
+      "@container": "@list"
+    },
+    "name": {
+      "@id": "daon:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "daon:description",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "daon:status",
+      "@type": "xsd:string"
+    },
+    "permissions": {
+      "@id": "daon:permissions",
+      "@container": "@list"
+    },
+    "expiringDtm": {
+      "@id": "daon:expiringDtm",
+      "@type": "xsd:dateTime"
+    },
+    "lastIssuedAtDtm": {
+      "@id": "daon:lastIssuedAtDtm",
+      "@type": "xsd:dateTime"
+    },
+    "ApnsConfig": "daon:ApnsConfig",
+    "appBundleId": {
+      "@id": "daon:appBundleId",
+      "@type": "xsd:string"
+    },
+    "teamId": {
+      "@id": "daon:teamId",
+      "@type": "xsd:string"
+    },
+    "keyId": {
+      "@id": "daon:keyId",
+      "@type": "xsd:string"
+    },
+    "sandboxEnabled": {
+      "@id": "daon:sandboxEnabled",
+      "@type": "xsd:boolean"
+    },
+    "soundEnabled": {
+      "@id": "daon:soundEnabled",
+      "@type": "xsd:boolean"
+    },
+    "tokenSigningKey": {
+      "@id": "daon:tokenSigningKey",
+      "@type": "xsd:string"
+    },
+    "tokenSigningKeyEnc": {
+      "@id": "daon:tokenSigningKeyEnc",
+      "@type": "xsd:string"
+    },
+    "AppKeyAuditDisplayDto": "daon:AppKeyAuditDisplayDto",
+    "registrationDtm": {
+      "@id": "daon:registrationDtm",
+      "@type": "xsd:dateTime"
+    },
+    "friendlyName": {
+      "@id": "daon:friendlyName",
+      "@type": "xsd:string"
+    },
+    "authenticationDtm": {
+      "@id": "daon:authenticationDtm",
+      "@type": "xsd:dateTime"
+    },
+    "os": {
+      "@id": "daon:os",
+      "@type": "xsd:string"
+    },
+    "deviceType": {
+      "@id": "daon:deviceType",
+      "@type": "xsd:string"
+    },
+    "rpId": {
+      "@id": "daon:rpId",
+      "@type": "xsd:string"
+    },
+    "policyName": {
+      "@id": "daon:policyName",
+      "@type": "xsd:string"
+    },
+    "clientResponse": {
+      "@id": "daon:clientResponse",
+      "@type": "xsd:string"
+    },
+    "clientRequest": {
+      "@id": "daon:clientRequest",
+      "@type": "xsd:string"
+    },
+    "publicKey": {
+      "@id": "daon:publicKey",
+      "@type": "xsd:string"
+    },
+    "deviceId": {
+      "@id": "daon:deviceId",
+      "@type": "xsd:string"
+    },
+    "AppkeyAuthRequestHolder": "daon:AppkeyAuthRequestHolder",
+    "clientRequestMessage": {
+      "@id": "daon:clientRequestMessage",
+      "@type": "xsd:string"
+    },
+    "sessionId": {
+      "@id": "daon:sessionId",
+      "@type": "xsd:string"
+    },
+    "session": {
+      "@id": "daon:session",
+      "@type": "@id"
+    },
+    "AppkeyAuthResponseHolder": "daon:AppkeyAuthResponseHolder",
+    "AppkeyAuthenticationPolicy": "daon:AppkeyAuthenticationPolicy",
+    "fidoPolicy": {
+      "@id": "daon:fidoPolicy",
+      "@type": "@id"
+    },
+    "extensions": {
+      "@id": "daon:extensions",
+      "@container": "@list"
+    },
+    "externalChallengeAllowed": {
+      "@id": "daon:externalChallengeAllowed",
+      "@type": "xsd:boolean"
+    },
+    "sessionManagementExternal": {
+      "@id": "daon:sessionManagementExternal",
+      "@type": "xsd:boolean"
+    },
+    "sessionDuration": {
+      "@id": "daon:sessionDuration",
+      "@type": "xsd:string"
+    },
+    "auditLevel": {
+      "@id": "daon:auditLevel",
+      "@type": "xsd:string"
+    },
+    "auditDuration": {
+      "@id": "daon:auditDuration",
+      "@type": "xsd:string"
+    },
+    "AppkeyClientError": "daon:AppkeyClientError",
+    "authFailureErrorCode": {
+      "@id": "daon:authFailureErrorCode",
+      "@type": "xsd:integer"
+    },
+    "authKeyId": {
+      "@id": "daon:authKeyId",
+      "@type": "xsd:string"
+    },
+    "errorCode": {
+      "@id": "daon:errorCode",
+      "@type": "xsd:integer"
+    },
+    "errorMessage": {
+      "@id": "daon:errorMessage",
+      "@type": "xsd:string"
+    },
+    "aaid": {
+      "@id": "daon:aaid",
+      "@type": "xsd:string"
+    },
+    "deviceOsType": {
+      "@id": "daon:deviceOsType",
+      "@type": "xsd:string"
+    },
+    "AppkeyRegistrationPolicy": "daon:AppkeyRegistrationPolicy",
+    "fullAuditingRequired": {
+      "@id": "daon:fullAuditingRequired",
+      "@type": "xsd:boolean"
+    },
+    "AppkeyRegistrationRequestHolder": "daon:AppkeyRegistrationRequestHolder",
+    "AppkeyRegistrationResponseHolder": "daon:AppkeyRegistrationResponseHolder",
+    "AppkeyRelyingPartyConfig": "daon:AppkeyRelyingPartyConfig",
+    "trustedFacets": {
+      "@id": "daon:trustedFacets",
+      "@type": "@id"
+    },
+    "registrationPolicies": {
+      "@id": "daon:registrationPolicies"
+    },
+    "authenticationPolicies": {
+      "@id": "daon:authenticationPolicies"
+    },
+    "AppkeySessionData": "daon:AppkeySessionData",
+    "appId": {
+      "@id": "daon:appId",
+      "@type": "xsd:string"
+    },
+    "singleShot": {
+      "@id": "daon:singleShot",
+      "@type": "xsd:boolean"
+    },
+    "extUserId": {
+      "@id": "daon:extUserId",
+      "@type": "xsd:string"
+    },
+    "userId": {
+      "@id": "daon:userId",
+      "@type": "xsd:string"
+    },
+    "userStatus": {
+      "@id": "daon:userStatus",
+      "@type": "xsd:string"
+    },
+    "challenge": {
+      "@id": "daon:challenge",
+      "@type": "xsd:string"
+    },
+    "regPolicyName": {
+      "@id": "daon:regPolicyName",
+      "@type": "xsd:string"
+    },
+    "authPolicyName": {
+      "@id": "daon:authPolicyName",
+      "@type": "xsd:string"
+    },
+    "serverData": {
+      "@id": "daon:serverData",
+      "@type": "xsd:string"
+    },
+    "transaction": {
+      "@id": "daon:transaction",
+      "@container": "@list"
+    },
+    "policy": {
+      "@id": "daon:policy",
+      "@type": "@id"
+    },
+    "registrationRequest": {
+      "@id": "daon:registrationRequest",
+      "@type": "@id"
+    },
+    "authRequest": {
+      "@id": "daon:authRequest",
+      "@type": "@id"
+    },
+    "AppkeySummary": "daon:AppkeySummary",
+    "deviceOs": {
+      "@id": "daon:deviceOs",
+      "@type": "xsd:string"
+    },
+    "deviceName": {
+      "@id": "daon:deviceName",
+      "@type": "xsd:string"
+    },
+    "notificationToken": {
+      "@id": "daon:notificationToken",
+      "@type": "xsd:string"
+    },
+    "invalidToken": {
+      "@id": "daon:invalidToken",
+      "@type": "xsd:boolean"
+    },
+    "preferredDevice": {
+      "@id": "daon:preferredDevice",
+      "@type": "xsd:boolean"
+    },
+    "lastAuthenticatedWithDtm": {
+      "@id": "daon:lastAuthenticatedWithDtm",
+      "@type": "xsd:dateTime"
+    },
+    "AppkeyTypeOptions": "daon:AppkeyTypeOptions",
+    "types": {
+      "@id": "daon:types",
+      "@container": "@list"
+    },
+    "ArchiveConfig": "daon:ArchiveConfig",
+    "config": {
+      "@id": "daon:config",
+      "@type": "@id"
+    },
+    "ArchiveEntry": "daon:ArchiveEntry",
+    "archivePolicyId": {
+      "@id": "daon:archivePolicyId",
+      "@type": "xsd:string"
+    },
+    "archivePolicyName": {
+      "@id": "daon:archivePolicyName",
+      "@type": "xsd:string"
+    },
+    "archivePolicyVersion": {
+      "@id": "daon:archivePolicyVersion",
+      "@type": "xsd:integer"
+    },
+    "completedDtm": {
+      "@id": "daon:completedDtm",
+      "@type": "xsd:dateTime"
+    },
+    "location": {
+      "@id": "daon:location",
+      "@type": "xsd:string"
+    },
+    "expiresAfterDate": {
+      "@id": "daon:expiresAfterDate",
+      "@type": "xsd:dateTime"
+    },
+    "failureReason": {
+      "@id": "daon:failureReason",
+      "@type": "xsd:string"
+    },
+    "ArchiveEntryDto": "daon:ArchiveEntryDto",
+    "path": {
+      "@id": "daon:path",
+      "@type": "xsd:string"
+    },
+    "sizeBytes": {
+      "@id": "daon:sizeBytes",
+      "@type": "xsd:integer"
+    },
+    "contentType": {
+      "@id": "daon:contentType",
+      "@type": "xsd:string"
+    },
+    "ArchiveFilter": "daon:ArchiveFilter",
+    "filterType": {
+      "@id": "daon:filterType",
+      "@type": "xsd:string"
+    },
+    "ArchiveInflightResponse": "daon:ArchiveInflightResponse",
+    "numInflight": {
+      "@id": "daon:numInflight",
+      "@type": "xsd:integer"
+    },
+    "maxInflight": {
+      "@id": "daon:maxInflight",
+      "@type": "xsd:integer"
+    },
+    "availableCapacity": {
+      "@id": "daon:availableCapacity",
+      "@type": "xsd:integer"
+    },
+    "ArchivePolicyResponse": "daon:ArchivePolicyResponse",
+    "publicKeyFormat": {
+      "@id": "daon:publicKeyFormat",
+      "@type": "xsd:string"
+    },
+    "passphrase": {
+      "@id": "daon:passphrase",
+      "@type": "xsd:string"
+    },
+    "cloudFunctionId": {
+      "@id": "daon:cloudFunctionId",
+      "@type": "xsd:string"
+    },
+    "cloudFunctionName": {
+      "@id": "daon:cloudFunctionName",
+      "@type": "xsd:string"
+    },
+    "cloudFunctionVersion": {
+      "@id": "daon:cloudFunctionVersion",
+      "@type": "xsd:integer"
+    },
+    "retentionDays": {
+      "@id": "daon:retentionDays",
+      "@type": "xsd:integer"
+    },
+    "ArchivePolicyUsageResponse": "daon:ArchivePolicyUsageResponse",
+    "maxAllowed": {
+      "@id": "daon:maxAllowed",
+      "@type": "xsd:integer"
+    },
+    "total": {
+      "@id": "daon:total",
+      "@type": "xsd:integer"
+    },
+    "remaining": {
+      "@id": "daon:remaining",
+      "@type": "xsd:integer"
+    },
+    "ArchiveProcessInstancesRequest": "daon:ArchiveProcessInstancesRequest",
+    "filter": {
+      "@id": "daon:filter",
+      "@type": "@id"
+    },
+    "archiveKey": {
+      "@id": "daon:archiveKey",
+      "@type": "xsd:string"
+    },
+    "ArchiveProcessInstancesResponse": "daon:ArchiveProcessInstancesResponse",
+    "batchSize": {
+      "@id": "daon:batchSize",
+      "@type": "xsd:integer"
+    },
+    "numThrottled": {
+      "@id": "daon:numThrottled",
+      "@type": "xsd:integer"
+    },
+    "queuedProcessInstanceIds": {
+      "@id": "daon:queuedProcessInstanceIds",
+      "@container": "@list"
+    },
+    "ArthrSkyError": "daon:ArthrSkyError",
+    "Attributes": "daon:Attributes",
+    "searchable": {
+      "@id": "daon:searchable",
+      "@type": "xsd:boolean"
+    },
+    "AuditDisplayDto": "daon:AuditDisplayDto",
+    "result": {
+      "@id": "daon:result",
+      "@type": "xsd:string"
+    },
+    "appkeyAuditInfo": {
+      "@id": "daon:appkeyAuditInfo",
+      "@type": "@id"
+    },
+    "passkeyAuditInfo": {
+      "@id": "daon:passkeyAuditInfo",
+      "@type": "@id"
+    },
+    "biometricAuditInfo": {
+      "@id": "daon:biometricAuditInfo",
+      "@type": "@id"
+    },
+    "totpAuditInfo": {
+      "@id": "daon:totpAuditInfo",
+      "@type": "@id"
+    },
+    "passcodeAuditInfo": {
+      "@id": "daon:passcodeAuditInfo",
+      "@type": "@id"
+    },
+    "voiceBiometricAuditInfo": {
+      "@id": "daon:voiceBiometricAuditInfo",
+      "@type": "@id"
+    },
+    "AuditMessageQueryRequestDto": "daon:AuditMessageQueryRequestDto",
+    "httpMethod": {
+      "@id": "daon:httpMethod",
+      "@type": "xsd:string"
+    },
+    "httpResponseCode": {
+      "@id": "daon:httpResponseCode",
+      "@type": "xsd:integer"
+    },
+    "subject": {
+      "@id": "daon:subject",
+      "@type": "xsd:string"
+    },
+    "service": {
+      "@id": "daon:service",
+      "@type": "xsd:string"
+    },
+    "method": {
+      "@id": "daon:method",
+      "@type": "xsd:string"
+    },
+    "fromTime": {
+      "@id": "daon:fromTime",
+      "@type": "xsd:dateTime"
+    },
+    "toTime": {
+      "@id": "daon:toTime",
+      "@type": "xsd:dateTime"
+    },
+    "AuditMessageQueryResponseDto": "daon:AuditMessageQueryResponseDto",
+    "results": {
+      "@id": "daon:results",
+      "@type": "@id"
+    },
+    "nextToken": {
+      "@id": "daon:nextToken",
+      "@type": "xsd:string"
+    },
+    "AuthOptionResponse": "daon:AuthOptionResponse",
+    "timeout": {
+      "@id": "daon:timeout",
+      "@type": "xsd:integer"
+    },
+    "allowCredentials": {
+      "@id": "daon:allowCredentials",
+      "@container": "@list"
+    },
+    "userVerification": {
+      "@id": "daon:userVerification",
+      "@type": "xsd:string"
+    },
+    "hints": {
+      "@id": "daon:hints",
+      "@container": "@list"
+    },
+    "AuthOptionResponseHolder": "daon:AuthOptionResponseHolder",
+    "AuthenticateAppkeyResult": "daon:AuthenticateAppkeyResult",
+    "authenticatedAppKeys": {
+      "@id": "daon:authenticatedAppKeys",
+      "@container": "@list"
+    },
+    "deviceHealthCheckPassed": {
+      "@id": "daon:deviceHealthCheckPassed",
+      "@type": "xsd:boolean"
+    },
+    "deviceEnvironmentCheckResult": {
+      "@id": "daon:deviceEnvironmentCheckResult",
+      "@type": "xsd:string"
+    },
+    "AuthenticatedAppkey": "daon:AuthenticatedAppkey",
+    "authenticationMode": {
+      "@id": "daon:authenticationMode",
+      "@type": "xsd:string"
+    },
+    "AuthenticationAppkeyInfo": "daon:AuthenticationAppkeyInfo",
+    "authenticationResponse": {
+      "@id": "daon:authenticationResponse",
+      "@type": "@id"
+    },
+    "authenticationRequest": {
+      "@id": "daon:authenticationRequest",
+      "@type": "@id"
+    },
+    "metadata": {
+      "@id": "daon:metadata",
+      "@type": "@id"
+    },
+    "context": {
+      "@id": "daon:context"
+    },
+    "AuthenticationAudit": "daon:AuthenticationAudit",
+    "tenantId": {
+      "@id": "daon:tenantId",
+      "@type": "xsd:string"
+    },
+    "storeId": {
+      "@id": "daon:storeId",
+      "@type": "xsd:string"
+    },
+    "storeName": {
+      "@id": "daon:storeName",
+      "@type": "xsd:string"
+    },
+    "appkeyInfo": {
+      "@id": "daon:appkeyInfo",
+      "@type": "@id"
+    },
+    "passkeyInfo": {
+      "@id": "daon:passkeyInfo",
+      "@type": "@id"
+    },
+    "faceAuthenticationRecord": {
+      "@id": "daon:faceAuthenticationRecord",
+      "@type": "@id"
+    },
+    "totpInfo": {
+      "@id": "daon:totpInfo",
+      "@type": "@id"
+    },
+    "passcodeInfo": {
+      "@id": "daon:passcodeInfo",
+      "@type": "@id"
+    },
+    "voiceAuthenticationRecord": {
+      "@id": "daon:voiceAuthenticationRecord",
+      "@type": "@id"
+    },
+    "AuthenticationAuditDto": "daon:AuthenticationAuditDto",
+    "authAuditRecord": {
+      "@id": "daon:authAuditRecord",
+      "@type": "@id"
+    },
+    "authAuditDisplayInfo": {
+      "@id": "daon:authAuditDisplayInfo",
+      "@type": "@id"
+    },
+    "AuthenticationError": "daon:AuthenticationError",
+    "biometricSourceReference": {
+      "@id": "daon:biometricSourceReference",
+      "@type": "@id"
+    },
+    "score": {
+      "@id": "daon:score",
+      "@type": "xsd:decimal"
+    },
+    "AuthenticationExtensionsClientInputs": "daon:AuthenticationExtensionsClientInputs",
+    "appid": {
+      "@id": "daon:appid",
+      "@type": "xsd:string"
+    },
+    "txAuthSimple": {
+      "@id": "daon:txAuthSimple",
+      "@type": "xsd:string"
+    },
+    "txAuthGeneric": {
+      "@id": "daon:txAuthGeneric",
+      "@type": "@id"
+    },
+    "authnSel": {
+      "@id": "daon:authnSel",
+      "@container": "@list"
+    },
+    "line_authnSel": {
+      "@id": "daon:line_authnSel",
+      "@container": "@list"
+    },
+    "exts": {
+      "@id": "daon:exts",
+      "@type": "xsd:boolean"
+    },
+    "uvi": {
+      "@id": "daon:uvi",
+      "@type": "xsd:boolean"
+    },
+    "loc": {
+      "@id": "daon:loc",
+      "@type": "xsd:boolean"
+    },
+    "biometricPerfBounds": {
+      "@id": "daon:biometricPerfBounds",
+      "@type": "@id"
+    },
+    "credProps": {
+      "@id": "daon:credProps",
+      "@type": "xsd:boolean"
+    },
+    "credentialProtectionPolicy": {
+      "@id": "daon:credentialProtectionPolicy",
+      "@type": "xsd:string"
+    },
+    "enforceCredentialProtectionPolicy": {
+      "@id": "daon:enforceCredentialProtectionPolicy",
+      "@type": "xsd:boolean"
+    },
+    "AuthenticationExtensionsClientOutputs": "daon:AuthenticationExtensionsClientOutputs",
+    "AuthenticationPasscodeInfo": "daon:AuthenticationPasscodeInfo",
+    "AuthenticationPasskeyInfo": "daon:AuthenticationPasskeyInfo",
+    "verifyCredential": {
+      "@id": "daon:verifyCredential",
+      "@type": "@id"
+    },
+    "passkeyAuthRequest": {
+      "@id": "daon:passkeyAuthRequest",
+      "@type": "@id"
+    },
+    "AuthenticationPolicy": "daon:AuthenticationPolicy",
+    "AuthenticationSummary": "daon:AuthenticationSummary",
+    "outcome": {
+      "@id": "daon:outcome",
+      "@type": "xsd:string"
+    },
+    "authId": {
+      "@id": "daon:authId",
+      "@type": "xsd:string"
+    },
+    "AuthenticationTOTPInfo": "daon:AuthenticationTOTPInfo",
+    "algorithm": {
+      "@id": "daon:algorithm",
+      "@type": "xsd:string"
+    },
+    "registrationCreatedDtm": {
+      "@id": "daon:registrationCreatedDtm",
+      "@type": "xsd:dateTime"
+    },
+    "registrationActivatedDtm": {
+      "@id": "daon:registrationActivatedDtm",
+      "@type": "xsd:dateTime"
+    },
+    "AuthenticatorBiometricPerfBounds": "daon:AuthenticatorBiometricPerfBounds",
+    "far": {
+      "@id": "daon:far",
+      "@type": "xsd:decimal"
+    },
+    "frr": {
+      "@id": "daon:frr",
+      "@type": "xsd:decimal"
+    },
+    "AuthenticatorRegistrationAssertion": "daon:AuthenticatorRegistrationAssertion",
+    "assertionScheme": {
+      "@id": "daon:assertionScheme",
+      "@type": "xsd:string"
+    },
+    "assertion": {
+      "@id": "daon:assertion",
+      "@type": "xsd:string"
+    },
+    "tcDisplayPNGCharacteristics": {
+      "@id": "daon:tcDisplayPNGCharacteristics",
+      "@container": "@list"
+    },
+    "AuthenticatorSelectionCriteria": "daon:AuthenticatorSelectionCriteria",
+    "authenticatorAttachment": {
+      "@id": "daon:authenticatorAttachment",
+      "@type": "xsd:string"
+    },
+    "residentKey": {
+      "@id": "daon:residentKey",
+      "@type": "xsd:string"
+    },
+    "requireResidentKey": {
+      "@id": "daon:requireResidentKey",
+      "@type": "xsd:boolean"
+    },
+    "AuthenticatorSignAssertion": "daon:AuthenticatorSignAssertion",
+    "AuthorizationSkyError": "daon:AuthorizationSkyError",
+    "BiographicData": "daon:BiographicData",
+    "label": {
+      "@id": "daon:label",
+      "@type": "xsd:string"
+    },
+    "fieldId": {
+      "@id": "daon:fieldId",
+      "@type": "xsd:string"
+    },
+    "fieldName": {
+      "@id": "daon:fieldName",
+      "@type": "xsd:string"
+    },
+    "BiographicDataValues": "daon:BiographicDataValues",
+    "visualZoneValue": {
+      "@id": "daon:visualZoneValue",
+      "@type": "xsd:string"
+    },
+    "barcodeValue": {
+      "@id": "daon:barcodeValue",
+      "@type": "xsd:string"
+    },
+    "mrzValue": {
+      "@id": "daon:mrzValue",
+      "@type": "xsd:string"
+    },
+    "nfcValue": {
+      "@id": "daon:nfcValue",
+      "@type": "xsd:string"
+    },
+    "BiometricAuditDisplayDto": "daon:BiometricAuditDisplayDto",
+    "referencedImage": {
+      "@id": "daon:referencedImage",
+      "@type": "xsd:string"
+    },
+    "BiometricAuthenticationFailureRequest": "daon:BiometricAuthenticationFailureRequest",
+    "subtype": {
+      "@id": "daon:subtype",
+      "@type": "xsd:string"
+    },
+    "sampleData": {
+      "@id": "daon:sampleData",
+      "@type": "xsd:string"
+    },
+    "BiometricServiceConfig": "daon:BiometricServiceConfig",
+    "BiometricSummary": "daon:BiometricSummary",
+    "Botd": "daon:Botd",
+    "bot": {
+      "@id": "daon:bot",
+      "@type": "@id"
+    },
+    "meta": {
+      "@id": "daon:meta"
+    },
+    "linkedId": {
+      "@id": "daon:linkedId",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "daon:url",
+      "@type": "xsd:string"
+    },
+    "ip": {
+      "@id": "daon:ip",
+      "@type": "xsd:string"
+    },
+    "time": {
+      "@id": "daon:time",
+      "@type": "xsd:dateTime"
+    },
+    "userAgent": {
+      "@id": "daon:userAgent",
+      "@type": "xsd:string"
+    },
+    "requestId": {
+      "@id": "daon:requestId",
+      "@type": "xsd:string"
+    },
+    "BotdBot": "daon:BotdBot",
+    "BrowserDetails": "daon:BrowserDetails",
+    "browserName": {
+      "@id": "daon:browserName",
+      "@type": "xsd:string"
+    },
+    "browserMajorVersion": {
+      "@id": "daon:browserMajorVersion",
+      "@type": "xsd:string"
+    },
+    "browserFullVersion": {
+      "@id": "daon:browserFullVersion",
+      "@type": "xsd:string"
+    },
+    "osVersion": {
+      "@id": "daon:osVersion",
+      "@type": "xsd:string"
+    },
+    "device": {
+      "@id": "daon:device",
+      "@type": "xsd:string"
+    },
+    "Call": "daon:Call",
+    "agentId": {
+      "@id": "daon:agentId",
+      "@type": "xsd:string"
+    },
+    "audioSourceName": {
+      "@id": "daon:audioSourceName",
+      "@type": "xsd:string"
+    },
+    "audioFileHash": {
+      "@id": "daon:audioFileHash",
+      "@type": "xsd:string"
+    },
+    "callActions": {
+      "@id": "daon:callActions"
+    },
+    "CallAction": "daon:CallAction",
+    "operationId": {
+      "@id": "daon:operationId",
+      "@type": "xsd:string"
+    },
+    "executionKey": {
+      "@id": "daon:executionKey",
+      "@type": "xsd:string"
+    },
+    "startDtm": {
+      "@id": "daon:startDtm",
+      "@type": "xsd:dateTime"
+    },
+    "endDtm": {
+      "@id": "daon:endDtm",
+      "@type": "xsd:dateTime"
+    },
+    "completeReason": {
+      "@id": "daon:completeReason",
+      "@type": "xsd:string"
+    },
+    "CallMetadata": "daon:CallMetadata",
+    "callId": {
+      "@id": "daon:callId",
+      "@type": "xsd:string"
+    },
+    "numChannels": {
+      "@id": "daon:numChannels",
+      "@type": "xsd:integer"
+    },
+    "callerChannel": {
+      "@id": "daon:callerChannel",
+      "@type": "xsd:integer"
+    },
+    "agentChannel": {
+      "@id": "daon:agentChannel",
+      "@type": "xsd:integer"
+    },
+    "audioFrequencyHz": {
+      "@id": "daon:audioFrequencyHz",
+      "@type": "xsd:integer"
+    },
+    "audioBitsPerSample": {
+      "@id": "daon:audioBitsPerSample",
+      "@type": "xsd:integer"
+    },
+    "chunkFormat": {
+      "@id": "daon:chunkFormat",
+      "@type": "xsd:string"
+    },
+    "chunkLengthMs": {
+      "@id": "daon:chunkLengthMs",
+      "@type": "xsd:integer"
+    },
+    "agentPhoneNumber": {
+      "@id": "daon:agentPhoneNumber",
+      "@type": "xsd:string"
+    },
+    "callerPhoneNumber": {
+      "@id": "daon:callerPhoneNumber",
+      "@type": "xsd:string"
+    },
+    "callStartDtm": {
+      "@id": "daon:callStartDtm",
+      "@type": "xsd:dateTime"
+    },
+    "callEndDtm": {
+      "@id": "daon:callEndDtm",
+      "@type": "xsd:dateTime"
+    },
+    "CheckResponse": "daon:CheckResponse",
+    "displayName": {
+      "@id": "daon:displayName",
+      "@type": "xsd:string"
+    },
+    "moreInfo": {
+      "@id": "daon:moreInfo",
+      "@type": "xsd:string"
+    },
+    "nested": {
+      "@id": "daon:nested"
+    },
+    "metaData": {
+      "@id": "daon:metaData"
+    },
+    "ChildTrustXProcess": "daon:ChildTrustXProcess",
+    "processDefnName": {
+      "@id": "daon:processDefnName",
+      "@type": "xsd:string"
+    },
+    "processDefnVersion": {
+      "@id": "daon:processDefnVersion",
+      "@type": "xsd:integer"
+    },
+    "processDefnTag": {
+      "@id": "daon:processDefnTag",
+      "@type": "xsd:string"
+    },
+    "monitorStatus": {
+      "@id": "daon:monitorStatus",
+      "@type": "xsd:boolean"
+    },
+    "initParams": {
+      "@id": "daon:initParams"
+    },
+    "ClearUserAppkeyPreferredDeviceResponseDto": "daon:ClearUserAppkeyPreferredDeviceResponseDto",
+    "clearedDeviceSummary": {
+      "@id": "daon:clearedDeviceSummary",
+      "@type": "@id"
+    },
+    "ClientAuthenticationResponse": "daon:ClientAuthenticationResponse",
+    "clientResponseMessage": {
+      "@id": "daon:clientResponseMessage",
+      "@type": "xsd:string"
+    },
+    "clientError": {
+      "@id": "daon:clientError",
+      "@type": "@id"
+    },
+    "ClientDataRequest": "daon:ClientDataRequest",
+    "evaluationRules": {
+      "@id": "daon:evaluationRules",
+      "@type": "@id"
+    },
+    "ClientPasscodeAuthenticationResponse": "daon:ClientPasscodeAuthenticationResponse",
+    "srpVerificationData": {
+      "@id": "daon:srpVerificationData",
+      "@type": "@id"
+    },
+    "ClientPasscodeRegistrationResponse": "daon:ClientPasscodeRegistrationResponse",
+    "srpRegistrationData": {
+      "@id": "daon:srpRegistrationData",
+      "@type": "@id"
+    },
+    "ClientPasscodeRenewalResponse": "daon:ClientPasscodeRenewalResponse",
+    "ClientRegistrationResponse": "daon:ClientRegistrationResponse",
+    "ClonedApp": "daon:ClonedApp",
+    "CloudFunctions": "daon:CloudFunctions",
+    "reports": {
+      "@id": "daon:reports",
+      "@type": "@id"
+    },
+    "CloudSecret": "daon:CloudSecret",
+    "CloudSecretDto": "daon:CloudSecretDto",
+    "CompletePasscodeAuthenticationResponse": "daon:CompletePasscodeAuthenticationResponse",
+    "algorithmInfo": {
+      "@id": "daon:algorithmInfo",
+      "@type": "@id"
+    },
+    "CompletePasscodeRegistrationResponse": "daon:CompletePasscodeRegistrationResponse",
+    "CompletePasscodeRenewalResponse": "daon:CompletePasscodeRenewalResponse",
+    "Config": "daon:Config",
+    "password": {
+      "@id": "daon:password",
+      "@type": "xsd:string"
+    },
+    "Coordinates": "daon:Coordinates",
+    "latitude": {
+      "@id": "daon:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "daon:longitude",
+      "@type": "xsd:decimal"
+    },
+    "altitude": {
+      "@id": "daon:altitude",
+      "@type": "xsd:decimal"
+    },
+    "accuracy": {
+      "@id": "daon:accuracy",
+      "@type": "xsd:decimal"
+    },
+    "altitudeAccuracy": {
+      "@id": "daon:altitudeAccuracy",
+      "@type": "xsd:decimal"
+    },
+    "heading": {
+      "@id": "daon:heading",
+      "@type": "xsd:decimal"
+    },
+    "speed": {
+      "@id": "daon:speed",
+      "@type": "xsd:decimal"
+    },
+    "CreateArchivePolicyRequest": "daon:CreateArchivePolicyRequest",
+    "CreateCustomPageRequestDto": "daon:CreateCustomPageRequestDto",
+    "archive": {
+      "@id": "daon:archive",
+      "@type": "xsd:string"
+    },
+    "CreateProcessInstanceDto": "daon:CreateProcessInstanceDto",
+    "externalSources": {
+      "@id": "daon:externalSources",
+      "@type": "@id"
+    },
+    "CreateWatchlistRequestDto": "daon:CreateWatchlistRequestDto",
+    "entryExpirationPeriod": {
+      "@id": "daon:entryExpirationPeriod",
+      "@type": "xsd:string"
+    },
+    "CredProtect": "daon:CredProtect",
+    "CredentialPropertiesOutput": "daon:CredentialPropertiesOutput",
+    "rk": {
+      "@id": "daon:rk",
+      "@type": "xsd:boolean"
+    },
+    "CustomFormDatas": "daon:CustomFormDatas",
+    "formDataName": {
+      "@id": "daon:formDataName",
+      "@type": "xsd:string"
+    },
+    "formDataValues": {
+      "@id": "daon:formDataValues",
+      "@container": "@list"
+    },
+    "CustomPageCreateResponseDto": "daon:CustomPageCreateResponseDto",
+    "archiveHash": {
+      "@id": "daon:archiveHash",
+      "@type": "xsd:string"
+    },
+    "archiveEntries": {
+      "@id": "daon:archiveEntries",
+      "@container": "@list"
+    },
+    "previewUrl": {
+      "@id": "daon:previewUrl",
+      "@type": "xsd:string"
+    },
+    "CustomPageData": "daon:CustomPageData",
+    "customPageId": {
+      "@id": "daon:customPageId",
+      "@type": "xsd:string"
+    },
+    "customPageName": {
+      "@id": "daon:customPageName",
+      "@type": "xsd:string"
+    },
+    "customPageVersion": {
+      "@id": "daon:customPageVersion",
+      "@type": "xsd:integer"
+    },
+    "CustomPageDetailsDto": "daon:CustomPageDetailsDto",
+    "previewGatewayUrl": {
+      "@id": "daon:previewGatewayUrl",
+      "@type": "xsd:string"
+    },
+    "CustomPageDto": "daon:CustomPageDto",
+    "CustomPagePreviewCreateRequestDto": "daon:CustomPagePreviewCreateRequestDto",
+    "CustomPagePreviewCreateResponseDto": "daon:CustomPagePreviewCreateResponseDto",
+    "CustomPageUpdateRequestDto": "daon:CustomPageUpdateRequestDto",
+    "Data": "daon:Data",
+    "data": {
+      "@id": "daon:data",
+      "@type": "xsd:string"
+    },
+    "DecisionOutcome": "daon:DecisionOutcome",
+    "DeprecatedGeolocation": "daon:DeprecatedGeolocation",
+    "accuracyRadius": {
+      "@id": "daon:accuracyRadius",
+      "@type": "xsd:integer"
+    },
+    "postalCode": {
+      "@id": "daon:postalCode",
+      "@type": "xsd:string"
+    },
+    "timezone": {
+      "@id": "daon:timezone",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "daon:city",
+      "@type": "@id"
+    },
+    "country": {
+      "@id": "daon:country",
+      "@type": "@id"
+    },
+    "continent": {
+      "@id": "daon:continent",
+      "@type": "@id"
+    },
+    "subdivisions": {
+      "@id": "daon:subdivisions",
+      "@container": "@list"
+    },
+    "DeregisterAuthenticator": "daon:DeregisterAuthenticator",
+    "keyID": {
+      "@id": "daon:keyID",
+      "@type": "xsd:string"
+    },
+    "DeregisterPasscodeResponse": "daon:DeregisterPasscodeResponse",
+    "DeregistrationParameters": "daon:DeregistrationParameters",
+    "aaidOptions": {
+      "@id": "daon:aaidOptions",
+      "@type": "@id"
+    },
+    "typeOptions": {
+      "@id": "daon:typeOptions",
+      "@type": "@id"
+    },
+    "DeregistrationResponse": "daon:DeregistrationResponse",
+    "fidoDeregistrationRequest": {
+      "@id": "daon:fidoDeregistrationRequest",
+      "@type": "@id"
+    },
+    "DeveloperTools": "daon:DeveloperTools",
+    "DeviceInfo": "daon:DeviceInfo",
+    "make": {
+      "@id": "daon:make",
+      "@type": "xsd:string"
+    },
+    "model": {
+      "@id": "daon:model",
+      "@type": "xsd:string"
+    },
+    "osType": {
+      "@id": "daon:osType",
+      "@type": "xsd:string"
+    },
+    "sdkVersion": {
+      "@id": "daon:sdkVersion",
+      "@type": "xsd:string"
+    },
+    "healthCheckPassed": {
+      "@id": "daon:healthCheckPassed",
+      "@type": "xsd:boolean"
+    },
+    "environmentCheckResult": {
+      "@id": "daon:environmentCheckResult",
+      "@type": "xsd:string"
+    },
+    "DeviceIntegritySignals": "daon:DeviceIntegritySignals",
+    "v3": {
+      "@id": "daon:v3"
+    },
+    "DeviceSummary": "daon:DeviceSummary",
+    "keys": {
+      "@id": "daon:keys"
+    },
+    "DisplayPNGCharacteristicsDescriptor": "daon:DisplayPNGCharacteristicsDescriptor",
+    "width": {
+      "@id": "daon:width",
+      "@type": "xsd:integer"
+    },
+    "height": {
+      "@id": "daon:height",
+      "@type": "xsd:integer"
+    },
+    "bitDepth": {
+      "@id": "daon:bitDepth",
+      "@type": "xsd:integer"
+    },
+    "colorType": {
+      "@id": "daon:colorType",
+      "@type": "xsd:integer"
+    },
+    "compression": {
+      "@id": "daon:compression",
+      "@type": "xsd:integer"
+    },
+    "interlace": {
+      "@id": "daon:interlace",
+      "@type": "xsd:integer"
+    },
+    "plte": {
+      "@id": "daon:plte",
+      "@container": "@list"
+    },
+    "Document": "daon:Document",
+    "classification": {
+      "@id": "daon:classification",
+      "@type": "xsd:string"
+    },
+    "upload": {
+      "@id": "daon:upload",
+      "@type": "@id"
+    },
+    "segmentedImages": {
+      "@id": "daon:segmentedImages"
+    },
+    "keyBiographicData": {
+      "@id": "daon:keyBiographicData"
+    },
+    "biographicData": {
+      "@id": "daon:biographicData",
+      "@container": "@list"
+    },
+    "portraitImage": {
+      "@id": "daon:portraitImage",
+      "@type": "@id"
+    },
+    "DocumentSummary": "daon:DocumentSummary",
+    "DocumentUpload": "daon:DocumentUpload",
+    "documentFormat": {
+      "@id": "daon:documentFormat",
+      "@type": "xsd:string"
+    },
+    "documentCaptureKey": {
+      "@id": "daon:documentCaptureKey",
+      "@type": "xsd:string"
+    },
+    "pageCaptureKey": {
+      "@id": "daon:pageCaptureKey",
+      "@type": "xsd:string"
+    },
+    "uploadUrl": {
+      "@id": "daon:uploadUrl",
+      "@type": "xsd:string"
+    },
+    "uploadHeaders": {
+      "@id": "daon:uploadHeaders"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Daon API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Daon's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-18) from openapi/daon-trustx-openapi.yml.",
+  "dcterms:created": "2026-10-18",
+  "dcterms:source": [
+    "openapi/daon-trustx-openapi.yml"
+  ]
+}

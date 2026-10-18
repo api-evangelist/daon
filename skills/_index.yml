@@ -1,0 +1,36 @@
+generated: '2026-10-18'
+method: generated
+generator: extract-docs-artifacts.py skills (deepseek)
+source: openapi/daon-trustx-openapi.yml
+skills:
+- file: skills/daon-create-and-manage-user.md
+  name: daon-create-and-manage-user
+  api: openapi/daon-trustx-openapi.yml
+  operations:
+  - createUser
+  - getUser
+  - updateUser
+  - deleteUser
+- file: skills/daon-create-and-manage-process-instances.md
+  name: daon-create-and-manage-process-instances
+  api: openapi/daon-trustx-openapi.yml
+  operations:
+  - createProcessInstance
+  - getProcessInstance
+  - updateProcessInstanceFraudState
+  - searchProcessInstancesBetweenDates
+  - exportProcessInstancesToCsv
+- file: skills/daon-create-and-manage-identity-store.md
+  name: daon-create-and-manage-identity-store
+  api: openapi/daon-trustx-openapi.yml
+  operations:
+  - addStore
+  - updateStore
+  - getStoreStats
+  - deleteStore
+- file: skills/daon-process-instance.md
+  name: daon-process-instance
+  api: openapi/daon-trustx-openapi.yml
+  operations:
+  - startProcessByInstanceId
+  - continueProcess

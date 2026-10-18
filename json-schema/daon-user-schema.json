@@ -1,0 +1,557 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/daon/main/json-schema/daon-user-schema.json",
+  "title": "User",
+  "description": "A user in an identity store.",
+  "x-generated": "2026-10-18",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/daon-trustx-openapi.yml#/components/schemas/User",
+  "type": "object",
+  "properties": {
+    "createdDtm": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastUpdatedDtm": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique 26-character database user ID."
+    },
+    "storeName": {
+      "type": "string",
+      "description": "The name of the store in which this user resides."
+    },
+    "status": {
+      "type": "string",
+      "description": "The user's status: pending, active, locked or disabled.",
+      "enum": [
+        "PENDING_ACTIVE",
+        "ACTIVE",
+        "TEMP_LOCKED",
+        "LOCKED",
+        "DISABLED"
+      ]
+    },
+    "extId": {
+      "type": "string",
+      "description": "A unique ID of the user supplied by the customer.",
+      "maxLength": 255,
+      "minLength": 0
+    },
+    "type": {
+      "type": "string",
+      "description": "A user type supplied by the customer.",
+      "maxLength": 64,
+      "minLength": 0
+    },
+    "locale": {
+      "$ref": "#/$defs/TrustXLocale",
+      "description": "The user's locale. The default locale configured at the store level."
+    },
+    "timezone": {
+      "type": "string",
+      "description": "The user's timezone. The default timezone configured at the store level."
+    },
+    "firstName": {
+      "type": "string",
+      "description": "The user's first name.",
+      "maxLength": 128,
+      "minLength": 0
+    },
+    "lastName": {
+      "type": "string",
+      "description": "The user's last name.",
+      "maxLength": 128,
+      "minLength": 0
+    },
+    "email": {
+      "type": "string",
+      "description": "The user's email address."
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "format": "date",
+      "description": "The user's date of birth."
+    },
+    "nationalities": {
+      "type": "array",
+      "description": "A list of nationalities associated with the user.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      },
+      "description": "A list of attributes associated with the user.\nThe only attribute which is currently defined by the service is passkeyUsers which has the following structure and allows optional user handles to be set for passkey users. If this is not set then this field is set to a random ID when the first passkey is created for the user.\n```\"passkeyUsers\": {\r\n  \"{relyingPartyId}\": {\r\n    \"USER_HANDLE\":\"{passkey user handle}\"\r\n  }\r\n} \r\n```"
+    },
+    "summaryInfo": {
+      "$ref": "#/$defs/UserSummaryInfo",
+      "description": "Summary information about items registered to the user."
+    },
+    "locks": {
+      "$ref": "#/$defs/UserLocks",
+      "description": "User lock information."
+    },
+    "lockedUntilDtm": {
+      "type": "string",
+      "format": "date-time",
+      "description": "If the user is currently locked, this is the time at which the lock will end."
+    },
+    "lastAuthenticatedDtm": {
+      "type": "string",
+      "format": "date-time",
+      "description": "If the user has been authenticated, this is the time at which they were last authenticated."
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "$defs": {
+    "AppkeySummary": {
+      "type": "object",
+      "description": "Summary information about an appkey registered to the user.\n\n**NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "A unique identifier of the device on which the appkey is installed\n\n**NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy."
+        },
+        "deviceOs": {
+          "type": "string",
+          "description": "The device operating system, for example `iOS`.\n\n**NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy."
+        },
+        "deviceType": {
+          "type": "string",
+          "description": "The device type: identifies the device make and model.\n\n**NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy."
+        },
+        "deviceName": {
+          "type": "string",
+          "description": "The device name: the device name if one has been registered by the device owner.\n\n**NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy."
+        },
+        "notificationToken": {
+          "type": "string",
+          "description": "A push notification token provided by the device"
+        },
+        "invalidToken": {
+          "type": "boolean",
+          "description": "Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered)."
+        },
+        "preferredDevice": {
+          "type": "boolean",
+          "description": "Present and true if this is the preferred device to receive notifications for this app."
+        },
+        "rpId": {
+          "type": "string",
+          "description": "The relying party ID."
+        },
+        "aaid": {
+          "type": "string",
+          "description": "A unique identifier of the appkey type."
+        },
+        "keyId": {
+          "type": "string",
+          "description": "A unique identifier of the particular appkey credential."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the appkey.",
+          "enum": [
+            "ACTIVE",
+            "DISABLED"
+          ]
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time of the last authentication. If this appkey has not been used for authentication then this field is not present."
+        }
+      }
+    },
+    "BiometricSummary": {
+      "type": "object",
+      "description": "Summary information about a biometric registered to the user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string",
+          "description": "The biometric type, for example `Face`"
+        },
+        "subtype": {
+          "type": "string",
+          "description": "The biometric subtype, for example an algorithm identifier like `DFV6E`"
+        },
+        "status": {
+          "type": "string",
+          "description": "The biometric status",
+          "enum": [
+            "PARTIAL_ENROLLMENT",
+            "ACTIVE",
+            "DISABLED"
+          ]
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time of the last authentication. If this biometric has not been used for authentication then this field is not present."
+        }
+      }
+    },
+    "DocumentSummary": {
+      "type": "object",
+      "description": "Summary information about a document registered to the user.\n\n**NOT USED IN THIS RELEASE**",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "PasscodeSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "policyName": {
+          "type": "string",
+          "description": "Identifies the identity store passcode policy."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the user passcode.",
+          "enum": [
+            "ACTIVE",
+            "DISABLED"
+          ]
+        },
+        "lastRenewedDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The last time the passcode was renewed. Only present if a renewal has occurred."
+        },
+        "expirationDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Expiration date for a passcode. Only required if regular renewals are enforced."
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time of the last authentication. If this passcode has not been used for authentication then this field is not present."
+        }
+      }
+    },
+    "PasskeySummary": {
+      "type": "object",
+      "description": "Summary information about a passkey registered to the user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "aaguid": {
+          "type": "string",
+          "description": "A unique identifier of the passkey type."
+        },
+        "credentialId": {
+          "type": "string",
+          "description": "A unique identifier of the particular passkey credential."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the passkey.",
+          "enum": [
+            "ACTIVE",
+            "DISABLED"
+          ]
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time of the last authentication. If this passkey has not been used for authentication then this field is not present."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the passkey supplied when the passkey was registered."
+        }
+      }
+    },
+    "SecretSummary": {
+      "type": "object",
+      "description": "Summary information about a secret registered to the user.\n\n**NOT USED IN THIS RELEASE**",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "LOCKED",
+            "TEMP_LOCKED"
+          ]
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "TOTPSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The database identifier of the entity"
+        },
+        "createdDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastUpdatedDtm": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the user TOTP.",
+          "enum": [
+            "ACTIVE",
+            "PENDING",
+            "DISABLED"
+          ]
+        },
+        "issuer": {
+          "type": "string",
+          "description": "The issuer of the user TOTP."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user name label used for registering TOTP."
+        },
+        "policyName": {
+          "type": "string",
+          "description": "TOTP Policy name"
+        },
+        "algorithm": {
+          "type": "string",
+          "description": "The algorithm used to validate the authentication code."
+        },
+        "activatedDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time of the TOTP activation - this is time when first auth with TOTP happened and marked TOTP as active."
+        },
+        "expirationDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expiration dtm for the pending TOTPs - this is time before which is possible to activate pending TOTP."
+        },
+        "lastAuthenticatedWithDtm": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time of the last authentication. If this TOTP has not been used for authentication then this field is not present."
+        }
+      }
+    },
+    "TrustXLocale": {
+      "type": "object",
+      "description": "Locale information. Exposes the language, country and variant locale components, for example `en_US_UNIX` contains these components as `en`, `US` and `UNIX` respectively.",
+      "properties": {
+        "language": {
+          "type": "string",
+          "description": "The mandatory locale language component"
+        },
+        "country": {
+          "type": "string",
+          "description": "The optional locale country component"
+        },
+        "variant": {
+          "type": "string",
+          "description": "The optional locale variant component"
+        }
+      }
+    },
+    "UserLocks": {
+      "type": "object",
+      "description": "User lock information.\n\nDescribes locks at the user level and modality level. A user can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.\n\n**NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.",
+      "properties": {
+        "lockCounter": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of consecutive locks tagged for this user."
+        },
+        "tempLockedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the user is *temporarily* locked then this is the time at which the lock came into effect."
+        },
+        "tempLockedUntil": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the user is *temporarily* locked then this is the time at which the lock ends."
+        },
+        "lockedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the user is *permanently* locked then this is the time at which the lock came into effect."
+        },
+        "userModalityLocks": {
+          "type": "array",
+          "description": "Locking information related to particular authentication modalities.\n\n**Not supported in this release**",
+          "items": {
+            "$ref": "#/$defs/UserModalityLock"
+          }
+        }
+      }
+    },
+    "UserModalityLock": {
+      "type": "object",
+      "description": "Modality lock information.\n\nDescribes locks at the modality level. A modality can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.\n\n**NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.",
+      "properties": {
+        "lockCounter": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of consecutive locks tagged for this modality."
+        },
+        "tempLockedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the modality is *temporarily* locked then this is the time at which the lock came into effect."
+        },
+        "tempLockedUntil": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the modality is *temporarily* locked then this is the time at which the lock ends."
+        },
+        "lockedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "If the modality is *permanently* locked then this is the time at which the lock came into effect."
+        },
+        "type": {
+          "type": "string",
+          "description": "The modality type, for example `Face`."
+        }
+      }
+    },
+    "UserSummaryInfo": {
+      "type": "object",
+      "description": "Summary information about items registered to the user such as biometrics, appkeys and passkeys.",
+      "properties": {
+        "biometrics": {
+          "type": "array",
+          "description": "A list of biometrics registered to the user",
+          "items": {
+            "$ref": "#/$defs/BiometricSummary"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "description": "A list of documents registered to the user\n**NOT USED IN THIS RELEASE**",
+          "items": {
+            "$ref": "#/$defs/DocumentSummary"
+          }
+        },
+        "secrets": {
+          "type": "array",
+          "description": "A list of secrets registered to the user\n**NOT USED IN THIS RELEASE**",
+          "items": {
+            "$ref": "#/$defs/SecretSummary"
+          }
+        },
+        "passkeys": {
+          "type": "array",
+          "description": "A list of passkeys registered to the user",
+          "items": {
+            "$ref": "#/$defs/PasskeySummary"
+          }
+        },
+        "appkeys": {
+          "type": "array",
+          "description": "A list of appkeys registered to the user",
+          "items": {
+            "$ref": "#/$defs/AppkeySummary"
+          }
+        },
+        "totps": {
+          "type": "array",
+          "description": "A list of TOTPs registered to the user",
+          "items": {
+            "$ref": "#/$defs/TOTPSummary"
+          }
+        },
+        "passcodes": {
+          "type": "array",
+          "description": "A list of passcodes registered to the user",
+          "items": {
+            "$ref": "#/$defs/PasscodeSummary"
+          }
+        }
+      }
+    }
+  }
+}

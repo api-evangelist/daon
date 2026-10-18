@@ -1,0 +1,4293 @@
+openapi: 3.2.0
+info:
+  title: Daon User Management API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged User Management across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: User Management
+paths:
+  /api/identity-store/stores/{storeName}/users/{extId}/authentications/ext:
+    get:
+      tags:
+      - User Management
+      summary: List user authentications by external user ID
+      description: 'Return a list of user authentication summaries which can be filtered by type, outcome and date range.
+
+
+        **NOTE**: Results are returned as *slices* rather than *pages* for efficiency so no pagination is possible when displaying this data.### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserAuthenticationsByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserAuthenticationsByExtId`'
+      operationId: listUserAuthenticationsByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Type regex (supports wildcard search). For example biometric, passkey.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: .*
+        example: appkey
+      - name: outcome
+        in: query
+        description: 'Outcome regex (supports wildcard search). Values: Success or Failed.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: .*
+        example: Success
+      - name: from
+        in: query
+        description: From date. Default is one day before now.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        description: To date. Default is now.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        description: Page number.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Page size.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: User authentications retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SliceAuthenticationSummary'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserAuthenticationsByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/authentications/{id}/presentedData:
+    get:
+      tags:
+      - User Management
+      summary: Get the presented data for a user authentication record by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedData` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedData`'
+      operationId: getUserAuthenticationPresentedData
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authentication presented data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresentedDataDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **840**: Invalid authentication ID format
+
+            - **841**: Failed to retrieve audit record
+
+            - **842**: Failed to decompress audit record
+
+            - **3200**: Failed to build the presented data response
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedData
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users:
+    get:
+      tags:
+      - User Management
+      summary: List users
+      description: 'Return a list of users which can be filtered by external ID.
+
+
+        **NOTE**: Users are returned as *slices* rather than *pages* for efficiency so no pagination is possible when displaying this data.### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUsers` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUsers`'
+      operationId: listUsers
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: idSearch
+        in: query
+        description: User external ID filter (supports wildcard search) or full user id to find specific user.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: '%'
+      - name: searchMode
+        in: query
+        description: Search mode. Default if not supplied is `STANDARD` which is a backwards-compatible mode which doesn't return any authentication timing information. Other options are `LAST_AUTHENTICATED` which includes `lastAuthenticatedDtm` for each user, and `LAST_AUTHENTICATED_EXTENDED` which additionally includes `lastAuthentication` (most recent authenticator) and `lastAuthentications` (most recent authenticator per factor type).
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: STANDARD
+          description: 'Search mode optionally supplied when listing users. Controls what authentication timing information is included in the response. Possible values:
+
+            - **STANDARD**: backwards-compatible mode. No authentication timing information is returned (`lastAuthenticatedDtm`, `lastAuthentication` and `lastAuthentications` are omitted).
+
+            - **LAST_AUTHENTICATED**: returns `lastAuthenticatedDtm` for each user (the timestamp of their most recent authentication). `lastAuthentication` and `lastAuthentications` are omitted.
+
+            - **LAST_AUTHENTICATED_EXTENDED**: returns `lastAuthenticatedDtm` plus detailed `lastAuthentication` (the most recently used authenticator) and `lastAuthentications` (the most recently used authenticator per factor type e.g. Passkey, Face, TOTP).
+
+            '
+          enum:
+          - STANDARD
+          - LAST_AUTHENTICATED
+          - LAST_AUTHENTICATED_EXTENDED
+      - name: page
+        in: query
+        description: The page number.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: The page size.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          maximum: 100
+          minimum: 1
+      - name: sort
+        in: query
+        description: 'Sorting parameter. Default ascending by external ID.
+
+
+          **NOTE** The users table may contain millions of entries. Sorting is only recommended on indexed fields. Currently these are:
+
+          - extId
+
+          - email
+
+          - lastName
+
+          - createdDtm
+
+          - lastAuthenticatedDtm
+
+          '
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SliceUserSearchDto'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUsers
+    post:
+      tags:
+      - User Management
+      summary: Create a new user within an identity store
+      description: 'Creates a new user with some biographical details, an optional external ID supplied by the customer, locale information and optional additional attributes. A user has a status which indicates whether they are pending, active, locked or disabled. The initial defaultstatus and locale are configured at the store level.
+
+
+        **NOTE**: If a user is created without an extId, the system will generate a GUID and set this as the external ID for the user.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:createUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:createUser`'
+      operationId: createUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      requestBody:
+        description: The user to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **504**: Max number of users reached for this tenant
+
+            - **506**: A user with a duplicate external ID exists
+
+            - **507**: A data integrity violation occurred when saving the user to the database
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:createUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/authentications/{id}/presentedData/ext:
+    get:
+      tags:
+      - User Management
+      summary: Get the presented data for a user authentication record by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedDataByExtUserId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedDataByExtUserId`'
+      operationId: getUserAuthenticationPresentedDataByExtUserId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authentication presented data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresentedDataDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **840**: Invalid authentication ID format
+
+            - **841**: Failed to retrieve audit record
+
+            - **842**: Failed to decompress audit record
+
+            - **3200**: Failed to build the presented data response
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserAuthenticationPresentedDataByExtUserId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}:
+    get:
+      tags:
+      - User Management
+      summary: Get an existing user by internal ID **contains examples**
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUser`'
+      operationId: getUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+              examples:
+                Response with registered appkeys:
+                  description: 'Note that one of the appkeys has been used for an authentication: the DEVICE appkey for the device with ID 22222. This is indicated by the presence of the `lastAuthenticatedWithDtm` field.'
+                  value:
+                    id: VRZEMYFKVTNDGNOMCFTLUGLZYE
+                    storeName: store1
+                    status: ACTIVE
+                    extId: a3eced22-edef-4ce1-b779-f189c8efadcf
+                    locale:
+                      language: en
+                      country: US
+                    timezone: US/Eastern
+                    summaryInfo:
+                      devices:
+                      - id: '54321'
+                        rpId: AcmeBankApp
+                        os: android
+                        deviceType: samsung SM-G920F
+                        name: MyDevice
+                        notificationToken: fgwqef87we8f7gw8
+                        preferredDevice: true
+                        keys:
+                          BIOMETRIC:
+                          - id: MHHSYH6HFSGD73AZBEMG6NHV2I
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0102
+                            keyId: YjgwYzI2YWQ2MTY2NGVjOTk1OGI0ODg4YzgxZWIwZDA
+                            status: ACTIVE
+                          DEVICE:
+                          - id: S37G52RDIIOWDRPIX5OHMISE2M
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0602
+                            keyId: NzAyNGFjMWY1NDA2NGQ2Y2I1YTI4MDg2NjQ5NmJiZTU
+                            status: ACTIVE
+                      - id: '11111'
+                        rpId: AcmeInsuranceApp
+                        os: android
+                        deviceType: samsung SM-G920F
+                        name: MyDevice
+                        notificationToken: sj387682876834
+                        keys:
+                          BIOMETRIC:
+                          - id: 46U3OHH5RF75JTXUS3XT32NXUI
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0102
+                            keyId: MDEwMGUzNTczNDBjNDUzN2FkY2IzNjJiNTJlOWZiMjI
+                            status: ACTIVE
+                          DEVICE:
+                          - id: ON554V3GHOBVLE4SORYX4DDJP4
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0602
+                            keyId: NzhhNTgwNzQ0ZmQ0NDFiNzg1ZWVkYTM2YTVkMGUzYmY
+                            status: ACTIVE
+                      - id: '12345'
+                        rpId: AcmeMessagingApp
+                        os: android
+                        deviceType: samsung SM-G920F
+                        name: MyDevice
+                        notificationToken: siusf9399298792
+                        keys:
+                          BIOMETRIC:
+                          - id: PFZKVMLF3URCHIQA7WUYLDKABA
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0102
+                            keyId: MzhmNjUxNzYyN2EzNDRiNGI5NWZiODFkMTUzOGNkMjE
+                            status: ACTIVE
+                          DEVICE:
+                          - id: 47VEKO65GSRAG3ZDAIZ3ZODNGA
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0602
+                            keyId: YzEwMmNlZWVlNDI1NGMxZTk5ZTY5OTdmNTJmZTYwMjY
+                            status: ACTIVE
+                      - id: '22222'
+                        rpId: AcmeDatingApp
+                        os: android
+                        deviceType: samsung SM-G920F
+                        name: MyDevice
+                        notificationToken: mog4m345n3n45nn
+                        keys:
+                          BIOMETRIC:
+                          - id: YNSL22X4GHDTLMKXJBAVLNTEDU
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0102
+                            keyId: ZDIwYzg3OTE3OGRmNGFjMDlmOTE5MTQ0OTQ2NjcxNWM
+                            status: ACTIVE
+                          DEVICE:
+                          - id: N7H3HSQPH4P4BKIOQYQNDXALQA
+                            createdDtm: {}
+                            lastUpdatedDtm: {}
+                            aaid: D409#0602
+                            keyId: ZWNmMzVhYTU1Yzk5NDgzYmI1NGYxNTYxOWRjNGEzZGM
+                            status: ACTIVE
+                            lastAuthenticatedWithDtm: {}
+                    lastAuthenticatedDtm: {}
+                    createdDtm: {}
+                    lastUpdatedDtm: {}
+                Response with registered passkeys:
+                  description: Note that the passkey has been used for an authentication as indicated by the presence of the `lastAuthenticatedWithDtm` field.
+                  value:
+                    id: 3C5SEDSBL5RAIUTSCNSFGO2NGE
+                    storeName: store1
+                    status: ACTIVE
+                    extId: ee710561-b722-4cbc-923a-f3ece46447bd
+                    locale:
+                      language: en
+                      country: US
+                    timezone: US/Eastern
+                    attributes:
+                      passkeyUsers:
+                        www.passkeys.io:
+                          USER_HANDLE: C2P3BNDU3Y46UM6IH5VOH2P6PQQZ2IPGOQTHTBEMOA6SJS6QY23Q===
+                    summaryInfo:
+                      passkeys:
+                      - id: 7RVT2CDGGWFFXHHYBHEODQUMTM
+                        createdDtm: {}
+                        lastUpdatedDtm: {}
+                        aaguid: 00000000-0000-0000-0000-000000000000
+                        credentialId: pGNrZXmmAQIDJiABIVggArwRo0MsALRXaq10GuQrQ3sSb2ZPtDdajURmE4220FkiWCCH3JcTwap1gggzLkakVJX4GCFOTVGilkrvyJ3GwTHehiNYIFZsc183OUMBWg32x4sBabt3dRIWLRRRiG45AVtmznBbZHJwSWRvd3d3LnBhc3NrZXlzLmlvZHR5cGUAZHVzZXJYN0MyUDNCTkRVM1k0NlVNNklINVZPSDJQNlBRUVoySVBHT1FUSFRCRU1PQTZTSlM2UVkyM1E9PT0
+                        status: ACTIVE
+                        lastAuthenticatedWithDtm: {}
+                        name: MyPasskey
+                    lastAuthenticatedDtm: {}
+                    createdDtm: {}
+                    lastUpdatedDtm: {}
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUser
+    post:
+      tags:
+      - User Management
+      summary: Update an existing user by internal user ID
+      description: 'Update the biographic info, locale info, external ID, type, attributes and status of a user. **Only the fields to be updated need to be supplied**
+
+
+        Updatable fields:
+
+        - extId
+
+        - type
+
+        - firstName
+
+        - lastName
+
+        - email
+
+        - locale
+
+        - timezone
+
+        - dateOfBirth
+
+        - status
+
+        - attributes
+
+
+        **NOTE** Updating the user status to `ACTIVE` or `DISABLED` will reset user locks.
+
+
+        **NOTE 2** When updating the user status to `TEMP_LOCKED` a `lockedUntilDtm` must be supplied.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUser`'
+      operationId: updateUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **506**: A user with a duplicate external ID exists
+
+            - **507**: A data integrity violation occurred when saving the user to the database
+
+            - **1202**: User update to PENDING_ACTIVE
+
+            - **1203**: User update to TEMP_LOCKED without a locked until time
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUser
+    delete:
+      tags:
+      - User Management
+      summary: Delete an existing user by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUser` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUser`'
+      operationId: deleteUser
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUser
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/authentications:
+    get:
+      tags:
+      - User Management
+      summary: List user authentications by internal user ID
+      description: 'Return a list of user authentication summaries which can be filtered by type, outcome and date range.
+
+
+        **NOTE**: Results are returned as *slices* rather than *pages* for efficiency so no pagination is possible when displaying this data.### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserAuthentications` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserAuthentications`'
+      operationId: listUserAuthentications
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Type regex (supports wildcard search). For example biometric, passkey.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: .*
+        example: appkey
+      - name: outcome
+        in: query
+        description: 'Outcome regex (supports wildcard search). Values: Success or Failed.'
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: .*
+        example: Success
+      - name: from
+        in: query
+        description: From date. Default is one day before now.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        description: To date. Default is now.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: page
+        in: query
+        description: Page number.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Page size.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: User authentications retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SliceAuthenticationSummary'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserAuthentications
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/authentications/{id}:
+    get:
+      tags:
+      - User Management
+      summary: Get a detailed authentication record for a user by internal ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserAuthenticationAudit` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserAuthenticationAudit`'
+      operationId: getUserAuthenticationAudit
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authentication record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationAuditDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **840**: Invalid authentication ID format
+
+            - **841**: Failed to retrieve audit record
+
+            - **842**: Failed to decompress and deserialize audit record
+
+            - **843**: Failed to build the authentication display data
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            - **2010**: Biometric data not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserAuthenticationAudit
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/sessions/ext:
+    get:
+      tags:
+      - User Management
+      summary: List active user appkey/passkey operation session data.
+      description: 'Return a list of appkey and passkey session data for a user which is currently cached in server memory.
+
+
+        Appkey and passkey registration and authentication is a two-step process:
+
+        - Step 1 is generating the request to send to the client
+
+        - Step 2 is returning the response from the client for validation
+
+
+        Session data is generated at step 1 which is required to complete step 2. If an appkey or passkey policy for a store has `sessionManagementExternal` set to `false` then the session data is cached in server memory for a limited time specified by the configured `sessionDuration` and is referenced by a unique session ID.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserSessionsByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserSessionsByExtId`'
+      operationId: listUserSessionsByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Session data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSession'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserSessionsByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/ext:
+    get:
+      tags:
+      - User Management
+      summary: Get an existing user by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserByExtId`'
+      operationId: getUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserByExtId
+    post:
+      tags:
+      - User Management
+      summary: Update an existing user by external user ID.
+      description: 'Update the biographic info, locale info, external ID, type, attributes and status of a user.
+
+
+        Updatable fields:
+
+        - extId
+
+        - type
+
+        - firstName
+
+        - lastName
+
+        - email
+
+        - locale
+
+        - timezone
+
+        - dateOfBirth
+
+        - status
+
+        - attributes
+
+
+        **NOTE** Updating the user status to `ACTIVE` or `DISABLED` will reset user locks.
+
+
+        **NOTE 2** When updating the user status to `TEMP_LOCKED` a `lockedUntilDtm` must be supplied.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:updateUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:updateUserByExtId`'
+      operationId: updateUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: External ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The user to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **506**: A user with a duplicate external ID exists
+
+            - **507**: A data integrity violation occurred when saving the user to the database
+
+            - **1202**: User update to PENDING_ACTIVE
+
+            - **1203**: User update to TEMP_LOCKED without a locked until time
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:updateUserByExtId
+    delete:
+      tags:
+      - User Management
+      summary: Delete an existing user by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:deleteUserByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:deleteUserByExtId`'
+      operationId: deleteUserByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User deleted successfully
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:deleteUserByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{extId}/authentications/{id}/ext:
+    get:
+      tags:
+      - User Management
+      summary: Get a detailed authentication record for a user by external ID
+      description: '### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:getUserAuthenticationAuditByExtId` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:getUserAuthenticationAuditByExtId`'
+      operationId: getUserAuthenticationAuditByExtId
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: extId
+        in: path
+        description: external ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User authentication record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationAuditDto'
+        '400':
+          description: 'An error occurred. Possible error codes:
+
+            - **840**: Invalid authentication ID format
+
+            - **841**: Failed to retrieve audit record
+
+            - **842**: Failed to decompress audit record
+
+            - **843**: Failed to build the authentication display data
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **503**: User not found
+
+            - **2010**: Biometric data not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '503'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:getUserAuthenticationAuditByExtId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/identity-store/stores/{storeName}/users/{userId}/sessions:
+    get:
+      tags:
+      - User Management
+      summary: List active user appkey/passkey operation session data.
+      description: 'Return a list of appkey and passkey session data for a user which is currently cached in server memory.
+
+
+        Appkey and passkey registration and authentication is a two-step process:
+
+        - Step 1 is generating the request to send to the client
+
+        - Step 2 is returning the response from the client for validation
+
+
+        Session data is generated at step 1 which is required to complete step 2. If an appkey or passkey policy for a store has `sessionManagementExternal` set to `false` then the session data is cached in server memory for a limited time specified by the configured `sessionDuration` and is referenced by a unique session ID.
+
+
+        ### Permission
+
+        The JWT must contain the `TNT#{tenant}#IdentityStore:listUserSessions` permission.
+
+
+        API Permissions: `TNT#{tenant}#IdentityStore:listUserSessions`'
+      operationId: listUserSessions
+      parameters:
+      - name: storeName
+        in: path
+        description: Name of the store
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: testStore
+      - name: userId
+        in: path
+        description: ID of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Session data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSession'
+        '400':
+          description: An error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '123'
+                message: An error message
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+        '404':
+          description: 'A required entity was not found. Possible error codes:
+
+            - **90**: Tenant not found
+
+            - **100**: Store not found
+
+            - **500**: User not found
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdStoreSkyError'
+              example:
+                code: '500'
+                message: The specified user could not be found.
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenant}#IdentityStore:listUserSessions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    DisplayPNGCharacteristicsDescriptor:
+      type: object
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+        bitDepth:
+          type: integer
+          format: int32
+        colorType:
+          type: integer
+          format: int32
+        compression:
+          type: integer
+          format: int32
+        filter:
+          type: integer
+          format: int32
+        interlace:
+          type: integer
+          format: int32
+        plte:
+          type: array
+          items:
+            $ref: '#/components/schemas/RgbPaletteEntry'
+    PasscodeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        policyName:
+          type: string
+          description: Identifies the identity store passcode policy.
+        status:
+          type: string
+          description: The status of the user passcode.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastRenewedDtm:
+          type: string
+          format: date-time
+          description: The last time the passcode was renewed. Only present if a renewal has occurred.
+        expirationDate:
+          type: string
+          format: date
+          description: Expiration date for a passcode. Only required if regular renewals are enforced.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passcode has not been used for authentication then this field is not present.
+    PasscodeAuditDisplayDto:
+      type: object
+      description: A Passcode audit DTO, 1 to 1 mapped to what should be shown in UI for passcode authentication audit.
+      properties:
+        policyName:
+          type: string
+        algorithm:
+          type: string
+          enum:
+          - SRP
+        algorithmVariant:
+          type: string
+        registrationDtm:
+          type: string
+          format: date-time
+        authenticationDtm:
+          type: string
+          format: date-time
+    FIDOAuthenticationRequest:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/OperationHeader'
+        challenge:
+          type: string
+        policy:
+          $ref: '#/components/schemas/FIDOPolicy'
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOTransaction'
+    DeviceSummary:
+      type: object
+      description: 'Summary information about a device containing keys registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: 'A unique identifier of the device on which the keys are installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        rpId:
+          type: string
+          description: The relying party ID.
+        os:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        name:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        keys:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/AppkeySummary'
+          description: 'A map of appkey types to list of key summary information where the key types are:
+
+            - **DEVICE**: A device appkey which authenticates the device without user input.
+
+            - **BIOMETRIC**: A biometric appkey which authenticates the user using a biometric.
+
+            List is here to support "more than one app keys of the same type" concept, but in most cases we expect the size of it will be one.'
+    AuthenticationExtensionsClientOutputs:
+      type: object
+      properties:
+        appid:
+          type: boolean
+        txAuthSimple:
+          type: string
+        txAuthGeneric:
+          type: string
+        authnSel:
+          type: boolean
+        exts:
+          type: array
+          items:
+            type: string
+        uvi:
+          type: string
+        loc:
+          $ref: '#/components/schemas/Coordinates'
+        biometricPerfBounds:
+          type: boolean
+        credProps:
+          $ref: '#/components/schemas/CredentialPropertiesOutput'
+    IdStoreSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    SecretSummary:
+      type: object
+      description: 'Summary information about a secret registered to the user.
+
+
+        **NOT USED IN THIS RELEASE**'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - LOCKED
+          - TEMP_LOCKED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+    PasscodeSessionData:
+      type: object
+      description: Session data specific to an passcode operation in progress.
+      properties:
+        userId:
+          type: string
+          description: The internal database user ID.
+        policyName:
+          type: string
+          description: The passcode policy name
+        srpSessionParameters:
+          $ref: '#/components/schemas/SrpSessionParameters'
+          description: The appkey registration request with headers and challenge, built based on the params to send to SDK for registration
+        fake:
+          type: boolean
+          description: Flag indicating this is a fake session for a non-existent or invalid user. Used for user enumeration prevention during SRP authentication.
+        fakeVerifier:
+          type: string
+          format: byte
+          description: The fake verifier to use when performing fake password validation. Only populated when 'fake' is true.
+    LocationByIpInfo:
+      type: object
+      description: Location metadata
+      properties:
+        ipAddress:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+    ServerPublicKeyCredentialDescriptor:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - public-key
+        id:
+          type: string
+        transports:
+          type: array
+          items:
+            type: string
+            enum:
+            - usb
+            - nfc
+            - ble
+            - hybrid
+            - internal
+    AuthenticationExtensionsClientInputs:
+      type: object
+      properties:
+        appid:
+          type: string
+        txAuthSimple:
+          type: string
+        txAuthGeneric:
+          $ref: '#/components/schemas/TxAuthGenericAlg'
+        authnSel:
+          type: array
+          items:
+            type: string
+        line_authnSel:
+          type: array
+          items:
+            type: string
+        exts:
+          type: boolean
+        uvi:
+          type: boolean
+        loc:
+          type: boolean
+        biometricPerfBounds:
+          $ref: '#/components/schemas/AuthenticatorBiometricPerfBounds'
+        credProps:
+          type: boolean
+        credentialProtectionPolicy:
+          type: string
+          description: 'Defines the credential protection policy. Recommended value: **userVerificationOptional**'
+          enum:
+          - userVerificationOptional
+          - userVerificationOptionalWithCredentialIDList
+          - userVerificationRequired
+        enforceCredentialProtectionPolicy:
+          type: boolean
+    UserSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, appkeys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          description: A list of biometrics registered to the user
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        documents:
+          type: array
+          description: 'A list of documents registered to the user
+
+            **NOT USED IN THIS RELEASE**'
+          items:
+            $ref: '#/components/schemas/DocumentSummary'
+        secrets:
+          type: array
+          description: 'A list of secrets registered to the user
+
+            **NOT USED IN THIS RELEASE**'
+          items:
+            $ref: '#/components/schemas/SecretSummary'
+        passkeys:
+          type: array
+          description: A list of passkeys registered to the user
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        appkeys:
+          type: array
+          description: A list of appkeys registered to the user
+          items:
+            $ref: '#/components/schemas/AppkeySummary'
+        totps:
+          type: array
+          description: A list of TOTPs registered to the user
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          description: A list of passcodes registered to the user
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    FIDOExtensionEvaluationGroup:
+      type: object
+      properties:
+        evaluationType:
+          type: string
+          enum:
+          - ANY_MATCH
+          - ALL_MATCH
+          - FAIL_IF_ANY
+          - FAIL_IF_ALL
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOExtensionEvaluation'
+    OperationHeader:
+      type: object
+      properties:
+        upv:
+          $ref: '#/components/schemas/Version'
+        op:
+          type: string
+        appID:
+          type: string
+        serverData:
+          type: string
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    PassiveVoiceAuditDisplayDto:
+      type: object
+      description: An authentication audit dto containing extra details required by the UI for a passive voice authentication audit.
+      properties:
+        contentType:
+          type: string
+          description: The mime type of the enrolled audio. For example `audio/wav`.
+        enrolledAudio:
+          type: string
+          format: byte
+          description: The enrolled audio data in the format described by `contentType`.
+    AuthenticationTOTPInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the TOTP in the database.
+        policyName:
+          type: string
+          description: The TOTP policy defined.
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code
+        registrationCreatedDtm:
+          type: string
+          format: date-time
+          description: The TOTP's registration date/time.
+        registrationActivatedDtm:
+          type: string
+          format: date-time
+          description: The TOTP's activation date/time (first authentication date/time).
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        altitude:
+          type: number
+          format: double
+        accuracy:
+          type: number
+          format: double
+        altitudeAccuracy:
+          type: number
+          format: double
+        heading:
+          type: number
+          format: double
+        speed:
+          type: number
+          format: double
+    UserDto:
+      type: object
+      description: A user in an identity store.
+      properties:
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+        type:
+          type: string
+          description: A user type supplied by the customer.
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+        lastName:
+          type: string
+          description: The user's last name.
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\n\nOne attribute, which is set **internally** by the server on a user during passkey registration, is `passkeyUsers`. A specific user handle may be provided via the passkey registration request, if not it is set to a random ID when the first passkey is created for the user. The attribute value looks like this:.\n\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserDtoSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    BiometricAuditDisplayDto:
+      type: object
+      description: An authentication audit dto containing extra details required by the UI for a face authentication audit.
+      properties:
+        referencedImage:
+          type: string
+          format: byte
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    ServerPublicKeyCredentialUserEntity:
+      type: object
+      description: Passkey-specific user details
+      properties:
+        name:
+          type: string
+          description: A human-palatable name for the entity.
+        icon:
+          type: string
+          description: An optional icon for the entity.
+        id:
+          type: string
+          description: The user handle of the user account entity. A user handle is an opaque byte sequence with a maximum size of 64 bytes, and is not meant to be displayed to the user.
+        displayName:
+          type: string
+          description: A human-palatable name for the user account, intended only for display.
+      required:
+      - id
+    PasskeySessionData:
+      type: object
+      description: Session data specific to a passkey operation in progress.
+      properties:
+        rpId:
+          type: string
+          description: The relying party ID.
+        extUserId:
+          type: string
+          description: The external user ID.
+        userId:
+          type: string
+          description: The internal database user ID.
+        userStatus:
+          type: string
+          description: The user status.
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        passkeyUser:
+          $ref: '#/components/schemas/ServerPublicKeyCredentialUserEntity'
+          description: Passkey-specific user details.
+        excludedCredentials:
+          type: array
+          description: 'A list of excluded credentials.
+
+
+            During registration, this list contains credentials registered to the user.'
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        allowedCredentials:
+          type: array
+          description: 'A list of allowed credentials.
+
+
+            During authentication, this list contains credentials registered to the user.'
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        served:
+          type: boolean
+        challenge:
+          type: string
+          description: The registration or authentication challenge
+        regPolicyName:
+          type: string
+          description: The policy name for a registration operation
+        authPolicyName:
+          type: string
+          description: The policy name for an authentication operation
+        registerPasskeyRequest:
+          $ref: '#/components/schemas/RegOptionResponse'
+          description: The public key credential creation options to be supplied to the user agent to create and register a new passkey credential.
+        authPasskeyRequest:
+          $ref: '#/components/schemas/AuthOptionResponse'
+          description: The passkey assertion generation options used as a request to the user agent.
+    CredentialPropertiesOutput:
+      type: object
+      properties:
+        rk:
+          type: boolean
+    ServerAuthenticatorAssertionResponse:
+      type: object
+      properties:
+        clientDataJSON:
+          type: string
+          minLength: 1
+        authenticatorData:
+          type: string
+          minLength: 1
+        signature:
+          type: string
+          minLength: 1
+        userHandle:
+          type: string
+    User:
+      type: object
+      description: A user in an identity store.
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+          maxLength: 255
+          minLength: 0
+        type:
+          type: string
+          description: A user type supplied by the customer.
+          maxLength: 64
+          minLength: 0
+        locale:
+          $ref: '#/components/schemas/TrustXLocale'
+          description: The user's locale. The default locale configured at the store level.
+        timezone:
+          type: string
+          description: The user's timezone. The default timezone configured at the store level.
+          example: Europe/London
+        firstName:
+          type: string
+          description: The user's first name.
+          maxLength: 128
+          minLength: 0
+        lastName:
+          type: string
+          description: The user's last name.
+          maxLength: 128
+          minLength: 0
+        email:
+          type: string
+          description: The user's email address.
+        dateOfBirth:
+          type: string
+          format: date
+          description: The user's date of birth.
+        nationalities:
+          type: array
+          description: A list of nationalities associated with the user.
+          items:
+            type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+          description: "A list of attributes associated with the user.\nThe only attribute which is currently defined by the service is passkeyUsers which has the following structure and allows optional user handles to be set for passkey users. If this is not set then this field is set to a random ID when the first passkey is created for the user.\n```\"passkeyUsers\": {\n  \"{relyingPartyId}\": {\n    \"USER_HANDLE\":\"{passkey user handle}\"\n  }\n} \n```"
+        summaryInfo:
+          $ref: '#/components/schemas/UserSummaryInfo'
+          description: Summary information about items registered to the user.
+        locks:
+          $ref: '#/components/schemas/UserLocks'
+          description: User lock information.
+        lockedUntilDtm:
+          type: string
+          format: date-time
+          description: If the user is currently locked, this is the time at which the lock will end.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: If the user has been authenticated, this is the time at which they were last authenticated.
+      required:
+      - status
+    VoiceAuthSessionData:
+      type: object
+      description: Session data specific to a voice authentication operation in progress.
+      properties:
+        partialPresentedBiometric:
+          type: object
+          additionalProperties:
+            type: object
+          description: The partial presented biometric data for the voice authentication.
+        partialTransformedBiometric:
+          type: object
+          additionalProperties:
+            type: object
+          description: The partial transformed biometric data for the voice authentication.
+        matchingProcesses:
+          type: array
+          description: The list of matching processes for the voice authentication.
+          items:
+            $ref: '#/components/schemas/VoiceMatchingPairProcess'
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+          description: TrustWeb client metadata to be audited.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional context data for the voice authentication.
+    FIDOTransaction:
+      type: object
+      properties:
+        tcDisplayPNGCharacteristics:
+          $ref: '#/components/schemas/DisplayPNGCharacteristicsDescriptor'
+        contentType:
+          type: string
+        content:
+          type: string
+    TxAuthGenericAlg:
+      type: object
+      properties:
+        contentType:
+          type: string
+        content:
+          type: string
+    TokenBinding:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - present
+          - supported
+          - not-supported
+        id:
+          type: string
+    TrustXLocale:
+      type: object
+      description: Locale information. Exposes the language, country and variant locale components, for example `en_US_UNIX` contains these components as `en`, `US` and `UNIX` respectively.
+      properties:
+        language:
+          type: string
+          description: The mandatory locale language component
+        country:
+          type: string
+          description: The optional locale country component
+        variant:
+          type: string
+          description: The optional locale variant component
+    AuthenticatorSignAssertion:
+      type: object
+      properties:
+        assertionScheme:
+          type: string
+        assertion:
+          type: string
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    UserLocks:
+      type: object
+      description: 'User lock information.
+
+
+        Describes locks at the user level and modality level. A user can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this user.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the user is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the user is *permanently* locked then this is the time at which the lock came into effect.
+        userModalityLocks:
+          type: array
+          description: 'Locking information related to particular authentication modalities.
+
+
+            **Not supported in this release**'
+          items:
+            $ref: '#/components/schemas/UserModalityLock'
+    UserAuthentication:
+      type: object
+      description: Summary information about a user authentication returned in a user search.
+      properties:
+        authenticatorType:
+          type: string
+          description: The type of authentication used to authenticate the user.
+          enum:
+          - Passkey
+          - Appkey
+          - Face
+          - VoiceActive
+          - VoicePassive
+          - TOTP
+          - Passcode
+        authenticatorId:
+          type: string
+          description: The unique ID of the authenticator used to authenticate the user.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: The date and time when the user was last authenticated with the authenticator.
+    VoiceTransform:
+      type: object
+      description: A Biometric transform takes biometric data of one format and produces data of another format.
+      properties:
+        sourceSubtype:
+          type: string
+          enum:
+          - Passive
+          - DVASVTI5_8K
+        matchableSubtype:
+          type: string
+          enum:
+          - Passive
+          - DVASVTI5_8K
+        algorithm:
+          type: string
+          enum:
+          - None
+          - DVASVTI5
+    PassKeyAuditDisplayDto:
+      type: object
+      description: An authentication audit dto, 1 to 1 mapped to what should be shown in UI for pass key authentication audit.
+      properties:
+        registrationDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+        friendlyName:
+          type: string
+        authenticationDtm:
+          type: string
+          format: date-time
+        os:
+          type: string
+        deviceType:
+          type: string
+        rpId:
+          type: string
+        policyName:
+          type: string
+        clientResponse:
+          type: string
+        clientRequest:
+          type: string
+        publicKey:
+          type: string
+          format: byte
+        userAgent:
+          type: string
+    UserSearchDto:
+      type: object
+      description: A user search dto - data needed for users search view. Use the GET /users API to retrieve additional data.
+      properties:
+        id:
+          type: string
+          description: Unique 26-character database user ID.
+        storeId:
+          type: string
+          description: The id of the store in which this user resides.
+        storeName:
+          type: string
+          description: The name of the store in which this user resides.
+        status:
+          type: string
+          description: 'The user''s status: pending, active, locked or disabled.'
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        extId:
+          type: string
+          description: A unique ID of the user supplied by the customer.
+        lastAuthenticatedDtm:
+          type: string
+          format: date-time
+          description: The date and time when the user last authenticated. Populated in LAST_AUTHENTICATED and LAST_AUTHENTICATED_EXTENDED search modes only.
+        lastAuthentication:
+          $ref: '#/components/schemas/UserAuthentication'
+          description: The most recently used authenticator across all factor types. Populated in LAST_AUTHENTICATED_EXTENDED search mode only.
+        lastAuthentications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/UserAuthentication'
+          description: The most recently used authenticator per factor type, keyed by factor name (e.g. Passkey, Face, TOTP). Populated in LAST_AUTHENTICATED_EXTENDED search mode only.
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    PublicKeyCredentialRpEntity:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A human-palatable name for the entity.
+        icon:
+          type: string
+          description: An optional icon for the entity.
+        id:
+          type: string
+    AuthenticationAuditDto:
+      type: object
+      description: An audit dto, structure returned from getRegistrationAudit or getAuthenticationAudit call. Contains what is stored on s3 + UI aligned structure.
+      properties:
+        authAuditRecord:
+          $ref: '#/components/schemas/AuthenticationAudit'
+        authAuditDisplayInfo:
+          $ref: '#/components/schemas/AuditDisplayDto'
+    FIDOExtensionEvaluation:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - REGEX
+          - CONTAINS
+          - MATCH
+          - SN_CTS_PROFILE_MATCH
+          - SN_BASIC_INTEGRITY
+          - IA_DEVICE_INTEGRITY
+          - IA_APP_LICENSING
+          - IA_APP_RECOGNITION
+        evaluationRule:
+          type: string
+    AuthOptionResponse:
+      type: object
+      description: The public key assertion generation options to be supplied to the user agent to generate an authentication assertion for a passkey credential. See the [webauthn specification](https://www.w3.org/TR/webauthn-2/) for details
+      properties:
+        challenge:
+          type: string
+        timeout:
+          type: integer
+          format: int64
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        userVerification:
+          type: string
+          description: "Whether user verification is required on the authenticator. Possible values: \n- **required**: The relying party requires user verification. Fail if user verification is not supported.\n- **preferred**: The relying party prefers user verification. Don't fail if it is not supported. RECOMMENDED VALUE.\n- **discouraged**: The relying does not want user verification."
+          enum:
+          - required
+          - preferred
+          - discouraged
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during authentication. Hints are ordered by decreasing preference and are not requirements.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientInputs'
+    AuthenticationPasskeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the passkey in the database.
+        rpId:
+          type: string
+          description: The relying party ID.
+        authPolicyName:
+          type: string
+          description: The authentication policy defined for the relying party.
+        verifyCredential:
+          $ref: '#/components/schemas/VerifyCredential'
+          description: Protocol-specific information related to the authentication.
+        passkeyAuthRequest:
+          $ref: '#/components/schemas/AuthOptionResponse'
+          description: The passkey assertion generation options used as a request to the user agent.
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata about the client.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context data about the client.
+        publicKey:
+          type: string
+          format: byte
+          description: The passkey's encoded public key.
+        registrationDtm:
+          type: string
+          format: date-time
+          description: The passkey's registration date/time.
+    PresentedDataDto:
+      type: object
+      description: The presented data and content type extracted from an authentication audit record. The presentedData and contentType are only populated for Face and VoicePassive audits where the presented data is available.
+      properties:
+        type:
+          type: string
+          description: The type of audit, ascertained from the audit record contents.
+          enum:
+          - Passkey
+          - Appkey
+          - Face
+          - VoiceActive
+          - VoicePassive
+          - TOTP
+          - Passcode
+        presentedData:
+          type: string
+          format: byte
+          description: The presented data, if available, encoded as base64.
+        contentType:
+          type: string
+          description: The content type of the presented data, if available.
+      required:
+      - type
+    Version:
+      type: object
+      properties:
+        major:
+          type: integer
+          format: int32
+        minor:
+          type: integer
+          format: int32
+    VoiceAuthenticationRecord:
+      type: object
+      description: The results of a voice authentication
+      properties:
+        authId:
+          type: string
+          description: Optional authentication ID from the external authentication sytem
+        presentedSubtype:
+          type: string
+          description: The voice subtype, for example the voice algorithm `Image` of the presented sample.
+        referenceSubtype:
+          type: string
+          description: The voice subtype, for example the voice template `DVASVTI5_8K` of the reference sample.
+        referenceVersionId:
+          type: string
+          description: The voice version ID, of the reference sample.
+        sourceReferenceSubtype:
+          type: string
+          description: The voice subtype, of the source of the reference sample.
+        sourceReferenceVersionId:
+          type: string
+          description: The voice version ID, of the source of the reference sample.
+        status:
+          type: string
+          description: The authentication status, for example `SUCCESS`.
+          enum:
+          - SUCCESS
+          - FAILURE
+          - INCOMPLETE
+          - UNKNOWN
+        rawScore:
+          type: number
+          format: double
+          description: The internal match score.
+        score:
+          type: number
+          format: double
+          description: The authentication score matched against the threshold. For a match the score will be equal to or below the threshold.
+        threshold:
+          type: number
+          format: double
+          description: The authentication threshold.
+        policy:
+          type: string
+          description: The policy used for the authentication.
+        voiceMatcherVersion:
+          type: string
+          description: The voice matcher version used for the authentication.
+        presentedData:
+          type: string
+          format: byte
+          description: The authentication data, i.e. the voice sample or template.
+        contentType:
+          type: string
+          description: The content type of the authentication data.
+        chunkReferences:
+          type: array
+          description: References to the voice audio chunks used for authentication.
+          items:
+            type: string
+        sourceType:
+          type: string
+          description: The source type of the reference sample, for example `CALL`.
+        callMetadataList:
+          type: array
+          description: Call metadata supplied with the authentication request.
+          items:
+            $ref: '#/components/schemas/CallMetadata'
+        config:
+          type: object
+          additionalProperties:
+            type: object
+          description: Configuration supplied with the authentication request.
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata supplied with the authentication request.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context supplied with the authentication request.
+      required:
+      - chunkReferences
+      - policy
+      - presentedData
+      - presentedSubtype
+      - rawScore
+      - referenceSubtype
+      - referenceVersionId
+      - score
+      - sourceReferenceSubtype
+      - sourceReferenceVersionId
+      - sourceType
+      - status
+      - threshold
+      - voiceMatcherVersion
+    VoiceMatchingPairProcess:
+      type: object
+      properties:
+        matchingAlgorithm:
+          type: string
+          enum:
+          - None
+          - DVASVTI5
+        sourceSubtype:
+          type: string
+          enum:
+          - Passive
+          - DVASVTI5_8K
+        matchableSubtype:
+          type: string
+          enum:
+          - Passive
+          - DVASVTI5_8K
+        sourceDataTransforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceTransform'
+        matchableDataTransforms:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceTransform'
+    FIDOMatchCriteria:
+      type: object
+      properties:
+        aaid:
+          type: array
+          items:
+            type: string
+        vendorID:
+          type: array
+          items:
+            type: string
+        keyIDs:
+          type: array
+          items:
+            type: string
+        userVerification:
+          type: integer
+          format: int64
+        keyProtection:
+          type: integer
+          format: int32
+        matcherProtection:
+          type: integer
+          format: int32
+        attachmentHint:
+          type: integer
+          format: int64
+        tcDisplay:
+          type: integer
+          format: int64
+        authenticationAlgorithms:
+          type: array
+          items:
+            type: integer
+            format: int32
+        assertionSchemes:
+          type: array
+          items:
+            type: string
+        attestationTypes:
+          type: array
+          items:
+            type: integer
+            format: int32
+        authenticatorVersion:
+          type: integer
+          format: int32
+        exts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+    Extension:
+      type: object
+      properties:
+        id:
+          type: string
+        data:
+          type: string
+        fail_if_unknown:
+          type: boolean
+    AppKeyAuditDisplayDto:
+      type: object
+      description: An authentication audit dto, 1 to 1 mapped to what should be shown in UI for app key authentication audit.
+      properties:
+        registrationDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+        friendlyName:
+          type: string
+        authenticationDtm:
+          type: string
+          format: date-time
+        os:
+          type: string
+        deviceType:
+          type: string
+        rpId:
+          type: string
+        policyName:
+          type: string
+        clientResponse:
+          type: string
+        clientRequest:
+          type: string
+        publicKey:
+          type: string
+          format: byte
+        deviceId:
+          type: string
+    AuthenticationAudit:
+      type: object
+      description: 'An authentication audit record
+
+        An authentication record contains common fields such as the type and references to the tenant, store and user and specific information depending on the type: appkey/passkey/biometric/TOTP.'
+      properties:
+        version:
+          type: integer
+          format: int32
+          description: The version of the audit structure
+        type:
+          type: string
+          description: The type of audit, for example `Face`
+          enum:
+          - Passkey
+          - Appkey
+          - Face
+          - VoiceActive
+          - VoicePassive
+          - TOTP
+          - Passcode
+        id:
+          type: string
+          description: A unique audit ID
+        createdDtm:
+          type: string
+          format: date-time
+        tenantId:
+          type: string
+          description: The tenant ID
+        storeId:
+          type: string
+          description: The database store ID
+        storeName:
+          type: string
+          description: The store name
+        userId:
+          type: string
+          description: The database user ID
+        extUserId:
+          type: string
+          description: The external user ID provided by the customer
+        errorMessage:
+          type: string
+          description: An error message if the authentication failed
+        errorCode:
+          type: integer
+          format: int32
+          description: An error code which should have a non-zero value if the authentication failed
+        result:
+          type: string
+          description: 'The authentication result: SUCCESS or FAILED'
+          enum:
+          - SUCCESS
+          - FAILED
+        appkeyInfo:
+          $ref: '#/components/schemas/AuthenticationAppkeyInfo'
+          description: For appkey authentications this field contains information specific to appkey authentication
+        passkeyInfo:
+          $ref: '#/components/schemas/AuthenticationPasskeyInfo'
+          description: For passkey authentications this field contains information specific to passkey authentication
+        faceAuthenticationRecord:
+          $ref: '#/components/schemas/FaceAuthenticationRecord'
+          description: For face authentications this field contains information specific to face
+        totpInfo:
+          $ref: '#/components/schemas/AuthenticationTOTPInfo'
+          description: For TOTP authentications this field contains information specific to TOTP authentication
+        passcodeInfo:
+          $ref: '#/components/schemas/AuthenticationPasscodeInfo'
+          description: For passcode authentications this field contains information specific to passcode authentication
+        voiceAuthenticationRecord:
+          $ref: '#/components/schemas/VoiceAuthenticationRecord'
+          description: For voice authentications this field contains information specific to voice
+    FIDORegistrationRequest:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/OperationHeader'
+        challenge:
+          type: string
+        username:
+          type: string
+        policy:
+          $ref: '#/components/schemas/FIDOPolicy'
+    FIDOPolicy:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/FIDOMatchCriteria'
+        disallowed:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        registrationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticationInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        authenticatorsAllowedUnlocking:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        additionalInfoRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientDataRequest'
+        passcodeCriteria:
+          $ref: '#/components/schemas/PasscodeCriteria'
+        authenticatorsRequiringVerificationOnReEnrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsRequiringDataReplacement:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+        authenticatorsAllowedReenrol:
+          type: array
+          items:
+            $ref: '#/components/schemas/FIDOMatchCriteria'
+    PublicKeyCredentialParameters:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - public-key
+        alg:
+          type: string
+          enum:
+          - '-7'
+          - '-257'
+          - '-35'
+          - '-36'
+          - '-37'
+          - '-38'
+          - '-39'
+          - '-258'
+          - '-259'
+    AuthenticatorBiometricPerfBounds:
+      type: object
+      properties:
+        far:
+          type: number
+          format: float
+        frr:
+          type: number
+          format: float
+    ServerAuthPublicKeyCredential:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          enum:
+          - public-key
+        response:
+          $ref: '#/components/schemas/ServerAuthenticatorAssertionResponse'
+        clientExtensionResults:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientOutputs'
+      required:
+      - response
+      - type
+    TOTPAuditDisplayDto:
+      type: object
+      description: A TOTP audit dto, 1 to 1 mapped to what should be shown in UI for TOTP authentication audit.
+      properties:
+        policyName:
+          type: string
+        algorithm:
+          type: string
+        registrationCreatedDtm:
+          type: string
+          format: date-time
+        registrationActivatedDtm:
+          type: string
+          format: date-time
+        authenticationDtm:
+          type: string
+          format: date-time
+    AuditDisplayDto:
+      type: object
+      description: An authentication audit dto, containing structures for app keys, pass keys, biometrics and TOTPs.
+      properties:
+        errorMessage:
+          type: string
+        errorCode:
+          type: integer
+          format: int32
+        result:
+          type: string
+          description: "The result of an authentication. Possible values: \n- **SUCCESS**: The authentication succeeded.\n- **FAILED**: The authentication failed. The `errorMessage` and `errorCode` fields should be populated.\n"
+          enum:
+          - SUCCESS
+          - FAILED
+        appkeyAuditInfo:
+          $ref: '#/components/schemas/AppKeyAuditDisplayDto'
+        passkeyAuditInfo:
+          $ref: '#/components/schemas/PassKeyAuditDisplayDto'
+        biometricAuditInfo:
+          $ref: '#/components/schemas/BiometricAuditDisplayDto'
+        totpAuditInfo:
+          $ref: '#/components/schemas/TOTPAuditDisplayDto'
+        passcodeAuditInfo:
+          $ref: '#/components/schemas/PasscodeAuditDisplayDto'
+        voiceBiometricAuditInfo:
+          $ref: '#/components/schemas/PassiveVoiceAuditDisplayDto'
+    ClientDataRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        evaluationRules:
+          $ref: '#/components/schemas/FIDOExtensionEvaluationGroup'
+    RgbPaletteEntry:
+      type: object
+      properties:
+        r:
+          type: integer
+          format: int32
+        g:
+          type: integer
+          format: int32
+        b:
+          type: integer
+          format: int32
+    FIDOAuthenticationResponse:
+      type: object
+      properties:
+        header:
+          $ref: '#/components/schemas/OperationHeader'
+        fcParams:
+          type: string
+        assertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorSignAssertion'
+    VerifyCredential:
+      type: object
+      description: 'Information provided from the user agent on a successful passkey authentication.
+
+
+        If the authentication is successful the `serverPublicKeyCredential` must be provided and an optional `tokenBinding`. If the authentication failed on the client then the `clientError` must be provided. In both cases it is recommended to supply `metadata` with as many fields populated as possible.'
+      properties:
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Client metadata to be audited
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Additional client context data to be audited
+        serverPublicKeyCredential:
+          $ref: '#/components/schemas/ServerAuthPublicKeyCredential'
+          description: The public key credential information containing the authenticator assertion response described in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2/#iface-pkcredential).
+        tokenBinding:
+          $ref: '#/components/schemas/TokenBinding'
+          description: Optional token binding which is compared against the collected client data as defined in the [Web Authentication Specification](https://www.w3.org/TR/webauthn-2).
+        clientError:
+          $ref: '#/components/schemas/PasskeyClientError'
+          description: Client error information
+    AppkeySessionData:
+      type: object
+      description: Session data specific to an appkey operation in progress.
+      properties:
+        appId:
+          type: string
+          description: This ID is used to identify a trusted facets URL which contains the set of trusted apps for this relying party configuration. If there is only one app then this field is set to `null` and the default `trustedFacets` are used.
+        rpId:
+          type: string
+          description: The relying party ID.
+        singleShot:
+          type: boolean
+          description: True if this is a *single-shot* authentication where the request is generated on the device, false otherwise.
+        extUserId:
+          type: string
+          description: The external user ID.
+        userId:
+          type: string
+          description: The internal database user ID.
+        userStatus:
+          type: string
+          description: The user status.
+          enum:
+          - PENDING_ACTIVE
+          - ACTIVE
+          - TEMP_LOCKED
+          - LOCKED
+          - DISABLED
+        challenge:
+          type: string
+          description: The registration or authentication challenge
+        regPolicyName:
+          type: string
+          description: The policy name for a registration operation
+        authPolicyName:
+          type: string
+          description: The policy name for an authentication operation
+        serverData:
+          type: string
+          description: Optional additional server data shared between the request and response.
+        transaction:
+          type: array
+          description: Optional transaction data for step-up authentications.
+          items:
+            $ref: '#/components/schemas/FIDOTransaction'
+        policy:
+          $ref: '#/components/schemas/FIDOPolicy'
+          description: The policy which describes acceptable appkey authenticators.
+        registrationRequest:
+          $ref: '#/components/schemas/FIDORegistrationRequest'
+          description: The appkey registration request with headers and challenge, built based on the params to send to SDK for registration
+        authRequest:
+          $ref: '#/components/schemas/FIDOAuthenticationRequest'
+          description: The appkey authentication request with headers and challenge, built based on the params to send to SDK for authentication
+    AuthenticationSummary:
+      type: object
+      description: A summary of a user authentication
+      properties:
+        createdDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+          description: The type of audit, for example passkey
+          example: passkey
+        outcome:
+          type: string
+          description: 'The type of audit: `Success` or `Failed`'
+          example: Success
+        rpId:
+          type: string
+          description: The relying party on whose behalf the authentication took place
+        authPolicyName:
+          type: string
+          description: The relying party's authentication policy name
+        authId:
+          type: string
+          description: The unique ID of the authenticator in the database
+        id:
+          type: string
+          description: 'Authentication audit file identifier.
+
+            The base-64 encoding of the audit record filename compressed using the zlib deflate algorithm.'
+    AuthenticatorSelectionCriteria:
+      type: object
+      description: Defines what sort of authenticators may be selected for registration.**See field descriptions for recommended values.**
+      properties:
+        authenticatorAttachment:
+          type: string
+          description: 'How the authenticator is tied to the platform
+
+
+            **For ease of use this should be set to `platform`**'
+          enum:
+          - platform
+          - cross-platform
+        residentKey:
+          type: string
+          description: 'Specifies the extent to which the Relying Party desires to create a client-side discoverable credential.
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - discouraged
+          - preferred
+          - required
+        requireResidentKey:
+          type: boolean
+          description: 'Whether the key is resident within the authenticator
+
+
+            **For ease of use this should be set to `false`**'
+        userVerification:
+          type: string
+          description: 'Whether user verification is required
+
+
+            **For ease of use this should be set to `preferred`**'
+          enum:
+          - required
+          - preferred
+          - discouraged
+      required:
+      - authenticatorAttachment
+      - residentKey
+      - userVerification
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    DeviceInfo:
+      type: object
+      description: Information extracted from the device where the appkey resides
+      properties:
+        appId:
+          type: string
+          description: Identifies the device app which owns the appkey
+        deviceId:
+          type: string
+          description: 'Identifies the device on which the app resides
+
+
+            **NOTE** This identifier is not trustworthy and is not used. The `appId` is used throughout the system as the proxy device ID because it is always available.'
+        make:
+          type: string
+          description: The device make
+        model:
+          type: string
+          description: The device model
+        osVersion:
+          type: string
+          description: The device OS version
+        osType:
+          type: string
+          description: The device OS type, for example `android`
+        sdkVersion:
+          type: string
+          description: The device client SDK version
+        name:
+          type: string
+          description: The device friendly name
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        healthCheckPassed:
+          type: boolean
+          description: 'Whether the device health check passed
+
+            Only available if the `HEALTH_CHECK` extension is enabled in the appkey registration policy'
+        environmentCheckResult:
+          type: string
+          description: 'The device environment. Possibly values:
+
+            - **Passed**: App cannot be debugged and is not running in an emulator.
+
+            - **Emulator**: App is running in an emulator.
+
+            - **Debugger**: App can be debugged.
+
+            Only available if the `ENVIRONMENT_CHECK` extension is enabled in the appkey registration policy'
+    SliceUserSearchDto:
+      type: object
+      properties:
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSearchDto'
+        empty:
+          type: boolean
+    BiometricSummary:
+      type: object
+      description: Summary information about a biometric registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        type:
+          type: string
+          description: The biometric type, for example `Face`
+        subtype:
+          type: string
+          description: The biometric subtype, for example an algorithm identifier like `DFV6E`
+        status:
+          type: string
+          description: The biometric status
+          enum:
+          - PARTIAL_ENROLLMENT
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this biometric has not been used for authentication then this field is not present.
+    SrpSessionParameters:
+      type: object
+      description: Server-side session data specific for the Secure Remote Password algorithm.
+      properties:
+        salt:
+          type: string
+          format: byte
+          description: The salt value.
+        serverSecretKey:
+          type: string
+          format: byte
+          description: The server secret key
+        serverPublicKey:
+          type: string
+          format: byte
+          description: The server public key
+    RegularExpression:
+      type: object
+      properties:
+        regularExpression:
+          type: string
+        tag:
+          type: string
+    SliceAuthenticationSummary:
+      type: object
+      properties:
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticationSummary'
+        empty:
+          type: boolean
+    UserSession:
+      type: object
+      description: 'User session data for an appkey or passkey operation. The structure contains common data and specific data for appkey and passkey operations.
+
+
+        Appkey and passkey registration and authentication is a two-step process:
+
+        - Step 1 is generating the request to send to the client
+
+        - Step 2 is returning the response from the client for validation
+
+
+        Session data is generated at step 1 which is required to complete step 2. If an appkey or passkey policy for a store has `sessionManagementExternal` set to `false` then the session data is cached in server memory for a limited time specified by the configured `sessionDuration` and is referenced by a unique session ID.
+
+
+        '
+      properties:
+        id:
+          type: string
+          description: The unique session ID.
+        storeId:
+          type: string
+          description: The store database ID.
+        sessionType:
+          type: string
+          description: The session type.
+          enum:
+          - PASSKEY_REG
+          - PASSKEY_AUTH
+          - APPKEY_REG
+          - APPKEY_AUTH
+          - PASSCODE_REG
+          - PASSCODE_AUTH
+          - PASSCODE_RENEW
+          - VOICE_AUTH
+        userId:
+          type: string
+          description: The user database ID.
+        passkeySessionData:
+          $ref: '#/components/schemas/PasskeySessionData'
+          description: The passkey-specific session data for a passkey operation.
+        appkeySessionData:
+          $ref: '#/components/schemas/AppkeySessionData'
+          description: The appkey-specific session data for an appkey operation.
+        passcodeSessionData:
+          $ref: '#/components/schemas/PasscodeSessionData'
+          description: The passcode-specific session data for an passcode operation.
+        voiceAuthSessionData:
+          $ref: '#/components/schemas/VoiceAuthSessionData'
+          description: The voice authentication-specific session data.
+        createdDtm:
+          type: string
+          format: date-time
+          description: Time the session was created.
+        expiringDtm:
+          type: string
+          format: date-time
+          description: Time the session expires.
+    UserAgentInfo:
+      type: object
+      description: User agent metadata
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+    PasscodeCriteria:
+      type: object
+      properties:
+        passcodeHistory:
+          type: integer
+          format: int32
+        requiredSymbolCount:
+          type: integer
+          format: int32
+        requiredUpperCaseCount:
+          type: integer
+          format: int32
+        requiredLowerCaseCount:
+          type: integer
+          format: int32
+        requiredDigitCount:
+          type: integer
+          format: int32
+        characterVariety:
+          type: integer
+          format: int32
+        disallowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        requiredRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+        allowedRegExArray:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegularExpression'
+    TrustWebClientMetadata:
+      type: object
+      description: Metadata supplied with from a trust web client
+      properties:
+        device:
+          $ref: '#/components/schemas/DeviceInfo'
+        locationByIp:
+          $ref: '#/components/schemas/LocationByIpInfo'
+        userAgent:
+          $ref: '#/components/schemas/UserAgentInfo'
+    AppkeySummary:
+      type: object
+      description: 'Summary information about an appkey registered to the user.
+
+
+        **NOTE** The device information is only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        deviceId:
+          type: string
+          description: 'A unique identifier of the device on which the appkey is installed
+
+
+            **NOTE** This is actually an identifier of the client application in which the appkey has been created. It is only available if the `DEVICE_INFO` extension s enabled in the appkey registration policy.'
+        deviceOs:
+          type: string
+          description: 'The device operating system, for example `iOS`.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceType:
+          type: string
+          description: 'The device type: identifies the device make and model.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        deviceName:
+          type: string
+          description: 'The device name: the device name if one has been registered by the device owner.
+
+
+            **NOTE** Only available if the `DEVICE_INFO` extension is enabled in the appkey registration policy.'
+        notificationToken:
+          type: string
+          description: A push notification token provided by the device
+        invalidToken:
+          type: boolean
+          description: Present and true if the push notification token has been used for a previous push notification and is marked as unusable (invalid or unregistered).
+        preferredDevice:
+          type: boolean
+          description: Present and true if this is the preferred device to receive notifications for this app.
+        rpId:
+          type: string
+          description: The relying party ID.
+        aaid:
+          type: string
+          description: A unique identifier of the appkey type.
+        keyId:
+          type: string
+          description: A unique identifier of the particular appkey credential.
+        status:
+          type: string
+          description: The status of the appkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this appkey has not been used for authentication then this field is not present.
+    UserModalityLock:
+      type: object
+      description: 'Modality lock information.
+
+
+        Describes locks at the modality level. A modality can have escalating temporary locks which come into effect after a certain number of consecutive authentication attempts. The number of locks and the lock durations are configured at the store level.
+
+
+        **NOTE**: Currently only user-level locking is supported with modality level locking planned for a later release.'
+      properties:
+        lockCounter:
+          type: integer
+          format: int32
+          description: The number of consecutive locks tagged for this modality.
+        tempLockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock came into effect.
+        tempLockedUntil:
+          type: string
+          format: date-time
+          description: If the modality is *temporarily* locked then this is the time at which the lock ends.
+        lockedAt:
+          type: string
+          format: date-time
+          description: If the modality is *permanently* locked then this is the time at which the lock came into effect.
+        type:
+          type: string
+          description: The modality type, for example `Face`.
+    CallMetadata:
+      type: object
+      properties:
+        callId:
+          type: string
+        numChannels:
+          type: integer
+          format: int32
+        callerChannel:
+          type: integer
+          format: int32
+        agentChannel:
+          type: integer
+          format: int32
+        audioFrequencyHz:
+          type: integer
+          format: int32
+        audioBitsPerSample:
+          type: integer
+          format: int32
+        chunkFormat:
+          type: string
+        chunkLengthMs:
+          type: integer
+          format: int32
+        agentPhoneNumber:
+          type: string
+        callerPhoneNumber:
+          type: string
+        callStartDtm:
+          type: string
+          format: date-time
+        callEndDtm:
+          type: string
+          format: date-time
+    UserDtoSummaryInfo:
+      type: object
+      description: Summary information about items registered to the user such as biometrics, device keys and passkeys.
+      properties:
+        biometrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BiometricSummary'
+        passkeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasskeySummary'
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceSummary'
+        totps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TOTPSummary'
+        passcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PasscodeSummary'
+    DocumentSummary:
+      type: object
+      description: 'Summary information about a document registered to the user.
+
+
+        **NOT USED IN THIS RELEASE**'
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+    AuthenticationAppkeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the appkey in the database.
+        rpId:
+          type: string
+          description: The relying party ID.
+        authPolicyName:
+          type: string
+          description: The authentication policy defined for the relying party.
+        authenticationResponse:
+          $ref: '#/components/schemas/FIDOAuthenticationResponse'
+          description: The appkey authentication response returned by the device as defined [here](https://fidoalliance.org/specs/fido-uaf-v1.2-ps-20201020/fido-uaf-protocol-v1.2-ps-20201020.html#authenticationresponse-dictionary).
+        authenticationRequest:
+          $ref: '#/components/schemas/FIDOAuthenticationRequest'
+          description: The appkey authentication request with headers and challenge, built based on the params to send to SDK for authentication
+        authFailureErrorCode:
+          type: integer
+          format: int32
+          description: Client authentication attempt failure error code.
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata about the client.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context data about the client.
+        publicKey:
+          type: string
+          format: byte
+          description: The appkey's encoded public key.
+        registrationDtm:
+          type: string
+          format: date-time
+          description: The appkey's registration date/time.
+    TOTPSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: The status of the user TOTP.
+          enum:
+          - ACTIVE
+          - PENDING
+          - DISABLED
+        issuer:
+          type: string
+          description: The issuer of the user TOTP.
+        username:
+          type: string
+          description: The user name label used for registering TOTP.
+        policyName:
+          type: string
+          description: TOTP Policy name
+        algorithm:
+          type: string
+          description: The algorithm used to validate the authentication code.
+        activatedDtm:
+          type: string
+          format: date-time
+          description: Date and time of the TOTP activation - this is time when first auth with TOTP happened and marked TOTP as active.
+        expirationDtm:
+          type: string
+          format: date-time
+          description: Expiration dtm for the pending TOTPs - this is time before which is possible to activate pending TOTP.
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this TOTP has not been used for authentication then this field is not present.
+    AuthenticationPasscodeInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the passcode in the database.
+        policyName:
+          type: string
+          description: The passcode policy defined.
+        registrationDtm:
+          type: string
+          format: date-time
+          description: The passcode's registration date/time.
+    RegOptionResponse:
+      type: object
+      description: The public key credential creation options to be supplied to the user agent to create and register a new passkey credential. See the [webauthn specification](https://www.w3.org/TR/webauthn-2/) for details
+      properties:
+        rp:
+          $ref: '#/components/schemas/PublicKeyCredentialRpEntity'
+        user:
+          $ref: '#/components/schemas/ServerPublicKeyCredentialUserEntity'
+        challenge:
+          type: string
+        pubKeyCredParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKeyCredentialParameters'
+        timeout:
+          type: integer
+          format: int64
+        excludeCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerPublicKeyCredentialDescriptor'
+        authenticatorSelection:
+          $ref: '#/components/schemas/AuthenticatorSelectionCriteria'
+        attestation:
+          type: string
+          description: "Defines whether or how the client conveys the registration attestation object. Possible values: \n- **none**: The relying party does is not interesetd in authenticator attestation. RECOMMENDED VALUE\n- **indirect**: The relying party prefers an attestation conveyance yielding verifiable attestation statements, but allows the client to decide how to obtain such attestation statements.\n- **direct**: The relying party wants to receive the attestation statement as generated by the authenticator."
+          enum:
+          - none
+          - indirect
+          - direct
+        hints:
+          type: array
+          description: Zero or more hints to guide the user agent in interacting with the user during registration. Hints are ordered by decreasing preference and are not requirements.
+          items:
+            type: string
+            description: "Hints to guide the user agent in interacting with the user during registration or authentication. Hints are not requirements and do not bind the user agent. They are provided in order of decreasing preference. Possible values: \n- **security-key**: The relying party believes that users will satisfy this request with a physical security key.\n- **client-device**: The relying party believes that users will satisfy this request with a platform authenticator attached to the client device.\n- **hybrid**: The relying party believes that users will satisfy this request with general-purpose authenticators such as smartphones."
+            enum:
+            - security-key
+            - client-device
+            - hybrid
+        extensions:
+          $ref: '#/components/schemas/AuthenticationExtensionsClientInputs'
+      required:
+      - attestation
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+    PasskeySummary:
+      type: object
+      description: Summary information about a passkey registered to the user.
+      properties:
+        id:
+          type: string
+          description: The database identifier of the entity
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        aaguid:
+          type: string
+          description: A unique identifier of the passkey type.
+        credentialId:
+          type: string
+          description: A unique identifier of the particular passkey credential.
+        status:
+          type: string
+          description: The status of the passkey.
+          enum:
+          - ACTIVE
+          - DISABLED
+        lastAuthenticatedWithDtm:
+          type: string
+          format: date-time
+          description: The time of the last authentication. If this passkey has not been used for authentication then this field is not present.
+        name:
+          type: string
+          description: The name of the passkey supplied when the passkey was registered.
+    FaceAuthenticationRecord:
+      type: object
+      description: The results of a face authentication
+      properties:
+        authId:
+          type: string
+          description: Optional authentication ID from the external authentication sytem
+        presentedSubtype:
+          type: string
+          description: The face subtype, for example the face algorithm `Image` of the presented sample.
+        referenceSubtype:
+          type: string
+          description: The face subtype, for example the face template `DFV6E` of the reference sample.
+        referenceVersionId:
+          type: string
+          description: The face version ID, of the reference sample.
+        sourceReferenceSubtype:
+          type: string
+          description: The face subtype, of the source of the reference sample.
+        sourceReferenceVersionId:
+          type: string
+          description: The face version ID, of the source of the reference sample.
+        faceMatcherVersion:
+          type: string
+          description: The face matcher version - algorithm used in match face processes.
+        status:
+          type: string
+          description: The authentication status, for example `SUCCESS`.
+          enum:
+          - SUCCESS
+          - FAILURE
+          - INCOMPLETE
+          - UNKNOWN
+        score:
+          type: number
+          format: double
+          description: The authentication score.
+        threshold:
+          type: number
+          format: double
+          description: The authentication threshold which must be met for the authentication to succeed.
+        presentedData:
+          type: string
+          format: byte
+          description: The authentication data, i.e. the face image or template.
+        metadata:
+          $ref: '#/components/schemas/TrustWebClientMetadata'
+          description: Metadata supplied with the authentication request.
+        context:
+          type: object
+          additionalProperties:
+            type: object
+          description: Context supplied with the authentication request.
+      required:
+      - faceMatcherVersion
+      - presentedData
+      - presentedSubtype
+      - referenceSubtype
+      - referenceVersionId
+      - score
+      - sourceReferenceSubtype
+      - sourceReferenceVersionId
+      - status
+      - threshold
+    PasskeyClientError:
+      type: object
+      description: Information about a passkey error which happened on the client.
+      properties:
+        errorType:
+          type: string
+          description: 'Describes the type of error.- **CONFIGURATION_ERROR**: An unexpected passkey operation request was received from the identity store server.
+
+            - **CREATE_ERROR**: The credential could not be created during passkey registration.
+
+            - **GET_ERROR**: The credential assertion could not be obtained during passkey authentication.
+
+            - **USER_CANCELED**: The user cancelled the passkey operation.
+
+            - **CLIENT_TIMEOUT** The user did not respond and the passkey operation timed-out.'
+        errorMessage:
+          type: string
+          description: Error message associated with the client failure if available.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

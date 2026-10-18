@@ -1,0 +1,75 @@
+generated: '2026-10-18'
+method: searched
+generator: extract-docs-artifacts.py (deepseek)
+source: https://docs.trustx.com/trust/api-versioning
+sources:
+- https://docs.trustx.com/trust/api-versioning
+- https://docs.trustx.com/trust/activity-versioning
+- https://docs.trustx.com/trust/api-changelog
+- https://docs.trustx.com/trust/api-changelog
+entries:
+- date: '2026-10-07'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-06-18'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-06-03'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-05-07'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-04-27'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-04-20'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-03-05'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-02-05'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2026-01-12'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2025-12-01'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2025-10-23'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+- date: '2025-09-03'
+  highlights:
+  - Changelogs are provided in the preview environment in advance of a release to allow users time to prepare any changes that are required for
+    their system.
+  breaking: false
+note: The changelog page lists entries with date-based naming (e.g., Changes.2026.10.07, Changes 2026.06.18) and some version-based naming (e.g.,
+  Changes 1.0.16.6). The page describes versioning policies but doesn't specify a current version. The entries are listed as links without detailed
+  content on the main page.
+scheme: date-based and version-based
+docs: https://docs.trustx.com/trust/api-changelog

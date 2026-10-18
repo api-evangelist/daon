@@ -1,0 +1,21 @@
+generated: '2026-10-18'
+method: searched
+source: https://docs.trustx.com/trust/iframe-support-for-trust-web.md
+families:
+- name: TrustWeb Iframe
+  description: TrustX identity verification flow embedded in an iframe
+  loader: HTML iframe element with Process Token URL
+  permissions:
+    - camera
+    - gyroscope
+    - accelerometer
+  events:
+    - webCompleted: Indicates completion of the TrustX flow
+    - webTimeout: Indicates that an activity has expired
+    - error: Indicates an error has occurred
+  configuration:
+    - Process Token URL required
+    - Content Security Policy configuration per tenant
+    - Iframe dimensions configurable (width/height)
+  docs: https://docs.trustx.com/trust/iframe-support-for-trust-web.md
+note: TrustWeb can be embedded in iframes for customer applications, but requires tenant-specific Content Security Policy configuration. Iframe embedding is disabled by default for security reasons.

@@ -1,0 +1,233 @@
+name: Daon TrustX MCP Server (candidate)
+type: MCPServer
+generated: '2026-10-18'
+method: derived
+source: openapi/daon-trustx-openapi.yml
+status: candidate
+description: No official Daon or TrustX MCP server was found (web search 2026-10-18 for Daon/TrustX Model Context Protocol returned nothing; neither https://docs.trustx.com/llms.txt nor https://www.daon.com/llms.txt mentions MCP; preflight found no MCP docs or tool table on www.daon.com, docs.trustx.com, status.daon.com). This is a candidate tool list derived from operations in the TrustX OpenAPI; nobody ships it.
+deployment:
+  mode: none
+  auth: unknown
+  verified: derived
+transport_notes: A server built from this list would call the per-tenant regional hosts https://{tenantId}.{fir|gum|oak}.trustx.com with a JWT bearer token obtained from issueTenantJwt using an X-Api-Key.
+tools:
+- name: issueTenantJwt
+  description: Obtain a bearer token by API Key for the tenant
+  operationId: issueTenantJwt
+  method: POST
+  path: /api/arthr/apiKeys/issue
+  readOnly: false
+  destructive: false
+- name: listProcessDefinitions
+  description: List Process Definitions.
+  operationId: listProcessDefinitions
+  method: GET
+  path: /api/process-manager/processDefinitions
+  readOnly: true
+  destructive: false
+- name: createProcessInstance
+  description: Create a Process Instance.
+  operationId: createProcessInstance
+  method: POST
+  path: /api/process-manager/processInstances/create
+  readOnly: false
+  destructive: false
+- name: startProcessByInstanceId
+  description: Start a process instance.
+  operationId: startProcessByInstanceId
+  method: POST
+  path: /api/process-server/startProcess
+  readOnly: false
+  destructive: false
+- name: continueProcess
+  description: Continue process.
+  operationId: continueProcess
+  method: POST
+  path: /api/process-server/processes/{processDefinitionName}/businessKeys/{businessKey}/topicName/{topicName}/continue
+  readOnly: false
+  destructive: false
+- name: getProcessInstance
+  description: Get a Process Instance.
+  operationId: getProcessInstance
+  method: GET
+  path: /api/process-manager/processInstances/{processInstanceId}
+  readOnly: true
+  destructive: false
+- name: getProcessInstanceWithParameters
+  description: Get a Process Instance with additional paramaters.
+  operationId: getProcessInstanceWithParameters
+  method: GET
+  path: /api/process-manager/processInstances/{processInstanceId}/withParameters
+  readOnly: true
+  destructive: false
+- name: searchProcessInstancesBetweenDates
+  description: Search Process Instances.
+  operationId: searchProcessInstancesBetweenDates
+  method: GET
+  path: /api/process-manager/processInstances/search
+  readOnly: true
+  destructive: false
+- name: getProcessInstanceFraudState
+  description: Get Process Instance Fraud State.
+  operationId: getProcessInstanceFraudState
+  method: GET
+  path: /api/process-manager/processInstances/{processInstanceId}/fraudState
+  readOnly: true
+  destructive: false
+- name: updateProcessInstanceFraudState
+  description: Update Process Instance Fraud State.
+  operationId: updateProcessInstanceFraudState
+  method: POST
+  path: /api/process-manager/processInstances/{processInstanceId}/fraudState
+  readOnly: false
+  destructive: false
+- name: getProcessInstanceUserData
+  description: Get User Data.
+  operationId: getProcessInstanceUserData
+  method: GET
+  path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata
+  readOnly: true
+  destructive: false
+- name: getChecksByKey
+  description: Get Checks.
+  operationId: getChecksByKey
+  method: GET
+  path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata/checks
+  readOnly: true
+  destructive: false
+- name: addProcessToken
+  description: Create a process token.
+  operationId: addProcessToken
+  method: POST
+  path: /api/process-manager/processTokens
+  readOnly: false
+  destructive: false
+- name: getProcessToken
+  description: Get Process Token.
+  operationId: getProcessToken
+  method: GET
+  path: /api/process-manager/processTokens/{processTokenId}
+  readOnly: true
+  destructive: false
+- name: listUsers
+  description: List users
+  operationId: listUsers
+  method: GET
+  path: /api/identity-store/stores/{storeName}/users
+  readOnly: true
+  destructive: false
+- name: createUser
+  description: Create a new user within an identity store
+  operationId: createUser
+  method: POST
+  path: /api/identity-store/stores/{storeName}/users
+  readOnly: false
+  destructive: false
+- name: getUser
+  description: Get an existing user by internal ID **contains examples**
+  operationId: getUser
+  method: GET
+  path: /api/identity-store/stores/{storeName}/users/{userId}
+  readOnly: true
+  destructive: false
+- name: createPasskeyRegistrationForUser
+  description: Create a passkey credential creation request for an existing user identified by its internal ID within an identity store using the specified registration policy for the specified relying party
+  operationId: createPasskeyRegistrationForUser
+  method: POST
+  path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}
+  readOnly: false
+  destructive: false
+- name: completePasskeyRegistrationWithSession
+  description: Complete a passkey credential creation request for an externally managed session.
+  operationId: completePasskeyRegistrationWithSession
+  method: POST
+  path: /api/identity-store/stores/{storeName}/passkeys/registrations
+  readOnly: false
+  destructive: false
+- name: createPasskeyAuthenticationForUser
+  description: Create a passkey authentication request for a known user identified by internal ID using the specified authentication policy for the specified relying party
+  operationId: createPasskeyAuthenticationForUser
+  method: POST
+  path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}
+  readOnly: false
+  destructive: false
+- name: completePasskeyAuthenticationWithSession
+  description: Complete a passkey authentication for an externally managed session.
+  operationId: completePasskeyAuthenticationWithSession
+  method: POST
+  path: /api/identity-store/stores/{storeName}/passkeys/authentications
+  readOnly: false
+  destructive: false
+- name: listWatchlistsV2
+  description: List watchlists
+  operationId: listWatchlistsV2
+  method: GET
+  path: /api/watchlist-manager/watchlists
+  readOnly: true
+  destructive: false
+- name: createWatchlistV2
+  description: Create a new watchlist
+  operationId: createWatchlistV2
+  method: POST
+  path: /api/watchlist-manager/watchlists
+  readOnly: false
+  destructive: false
+- name: createWatchlistEntry
+  description: Create a new watchlist entry
+  operationId: createWatchlistEntry
+  method: POST
+  path: /api/watchlist-manager/watchlists/{watchlistId}/entries
+  readOnly: false
+  destructive: false
+- name: queryWatchlistV2
+  description: Query a watchlist
+  operationId: queryWatchlistV2
+  method: POST
+  path: /api/watchlist-manager/watchlists/{watchlistId}/queries
+  readOnly: false
+  destructive: false
+- name: startQuery
+  description: Start a process archive search query.
+  operationId: startQuery
+  method: POST
+  path: /api/process-manager/archives/queries/start
+  readOnly: false
+  destructive: false
+- name: getQueryStatus
+  description: Poll the status of a process archive search query.
+  operationId: getQueryStatus
+  method: GET
+  path: /api/process-manager/archives/queries/{executionId}/status
+  readOnly: true
+  destructive: false
+- name: getQueryResults
+  description: Retrieve results of a completed process archive search query.
+  operationId: getQueryResults
+  method: GET
+  path: /api/process-manager/archives/queries/{executionId}/result
+  readOnly: true
+  destructive: false
+- name: startAuditQuery
+  description: Create an audit query.
+  operationId: startAuditQuery
+  method: POST
+  path: /api/metrics-server/auditMessages/queries/start
+  readOnly: false
+  destructive: false
+- name: getAuditQueryStatus
+  description: Query the status of an audit query.
+  operationId: getAuditQueryStatus
+  method: GET
+  path: /api/metrics-server/auditMessages/queries/{executionId}/status
+  readOnly: true
+  destructive: false
+- name: getAuditQueryResults
+  description: Get a query result.
+  operationId: getAuditQueryResults
+  method: GET
+  path: /api/metrics-server/auditMessages/queries/{executionId}/result
+  readOnly: true
+  destructive: false
+coverage:
+  spec_operations: 278
+  candidate_tools: 31

@@ -1,0 +1,671 @@
+openapi: 3.2.0
+info:
+  title: Daon Watchlist Member Management (Deprecated) API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Watchlist Member Management (Deprecated) across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Watchlist Member Management (Deprecated)
+paths:
+  /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members:
+    get:
+      tags:
+      - Watchlist Member Management (Deprecated)
+      summary: List watchlist members. (DEPRECATED)
+      description: 'List the members of a watchlist. Returns a paged list of watchlist members. DEPRECATED: Use ''/watchlists'' API endpoints instead.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:listWatchlistMembers`'
+      operationId: listWatchlistMembers
+      parameters:
+      - name: watchlistId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageWatchlistMemberResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      deprecated: true
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#WatchlistManager:listWatchlistMembers
+    post:
+      tags:
+      - Watchlist Member Management (Deprecated)
+      summary: Add watchlist member. (DEPRECATED)
+      description: 'Add a watchlist member to a watchlist. DEPRECATED: Use ''/watchlists'' API endpoints instead.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:createWatchlistMember`'
+      operationId: createWatchlistMember
+      parameters:
+      - name: watchlistId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WatchlistMemberCreateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WatchlistMemberResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      deprecated: true
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#WatchlistManager:createWatchlistMember
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members/{watchlistMemberId}:
+    get:
+      tags:
+      - Watchlist Member Management (Deprecated)
+      summary: Get a watchlist member. (DEPRECATED)
+      description: 'Get a watchlist member based on a member''s id. Returns detailed information for the watchlist member. DEPRECATED: Use ''/watchlists'' API endpoints instead.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistMember`'
+      operationId: getWatchlistMember
+      parameters:
+      - name: watchlistId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: watchlistMemberId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WatchlistMemberDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      deprecated: true
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistMember
+    delete:
+      tags:
+      - Watchlist Member Management (Deprecated)
+      summary: Delete a watchlist member. (DEPRECATED)
+      description: 'Delete a watchlist member based on a member''s id. DEPRECATED: Use ''/watchlists'' API endpoints instead.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:deleteWatchlistMember`'
+      operationId: deleteWatchlistMember
+      parameters:
+      - name: watchlistId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: watchlistMemberId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      deprecated: true
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#WatchlistManager:deleteWatchlistMember
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members/{watchlistMemberId}/image:
+    get:
+      tags:
+      - Watchlist Member Management (Deprecated)
+      summary: Get a watchlist member's face image if available (DEPRECATED)
+      description: 'Get a watchlist member''s face image based on a member''s id. DEPRECATED: Use ''/watchlists'' API endpoints instead.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistMemberImage`'
+      operationId: getWatchlistMemberImage
+      parameters:
+      - name: watchlistId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: watchlistMemberId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/WatchlistMemberImageDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      deprecated: true
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistMemberImage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    WatchlistMemberDto:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        watchlistName:
+          type: string
+        watchlistId:
+          type: string
+        faceImagePath:
+          type: string
+        faceImage:
+          type: string
+          format: byte
+        template:
+          type: string
+          format: byte
+        userId:
+          type: string
+        description:
+          type: string
+          maxLength: 2000
+          minLength: 0
+        storeSamples:
+          type: boolean
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        extId:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        attributes:
+          type: object
+          additionalProperties: {}
+        expireAtDtm:
+          type: string
+          format: date-time
+        id:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+      required:
+      - firstName
+      - lastName
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    WatchlistMemberCreateDto:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        watchlistName:
+          type: string
+        watchlistId:
+          type: string
+        faceImagePath:
+          type: string
+        faceImage:
+          type: string
+          format: byte
+        template:
+          type: string
+          format: byte
+        userId:
+          type: string
+        description:
+          type: string
+          maxLength: 2000
+          minLength: 0
+        storeSamples:
+          type: boolean
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        extId:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        attributes:
+          type: object
+          additionalProperties: {}
+        expireAtDtm:
+          type: string
+          format: date-time
+      required:
+      - firstName
+      - lastName
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    PageWatchlistMemberResponseDto:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        first:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchlistMemberResponseDto'
+        empty:
+          type: boolean
+    WatchlistMemberResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        tenantId:
+          type: string
+        watchlistId:
+          type: string
+        userId:
+          type: string
+        description:
+          type: string
+        storeSamples:
+          type: boolean
+        firstName:
+          type: string
+        lastName:
+          type: string
+        extId:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        attributes:
+          type: object
+          additionalProperties: {}
+        expireAtDtm:
+          type: string
+          format: date-time
+    WatchlistMemberImageDto:
+      type: object
+      properties:
+        contentType:
+          type: string
+        resource:
+          type: string
+          format: byte
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

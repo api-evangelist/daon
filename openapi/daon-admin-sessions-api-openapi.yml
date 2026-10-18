@@ -1,0 +1,391 @@
+openapi: 3.2.0
+info:
+  title: Daon Admin Sessions API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Admin Sessions across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Admin Sessions
+paths:
+  /api/arthr/oidcSessions/{sessionId}/sessionId:
+    get:
+      tags:
+      - Admin Sessions
+      summary: Get an Admin Session by sessionId for a tenant
+      description: 'Retrieves a specific OIDC session by its session ID for the specified tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:getTenantOidcSessionBySessionId`'
+      operationId: getTenantOidcSessionBySessionId
+      parameters:
+      - name: sessionId
+        in: path
+        description: Session ID of the OIDC session
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: sess-xyz-789
+      responses:
+        '200':
+          description: Successfully retrieved OIDC session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortOIDCSession'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '403':
+          description: Access denied - insufficient tenant permissions
+        '404':
+          description: OIDC session not found
+        '500':
+          description: Internal server error
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:getTenantOidcSessionBySessionId
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/arthr/oidcSessions:
+    get:
+      tags:
+      - Admin Sessions
+      summary: List Admin Sessions for a tenant
+      description: 'Retrieves a paginated list of OIDC sessions for the specified tenant with optional filtering by client ID and subject.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:listTenantOidcSessions`'
+      operationId: listTenantOidcSessions
+      parameters:
+      - name: client_id
+        in: query
+        description: Filter sessions by client ID (supports wildcards, default matches all)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: '%'
+        example: my-client
+      - name: subject
+        in: query
+        description: Filter sessions by subject (supports wildcards, default matches all)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: '%'
+        example: user@example.com
+      - name: page
+        in: query
+        description: Page number (zero-based)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        example: 0
+      - name: size
+        in: query
+        description: Number of items per page (minimum 1)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          minimum: 1
+        example: 10
+      - name: sort
+        in: query
+        description: 'Sorting criteria (default: sort by id ascending)'
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Sort'
+      responses:
+        '200':
+          description: Successfully retrieved OIDC sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '403':
+          description: Access denied - insufficient tenant permissions
+        '500':
+          description: Internal server error
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:listTenantOidcSessions
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/arthr/oidcSessions/{id}:
+    get:
+      tags:
+      - Admin Sessions
+      summary: Get an Admin Session by id for a tenant
+      description: 'Retrieves a specific OIDC session by its unique ID for the specified tenant.
+
+
+        API Permissions: `TNT#{tenantid}#ArthrServer:getTenantOidcSessionById`'
+      operationId: getTenantOidcSessionById
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the OIDC session
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: session-abc-123
+      responses:
+        '200':
+          description: Successfully retrieved OIDC session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortOIDCSession'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ArthrSkyError'
+        '403':
+          description: Access denied - insufficient tenant permissions
+        '404':
+          description: OIDC session not found
+        '500':
+          description: Internal server error
+      x-visibility: GA
+      x-permission: TNT#{tenantid}#ArthrServer:getTenantOidcSessionById
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+    ArthrSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    ShortOIDCSession:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        clientId:
+          type: string
+        sessionId:
+          type: string
+        subject:
+          type: string
+        revoked:
+          type: boolean
+        createdDtm:
+          type: string
+          format: date-time
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+        lastIssuedDtm:
+          type: string
+          format: date-time
+        expiringDtm:
+          type: string
+          format: date-time
+        revokedDtm:
+          type: string
+          format: date-time
+    Page:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items: {}
+        empty:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml

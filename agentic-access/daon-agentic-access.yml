@@ -1,0 +1,3737 @@
+generated: '2026-10-18'
+method: generated
+source: openapi/daon-trustx-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 278
+  by_action_class:
+    acting: 156
+    connected: 122
+  by_consequence:
+    write: 154
+    read: 122
+    physical: 2
+  human_in_the_loop_required: 0
+operations:
+- path: /api/arthr/apiKeys/issue
+  method: post
+  operationId: issueTenantJwt
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/arthr/oidcSessions/{sessionId}/sessionId
+  method: get
+  operationId: getTenantOidcSessionBySessionId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/arthr/apiKeys
+  method: get
+  operationId: listTenantApiKeys
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/arthr/apiKeys
+  method: post
+  operationId: createTenantApiKey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/arthr/oidcSessions
+  method: get
+  operationId: listTenantOidcSessions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/arthr/oidcSessions/{id}
+  method: get
+  operationId: getTenantOidcSessionById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/arthr/apiKeys/{apiKeyId}
+  method: get
+  operationId: getFromTenant
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/arthr/apiKeys/{apiKeyId}
+  method: post
+  operationId: updateTenantApiKey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/arthr/apiKeys/{apiKeyId}
+  method: delete
+  operationId: deleteFromTenant
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-server/processes/{processDefinitionName}/businessKeys/{businessKey}/topicName/{topicName}/continue
+  method: post
+  operationId: continueProcess
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-server/startProcess
+  method: post
+  operationId: startProcessByInstanceId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/{processInstanceId}/fraudState
+  method: get
+  operationId: getProcessInstanceFraudState
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances/{processInstanceId}/fraudState
+  method: post
+  operationId: updateProcessInstanceFraudState
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/archives/queries/{executionId}/status
+  method: get
+  operationId: getQueryStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archives/{fileKey}/sig
+  method: get
+  operationId: getSignatureFile
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archives/{fileKey}/archive
+  method: get
+  operationId: getArchiveFile
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances/{processInstanceId}
+  method: get
+  operationId: getProcessInstance
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances/{processInstanceId}
+  method: delete
+  operationId: deleteProcessInstance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/csv
+  method: post
+  operationId: exportProcessInstancesToCsv
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processDefinitions/tags/{name}
+  method: delete
+  operationId: deleteTagFromProcessDefinition
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processDefinitions/{processDefinitionId}/tags
+  method: post
+  operationId: tagProcessDefinition
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/byIds
+  method: post
+  operationId: getProcessInstancesByIds
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processDefinitions
+  method: get
+  operationId: listProcessDefinitions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archivePolicies
+  method: get
+  operationId: listArchivePolicies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archivePolicies
+  method: post
+  operationId: createArchivePolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/archives/queries/{executionId}/result
+  method: get
+  operationId: getQueryResults
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archivePolicies/name/{name}/versions/{version}
+  method: get
+  operationId: getArchivePolicyByNameAndVersion
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/cloudSecrets
+  method: get
+  operationId: listCloudSecrets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/cloudSecrets
+  method: post
+  operationId: addCloudSecret
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/create
+  method: post
+  operationId: createProcessInstance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/search
+  method: get
+  operationId: searchProcessInstancesBetweenDates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archives/{fileKey}
+  method: delete
+  operationId: deleteArchive
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processTokens/{processTokenId}
+  method: get
+  operationId: getProcessToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processTokens/{processTokenId}
+  method: put
+  operationId: invalidateProcessToken
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processTokens/{processTokenId}
+  method: delete
+  operationId: deleteProcessToken
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/archives/queries/start
+  method: post
+  operationId: startQuery
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/{processInstanceId}/processInstanceArchive
+  method: post
+  operationId: generateProcessInstanceZipArchive
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/archivePolicies/name/{name}/versions
+  method: get
+  operationId: listArchivePolicyVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processDefinitions/tags
+  method: get
+  operationId: getTagsForTenant
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances
+  method: get
+  operationId: listProcessInstancesBetweenDates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances
+  method: post
+  operationId: createProcessInstanceAndRedirect
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/archivePolicies/usage
+  method: get
+  operationId: getArchivePolicyUsage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances/{processInstanceId}/archive/status
+  method: get
+  operationId: getArchiveStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processInstances/archive/inflight
+  method: get
+  operationId: getArchiveInflight
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archivePolicies/{id}
+  method: get
+  operationId: getArchivePolicy
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/archivePolicies/{id}
+  method: delete
+  operationId: deleteArchivePolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processTokens
+  method: get
+  operationId: listProcessTokens
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/processTokens
+  method: post
+  operationId: addProcessToken
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/{processInstanceId}/withParameters
+  method: get
+  operationId: getProcessInstanceWithParameters
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/cloudSecrets/{cloudSecretId}
+  method: get
+  operationId: getCloudSecret
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/process-manager/cloudSecrets/{cloudSecretId}
+  method: post
+  operationId: updateCloudSecret
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/cloudSecrets/{cloudSecretId}
+  method: delete
+  operationId: deleteCloudSecret
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/process-manager/processInstances/archive
+  method: post
+  operationId: archiveProcessInstances
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/metrics-server/auditMessages/queries/{executionId}/status
+  method: get
+  operationId: getAuditQueryStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/metrics-server/auditMessages/queries/start
+  method: post
+  operationId: startAuditQuery
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/metrics-server/auditMessages/queries/{executionId}/result
+  method: get
+  operationId: getAuditQueryResults
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata/checks
+  method: get
+  operationId: getChecksByKey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/getdata
+  method: get
+  operationId: getProcessInstanceImages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdata
+  method: get
+  operationId: getProcessInstanceUserData
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/userdata-server/processDefinitions/{processDefnId}/processInstances/{processInstanceId}/userdataarchive
+  method: post
+  operationId: getProcessInstanceUserDataArchive
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/theme-server/customPages
+  method: get
+  operationId: listCustomPages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/theme-server/customPages
+  method: post
+  operationId: createCustomPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{name}/{version}
+  method: get
+  operationId: getCustomPageByNameAndVersion
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/theme-server/customPages/previews
+  method: post
+  operationId: createArchivePreview
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{id}/status/{status}
+  method: post
+  operationId: changeCustomPageStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{id}/archive
+  method: get
+  operationId: exportCustomPageArchive
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/theme-server/customPages/{id}/archive
+  method: delete
+  operationId: deleteCustomPageArchive
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{id}
+  method: get
+  operationId: getCustomPage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/theme-server/customPages/{id}
+  method: post
+  operationId: updateCustomPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{id}
+  method: delete
+  operationId: deleteCustomPage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/theme-server/customPages/{name}/versions
+  method: get
+  operationId: getCustomPageVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}
+  method: get
+  operationId: getWatchlistV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}
+  method: post
+  operationId: updateWatchlistV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/watchlists/{watchlistId}
+  method: delete
+  operationId: deleteWatchlistV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/trends
+  method: get
+  operationId: listTrendRecords
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/trends
+  method: post
+  operationId: addTrendRecord
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/trends/processInstances/{processInstanceId}
+  method: delete
+  operationId: deleteTrendRecordsByProcessInstanceId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members
+  method: get
+  operationId: listWatchlistMembers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members
+  method: post
+  operationId: createWatchlistMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/watchlists/usage/largest
+  method: get
+  operationId: getLargestWatchlists
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/trends/processInstances
+  method: get
+  operationId: listProcessInstancesForTrend
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}/usage
+  method: get
+  operationId: getWatchlistUsage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists
+  method: get
+  operationId: listWatchLists
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists
+  method: post
+  operationId: createWatchlist
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members/{watchlistMemberId}
+  method: get
+  operationId: getWatchlistMember
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members/{watchlistMemberId}
+  method: delete
+  operationId: deleteWatchlistMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/trends/{id}
+  method: get
+  operationId: getTrendRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}/watchlist-members/{watchlistMemberId}/image
+  method: get
+  operationId: getWatchlistMemberImage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists
+  method: get
+  operationId: listWatchlistsV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists
+  method: post
+  operationId: createWatchlistV2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/watchlists/{watchlistId}/entries/{entryId}
+  method: get
+  operationId: getWatchlistEntry
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}/entries/{entryId}
+  method: delete
+  operationId: deleteWatchlistEntry
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/trends/stats
+  method: get
+  operationId: getTrendStatistics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/usage
+  method: get
+  operationId: getWatchlistV2Usage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}
+  method: get
+  operationId: getWatchlist
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}
+  method: post
+  operationId: updateWatchlist
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/facewatchlists/{watchlistId}
+  method: delete
+  operationId: deleteWatchlist
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/watchlist-manager/watchlists/{watchlistId}/queries
+  method: post
+  operationId: queryWatchlistV2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}/entries
+  method: get
+  operationId: listWatchlistEntries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/watchlist-manager/watchlists/{watchlistId}/entries
+  method: post
+  operationId: createWatchlistEntry
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/events/queries/{executionId}/result
+  method: get
+  operationId: getStoreEventsQueryResults
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/ext
+  method: get
+  operationId: listUserBiometricVersionsByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/registrations/keyIds/{keyId}
+  method: delete
+  operationId: deregisterUserAppkeyByUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}/ext
+  method: post
+  operationId: createPasskeyRegistrationForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/deregistrations
+  method: post
+  operationId: deregisterUserAppkeys
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/ext
+  method: get
+  operationId: listUserBiometricsByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/appkeys/authentications
+  method: post
+  operationId: completeAppkeyAuthenticationWithSession
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/keys/rotate
+  method: post
+  operationId: rotateTenantKey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys
+  method: get
+  operationId: listUserAppkeys
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passcodes/renewals/sessions/{sessionId}
+  method: post
+  operationId: completePasscodeRenewal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions
+  method: get
+  operationId: listUserBiometricVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passkeys/registrations/sessions/{sessionId}
+  method: post
+  operationId: completePasskeyRegistrationWithSessionId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications/relyingParties/{rpId}
+  method: post
+  operationId: sendPushNotification
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/authentications/ext
+  method: get
+  operationId: listUserAuthenticationsByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/{id}/ext
+  method: get
+  operationId: getUserTOTPByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/{id}/ext
+  method: post
+  operationId: updateUserTOTPStatusByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/{id}/ext
+  method: delete
+  operationId: deleteUserTOTPByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/appkeys/relyingParties/{rpId}/authentications/{authPolicyName}/ext
+  method: post
+  operationId: createAppkeyAuthenticationForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/{id}/ext
+  method: get
+  operationId: getUserPasskeyByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/{id}/ext
+  method: delete
+  operationId: deleteUserPasskeyByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/biometrics/authentications/voice/{sessionId}
+  method: post
+  operationId: continueAuthenticateVoice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/registrations/{policyName}
+  method: get
+  operationId: getTOTPForUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/registrations/{policyName}
+  method: post
+  operationId: createTOTPRegistrationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/authentications/{policyName}
+  method: post
+  operationId: authenticateWithTOTPForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/voice
+  method: post
+  operationId: authenticateVoice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/{id}/registrationAudit/ext
+  method: get
+  operationId: getUserPasskeyRegistrationRecordByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/appkeys/relyingParties/{rpId}/authentications/{authPolicyName}
+  method: post
+  operationId: createAppkeyAuthentication
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/{id}/registrationAudit
+  method: get
+  operationId: getUserAppkeyRegistrationRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/authentications/{id}/presentedData
+  method: get
+  operationId: getUserAuthenticationPresentedData
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passcodes/registrations/sessions/{sessionId}
+  method: post
+  operationId: completePasscodeRegistration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/relyingParties/{rpId}/ext
+  method: post
+  operationId: sendPushNotificationByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/relyingParties/{rpId}/preferredDevices/ext
+  method: post
+  operationId: updateUserAppkeyPreferredDeviceByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/relyingParties/{rpId}/preferredDevices/ext
+  method: delete
+  operationId: clearUserAppkeyPreferredDeviceByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/biometrics/{id}/ext
+  method: delete
+  operationId: deleteUserBiometricByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics
+  method: get
+  operationId: listUserBiometrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics
+  method: post
+  operationId: addUserBiometric
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/biometrics/{type}/ext
+  method: post
+  operationId: updateUserBiometricStatusByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}
+  method: get
+  operationId: getUserPasskey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}
+  method: post
+  operationId: updateUserPasskeyStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}
+  method: delete
+  operationId: deleteUserPasskey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/appkeyConfig/{rpId}
+  method: get
+  operationId: getStoreAppkeyConfiguration
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/appkeyConfig/{rpId}
+  method: post
+  operationId: updateStoreAppkeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/appkeyConfig/{rpId}
+  method: delete
+  operationId: deleteStoreAppkeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/references
+  method: get
+  operationId: getReferenceUserBiometrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/authentications/{policyName}/ext
+  method: post
+  operationId: authenticateWithTOTPForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/deregistrations/{policyName}
+  method: post
+  operationId: deregisterTOTPForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/{id}
+  method: get
+  operationId: getUserBiometric
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/{id}
+  method: delete
+  operationId: deleteUserBiometric
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/registrations/{policyName}/ext
+  method: post
+  operationId: createPasscodeRegistrationForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/preferredDevices
+  method: post
+  operationId: updateUserAppkeyPreferredDevice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/preferredDevices
+  method: delete
+  operationId: clearUserAppkeyPreferredDevice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/appkeys/authentications/sessions/{sessionId}
+  method: post
+  operationId: completeAppkeyAuthenticationWithSessionId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/ext
+  method: get
+  operationId: listUserPasscodesByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/registrations/{policyName}/complete/ext
+  method: post
+  operationId: completeTOTPRegistrationForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/appkeyConfig
+  method: post
+  operationId: addStoreAppkeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users
+  method: get
+  operationId: listUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users
+  method: post
+  operationId: createUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications
+  method: get
+  operationId: listUserPushNotifications
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/authentications/{authPolicyName}
+  method: post
+  operationId: createAppkeyAuthenticationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/ext
+  method: post
+  operationId: addUserBiometricByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/authentications/{policyName}/ext
+  method: post
+  operationId: createPasscodeAuthenticationForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/{id}/ext
+  method: get
+  operationId: getUserPushNotificationRecordByExtUserID
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/relyingParties/{rpId}/deregistrations/ext
+  method: post
+  operationId: deregisterUserAppkeysByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/authentications/{policyName}
+  method: post
+  operationId: createPasscodeAuthenticationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passcodePolicy/{policyName}
+  method: get
+  operationId: getStorePasscodePolicy
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passcodePolicy/{policyName}
+  method: post
+  operationId: updateStorePasscodePolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passcodePolicy/{policyName}
+  method: delete
+  operationId: deleteStorePasscodePolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys
+  method: get
+  operationId: listUserPasskeys
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/ext
+  method: get
+  operationId: listUserTOTPsByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/totpPolicy/{policyName}
+  method: get
+  operationId: getStoreTOTPPolicy
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/totpPolicy/{policyName}
+  method: post
+  operationId: updateStoreTOTPPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/totpPolicy/{policyName}
+  method: delete
+  operationId: deleteStoreTOTPPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/registrations/{policyName}/complete
+  method: post
+  operationId: completeTOTPRegistrationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passkeys/ext
+  method: get
+  operationId: listUserPasskeysByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/pushNotificationPolicy/{rpId}
+  method: get
+  operationId: getStorePushNotificationPolicy
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/pushNotificationPolicy/{rpId}
+  method: post
+  operationId: updateStorePushNotificationPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/pushNotificationPolicy/{rpId}
+  method: delete
+  operationId: deleteStorePushNotificationPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/pushNotifications/ext
+  method: get
+  operationId: listUserPushNotificationsByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/ext
+  method: get
+  operationId: getUserBiometricVersionWithTypeAndSubtypeByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/appkeys/registrations
+  method: post
+  operationId: completeAppkeyRegistrationWithSession
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/ext
+  method: get
+  operationId: listUserAppkeysByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extId}/authentications/{id}/presentedData/ext
+  method: get
+  operationId: getUserAuthenticationPresentedDataByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/{id}
+  method: get
+  operationId: getUserPasscode
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/{id}
+  method: post
+  operationId: updateUserPasscode
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/{id}
+  method: delete
+  operationId: deleteUserPasscode
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/authentications/failure/ext
+  method: post
+  operationId: recordUserBiometricAuthenticationFailureByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}
+  method: post
+  operationId: createPasskeyRegistration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}
+  method: get
+  operationId: getUserBiometricWithTypeAndSubtype
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}
+  method: delete
+  operationId: deleteUserBiometricWithTypeAndSubtype
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/{id}/ext
+  method: post
+  operationId: updateUserPasskeyStatusByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/appkeys/relyingParties/{rpId}/registrations/{regPolicyName}
+  method: post
+  operationId: createAppkeyRegistration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/references/ext
+  method: get
+  operationId: getReferenceUserBiometricsByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}
+  method: get
+  operationId: getStore
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}
+  method: post
+  operationId: updateStore
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}
+  method: delete
+  operationId: deleteStore
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/biometrics/authentications/face/ext
+  method: post
+  operationId: matchFaceByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/failure
+  method: post
+  operationId: recordUserBiometricAuthenticationFailure
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/appkeys/{id}/ext
+  method: post
+  operationId: updateUserAppkeyStatusByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}
+  method: post
+  operationId: createPasskeyAuthenticationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/{id}/ext
+  method: get
+  operationId: getUserPasscodeByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/{id}/ext
+  method: post
+  operationId: updateUserPasscodeByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/{id}/ext
+  method: delete
+  operationId: deleteUserPasscodeByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps
+  method: get
+  operationId: listUserTOTPs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passkeyConfig
+  method: post
+  operationId: addStorePasskeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}
+  method: get
+  operationId: getUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}
+  method: post
+  operationId: updateUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}
+  method: delete
+  operationId: deleteUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeys/authentications
+  method: post
+  operationId: completePasskeyAuthenticationWithSession
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/authentications
+  method: get
+  operationId: listUserAuthentications
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/authentications/{id}
+  method: get
+  operationId: getUserAuthenticationAudit
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/pushNotifications/{id}
+  method: get
+  operationId: getUserPushNotificationRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/preferredDevice/{deviceId}
+  method: delete
+  operationId: deleteUserAppkeyPreferredDevice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/sessions/ext
+  method: get
+  operationId: listUserSessionsByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/partialEnrolment
+  method: delete
+  operationId: deletePartialEnrolment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes
+  method: get
+  operationId: listUserPasscodes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/data
+  method: get
+  operationId: getUserBiometricVersionDataWithTypeAndSubtype
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/keys
+  method: get
+  operationId: listTenantKeys
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extId}/ext
+  method: get
+  operationId: getUserByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extId}/ext
+  method: post
+  operationId: updateUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/ext
+  method: delete
+  operationId: deleteUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/authentications/face
+  method: post
+  operationId: matchFace
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/pushNotifications/relyingParties
+  method: get
+  operationId: listPushNotificationRelyingParties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/devices/{id}
+  method: delete
+  operationId: deleteUserAppkeysForDevice
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/authentications/{id}/ext
+  method: get
+  operationId: getUserAuthenticationAuditByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/events/queries/{executionId}/status
+  method: get
+  operationId: getStoreEventsQueryStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores
+  method: get
+  operationId: listStores
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores
+  method: post
+  operationId: addStore
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/totpPolicy
+  method: post
+  operationId: addStoreTOTPPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/{id}/ext
+  method: get
+  operationId: getUserAppkeyByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/{id}/ext
+  method: delete
+  operationId: deleteUserAppkeyByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/relyingParties/{rpId}/preferredDevice/{deviceId}/ext
+  method: delete
+  operationId: deleteUserAppkeyPreferredDeviceByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/pushNotificationPolicy
+  method: post
+  operationId: addStorePushNotificationPolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/ext
+  method: get
+  operationId: getUserBiometricWithTypeAndSubtypeByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/{id}/registrationAudit/ext
+  method: get
+  operationId: getUserAppkeyRegistrationRecordByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/deregistrations/{policyName}/ext
+  method: post
+  operationId: deregisterPasscodeForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stats
+  method: get
+  operationId: getTenantStats
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passcodePolicy
+  method: post
+  operationId: addStorePasscodePolicy
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/renewals/{policyName}
+  method: post
+  operationId: createPasscodeRenewalForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/events/queries/start
+  method: post
+  operationId: startStoreEventQuery
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/{id}
+  method: get
+  operationId: getUserAppkey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/{id}
+  method: post
+  operationId: updateUserAppkeyStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/{id}
+  method: delete
+  operationId: deleteUserAppkey
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}
+  method: get
+  operationId: getUserBiometricVersionWithTypeAndSubtype
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passcodes/registrations/{policyName}/ext
+  method: get
+  operationId: getPasscodeForUserByExtUserId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passcodes/authentications/sessions/{sessionId}
+  method: post
+  operationId: completePasscodeAuthentication
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/appkeys/relyingParties/{rpId}/registrations/{regPolicyName}/ext
+  method: post
+  operationId: createAppkeyRegistrationForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/{id}/ext
+  method: get
+  operationId: getUserBiometricByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/passcodes/renewals/{policyName}/ext
+  method: post
+  operationId: createPasscodeRenewalForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/devices/{id}/ext
+  method: delete
+  operationId: deleteAllUserAppkeysForDeviceByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/biometrics/{type}
+  method: post
+  operationId: updateUserBiometricStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/registrations/{policyName}
+  method: get
+  operationId: getPasscodeForUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/registrations/{policyName}
+  method: post
+  operationId: createPasscodeRegistrationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/{id}
+  method: get
+  operationId: getUserTOTP
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/{id}
+  method: post
+  operationId: updateUserTOTPStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/totps/{id}
+  method: delete
+  operationId: deleteUserTOTP
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/appkeys/relyingParties/{rpId}/registrations/keyIds/{keyId}/ext
+  method: delete
+  operationId: deregisterUserAppkeyByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/relyingParties/{rpId}/registrations/{regPolicyName}
+  method: post
+  operationId: createPasskeyRegistrationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/registrations/{policyName}/ext
+  method: get
+  operationId: getTOTPForUserByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/registrations/{policyName}/ext
+  method: post
+  operationId: createTOTPRegistrationForUserByExtUserId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passcodes/deregistrations/{policyName}
+  method: post
+  operationId: deregisterPasscodeForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/passkeys/{id}/registrationAudit
+  method: get
+  operationId: getUserPasskeyRegistrationRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/appkeys/registrations/sessions/{sessionId}
+  method: post
+  operationId: completeAppkeyRegistrationWithSessionId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/appkeys/relyingParties/{rpId}/registrations/{regPolicyName}
+  method: post
+  operationId: createAppkeyRegistrationForUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeys/registrations
+  method: post
+  operationId: completePasskeyRegistrationWithSession
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/authentications/voice/ext
+  method: post
+  operationId: authenticateVoiceByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userId}/sessions
+  method: get
+  operationId: listUserSessions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{extUserId}/biometrics/types/{type}/subtypes/{subtype}/versions/{versionId}/data/ext
+  method: get
+  operationId: getUserBiometricVersionDataWithTypeAndSubtypeByExtId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/totps/deregistrations/{policyName}/ext
+  method: post
+  operationId: deregisterTOTPForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeyConfig/{rpId}
+  method: get
+  operationId: getStorePasskeyConfiguration
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/passkeyConfig/{rpId}
+  method: post
+  operationId: updateStorePasskeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeyConfig/{rpId}
+  method: delete
+  operationId: deleteStorePasskeyConfiguration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeys/authentications/sessions/{sessionId}
+  method: post
+  operationId: completePasskeyAuthenticationWithSessionId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/stats
+  method: get
+  operationId: getStoreStats
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}/ext
+  method: post
+  operationId: createPasskeyAuthenticationForUserByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/passkeys/relyingParties/{rpId}/authentications/{authPolicyName}
+  method: post
+  operationId: createPasskeyAuthentication
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{extId}/biometrics/types/{type}/subtypes/{subtype}/ext
+  method: delete
+  operationId: deleteUserBiometricWithTypeAndSubtypeByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/biometrics
+  method: post
+  operationId: addUserBiometricAndCreateUser
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/identity-store/stores/{storeName}/users/{userExtId}/biometrics/types/{type}/subtypes/{subtype}/partialEnrolment/ext
+  method: delete
+  operationId: deletePartialEnrolmentByExtId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required

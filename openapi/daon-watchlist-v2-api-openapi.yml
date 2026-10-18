@@ -1,0 +1,1345 @@
+openapi: 3.2.0
+info:
+  title: Daon Watchlist V2 API
+  version: '1.0'
+  contact:
+    email: support@daon.com
+  termsOfService: https://docs.trustx.com
+  description: 'Operations tagged Watchlist V2 across 2 of this provider''s published API definitions: daon-trustx-openapi.yml, daon-trustx-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{tenantId}.fir.trustx.com
+  description: URL for fir regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.gum.trustx.com
+  description: URL for gum regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+- url: https://{tenantId}.oak.trustx.com
+  description: URL for oak regional system
+  variables:
+    tenantId:
+      description: The tenant ID
+      default: myTenantId
+security:
+- BearerAuth: []
+tags:
+- name: Watchlist V2
+paths:
+  /api/watchlist-manager/watchlists/{watchlistId}:
+    get:
+      tags:
+      - Watchlist V2
+      summary: Get a watchlist by ID
+      description: 'Retrieves detailed information about a specific watchlist including metadata and current entry count.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistV2`'
+      operationId: getWatchlistV2
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Watchlist retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistV2Dto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistV2
+    post:
+      tags:
+      - Watchlist V2
+      summary: Update a watchlist
+      description: 'Updates an existing watchlist. The watchlist type cannot be changed after creation. The name must remain unique within the tenant.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:updateWatchlistV2`'
+      operationId: updateWatchlistV2
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWatchlistRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Watchlist updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistV2Dto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 11 (VALIDATION_NAME_REQUIRED), Error Code 12 (VALIDATION_NAME_INVALID_FORMAT), Error Code 13 (VALIDATION_NAME_TOO_LONG), Error Code 14 (VALIDATION_DESCRIPTION_TOO_LONG), Error Code 16 (VALIDATION_DURATION_INVALID), Error Code 38 (INVALID_ISO_DURATION)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict - Watchlist name already exists (Error Code 21 - WATCHLIST_NAME_ALREADY_EXISTS)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:updateWatchlistV2
+    delete:
+      tags:
+      - Watchlist V2
+      summary: Delete a watchlist
+      description: 'Permanently deletes a watchlist and all its entries. This action cannot be undone.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:deleteWatchlistV2`'
+      operationId: deleteWatchlistV2
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Watchlist deleted successfully
+        '400':
+          description: Bad Request - Cannot delete active watchlist (Error Code 28 - DELETE_OF_ACTIVE_WATCHLIST_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:deleteWatchlistV2
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists/usage/largest:
+    get:
+      tags:
+      - Watchlist V2
+      summary: Get largest watchlists by entry count
+      description: 'Retrieves the top N watchlists sorted by entry count (size) in descending order. Results are cached for 1 minute to improve performance. When multiple watchlists have the same entry count, they are ordered by most recently updated to ensure deterministic ordering. Exactly `limit` results are returned (no ties beyond limit). The response includes cache metadata indicating when the statistics were collected and when the cache will be expired.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getLargestWatchlists`'
+      operationId: getLargestWatchlists
+      parameters:
+      - name: limit
+        in: query
+        description: Maximum number of watchlists to return (defaults to 10 if not specified)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: Largest watchlists retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LargestWatchlistsResponseDto'
+        '400':
+          description: Bad Request - Invalid limit parameter (Error Code 9 - INVALID_API_FIELD_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getLargestWatchlists
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists/{watchlistId}/usage:
+    get:
+      tags:
+      - Watchlist V2
+      summary: Get individual watchlist usage statistics
+      description: 'Retrieves usage statistics for a specific watchlist including total entry count, remaining capacity, and maximum allowed entries.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistUsage`'
+      operationId: getWatchlistUsage
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usage statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistEntryUsageDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistUsage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists:
+    get:
+      tags:
+      - Watchlist V2
+      summary: List watchlists
+      description: 'Retrieves a paginated list of watchlists for the tenant. Supports filtering by type, status, name, and date range. Results are sorted by creation date in descending order by default.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:listWatchlistsV2`'
+      operationId: listWatchlistsV2
+      parameters:
+      - name: type
+        in: query
+        description: Filter by watchlist type (documentNumber, ipv4Address, visitorID, facev6)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter by watchlist status (ACTIVE, INACTIVE)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: nameLike
+        in: query
+        description: Filter watchlists by name containing this text (case-insensitive partial match)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Filter watchlists by exact name. The filters name and nameLike are mutually exclusive)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: startDateTime
+        in: query
+        description: Filter watchlists created after this date (ISO 8601 format with timezone, e.g., '2024-01-15T10:30:00Z' or '2024-01-15T10:30:00-05:00')
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDateTime
+        in: query
+        description: Filter watchlists created before this date (ISO 8601 format with timezone, e.g., '2024-01-20T14:45:00Z' or '2024-01-20T14:45:00-05:00')
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: pageable
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: Watchlists retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistV2Dto'
+        '400':
+          description: Bad Request - Cannot specify both 'name' and 'nameLike' parameters (Error Code 9 - INVALID_API_FIELD_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:listWatchlistsV2
+    post:
+      tags:
+      - Watchlist V2
+      summary: Create a new watchlist
+      description: 'Creates a new watchlist for the specified type. Each tenant has a maximum number of watchlists they can create. The watchlist name must be unique within the tenant.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:createWatchlistV2`'
+      operationId: createWatchlistV2
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWatchlistRequestDto'
+        required: true
+      responses:
+        '201':
+          description: Watchlist created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistV2Dto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 11 (VALIDATION_NAME_REQUIRED), Error Code 12 (VALIDATION_NAME_INVALID_FORMAT), Error Code 13 (VALIDATION_NAME_TOO_LONG), Error Code 14 (VALIDATION_DESCRIPTION_TOO_LONG), Error Code 15 (VALIDATION_TYPE_REQUIRED), Error Code 16 (VALIDATION_DURATION_INVALID), Error Code 33 (WATCHLIST_MAX_LIMIT_REACHED), Error Code 38 (INVALID_ISO_DURATION), Error Code 40 (INVALID_WATCHLIST_TYPE)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict - Watchlist name already exists (Error Code 21 - WATCHLIST_NAME_ALREADY_EXISTS)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:createWatchlistV2
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists/usage:
+    get:
+      tags:
+      - Watchlist V2
+      summary: Get watchlist usage statistics
+      description: 'Retrieves usage statistics for watchlists including total count, remaining capacity, and breakdown by watchlist type. Useful for monitoring quota limits and current usage.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:getWatchlistV2Usage`'
+      operationId: getWatchlistV2Usage
+      parameters: []
+      responses:
+        '200':
+          description: Usage statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchlistUsageDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:getWatchlistV2Usage
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+  /api/watchlist-manager/watchlists/{watchlistId}/queries:
+    post:
+      tags:
+      - Watchlist V2
+      summary: Query a watchlist
+      description: 'Searches a watchlist for matches against the provided query. The query type must match the watchlist type. For documentNumber queries, the ''documentType'' field is optional: when provided, the search is limited to that type; when omitted, the search runs across all document types in the watchlist. Returns matching entries with scores and metadata.
+
+
+        API Permissions: `TNT#{tenantid}#WatchlistManager:queryWatchlistV2`'
+      operationId: queryWatchlistV2
+      parameters:
+      - name: watchlistId
+        in: path
+        description: Unique identifier for the watchlist
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: normalize
+        in: query
+        description: When true (default), normalize phone/email query values before lookup. For exact query tokens, normalization is best-effort and falls back to the raw token if normalization fails. When false, use each comma-separated token as a literal match against the stored value column.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: region
+        in: query
+        description: Optional region for phone number normalization (e.g. US, GB) when type is phoneNumber and normalize is true
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/DocumentNumberWatchlistQueryDto'
+              - $ref: '#/components/schemas/EmailWatchlistQueryDto'
+              - $ref: '#/components/schemas/FaceV6WatchlistQueryDto'
+              - $ref: '#/components/schemas/IPv4AddressWatchlistQueryDto'
+              - $ref: '#/components/schemas/PhoneNumberWatchlistQueryDto'
+              - $ref: '#/components/schemas/VisitorIdWatchlistQueryDto'
+        required: true
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractWatchlistQueryResponseDto'
+        '400':
+          description: Bad Request - Error Code 9 (INVALID_API_FIELD_ERROR), Error Code 22 (MISSING_FACE_IMAGE), Error Code 23 (GENERATING_FACE_TEMPLATE_ERROR), Error Code 27 (GENERATING_FACE_TEMPLATE_INVALID_IMAGE_ERROR), Error Code 39 (QUERY_LIMIT_EXCEEDED), Error Code 44 (INVALID_IPV4_ADDRESS_FOR_QUERY)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '404':
+          description: Not Found - Watchlist not found (Error Code 20 - WATCHLIST_NOT_FOUND)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+        '500':
+          description: Internal Server Error - Unexpected error occurred (Error Code 1 - UNEXPECTED_ERROR)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AbstractSkyError'
+      x-visibility: EARLY_ACCESS
+      x-permission: TNT#{tenantid}#WatchlistManager:queryWatchlistV2
+    servers:
+    - url: https://{tenantId}.fir.trustx.com
+      description: URL for fir regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.gum.trustx.com
+      description: URL for gum regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+    - url: https://{tenantId}.oak.trustx.com
+      description: URL for oak regional system
+      variables:
+        tenantId:
+          description: The tenant ID
+          default: myTenantId
+components:
+  schemas:
+    AbstractSkyError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        extraDetail:
+          type: string
+    ParametersDto:
+      type: object
+      description: Algorithm parameters for fuzzy matching
+      properties:
+        maxDistance:
+          type: integer
+          format: int32
+          description: Maximum Levenshtein distance allowed for matches
+          example: 2
+    AbstractWatchlistQueryDto:
+      type: object
+      description: Base class for watchlist query requests with type-specific matching parameters
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: Type of query (must match the watchlist type)
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - facev6
+          - email
+          - phoneNumber
+          example: documentNumber
+      required:
+      - type
+    EmailWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Comma-separated emails to search. When the watchlist query `normalize` query param is true (default), each is normalized before lookup.
+            example: a@b.com,user@gmail.com
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum matches per query value
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for email watchlists with exact matching on stored value
+      required:
+      - type
+      - value
+    FaceV6WatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            format: byte
+            description: Face image to search for (base64 in JSON)
+          template:
+            type: string
+            format: byte
+            description: Face template to search for (base64 in JSON)
+          matchThreshold:
+            type: number
+            format: double
+            default: '0.205245'
+            description: Score based matches threshold for matches (0.0 to 1.0)
+            example: '0.205245'
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for face recognition watchlists with similarity matching
+      required:
+      - type
+    UpdateWatchlistRequestDto:
+      type: object
+      description: Request to update an existing watchlist
+      properties:
+        name:
+          type: string
+          description: Updated name for the watchlist (must remain unique within the tenant)
+          example: Updated_High_Risk_Documents
+          maxLength: 250
+          minLength: 0
+          pattern: ^[a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Updated description of the watchlist purpose
+          example: Updated description for enhanced verification
+          maxLength: 2000
+          minLength: 0
+        status:
+          type: string
+          description: Updated status of the watchlist
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DELETING
+          example: ACTIVE
+        entryExpirationPeriod:
+          type: string
+          description: Updated ISO 8601 period after which entries expire (e.g., 'P60D' for 60 days). Note this will only apply to new entries
+          example: P60D
+      required:
+      - name
+    WatchlistUsageDto:
+      type: object
+      description: Usage statistics for watchlists within a tenant
+      properties:
+        maxAllowed:
+          type: integer
+          format: int32
+          description: Maximum number of watchlists allowed for this tenant
+          example: 10000
+        total:
+          type: integer
+          format: int32
+          description: Total number of watchlists created
+          example: 24
+        remaining:
+          type: integer
+          format: int32
+          description: Number of watchlists remaining
+          example: 9976
+        watchlists:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/WatchlistTypeUsageDto'
+          description: Breakdown of watchlists by type
+    AlgorithmDto:
+      type: object
+      description: Algorithm configuration for fuzzy matching
+      properties:
+        type:
+          type: string
+          description: Type of algorithm used
+          example: LEVENSHTEIN_DISTANCE
+        parameters:
+          $ref: '#/components/schemas/ParametersDto'
+          description: Algorithm-specific parameters
+    VisitorIdWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Visitor ID(s) to search for. Can be a comma-separated list of visitor IDs.
+            example: visitor_12345,visitor_67890
+            minLength: 1
+            readOnly: true
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 1
+            description: Maximum number of matches per query to return. If not specified, defaults to 1. Capped at 100.
+            example: 1
+            maximum: 100
+            minimum: 1
+      description: Query for visitor ID watchlists with exact matching
+      required:
+      - type
+      - value
+    IPv4AddressWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: IPv4 address(es) to search for (will match against ranges and individual addresses). Can be a comma-separated list of IPv4 addresses.
+            example: 192.168.1.100,10.0.0.1
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for IPv4 address watchlists with range matching capabilities
+      required:
+      - type
+      - value
+    CreateWatchlistRequestDto:
+      type: object
+      description: Request to create a new watchlist
+      properties:
+        name:
+          type: string
+          description: Unique name for the watchlist within the tenant
+          example: High Risk Documents
+          maxLength: 250
+          minLength: 0
+          pattern: ^[a-zA-Z0-9_]+$
+        description:
+          type: string
+          description: Optional description explaining the purpose of the watchlist
+          example: Documents flagged for enhanced verification
+          maxLength: 2000
+          minLength: 0
+        type:
+          type: string
+          description: Type of entries this watchlist will contain
+          enum:
+          - facev6
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - phoneNumber
+          - email
+          example: documentNumber
+        status:
+          type: string
+          description: Initial status of the watchlist
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DELETING
+          example: ACTIVE
+        entryExpirationPeriod:
+          type: string
+          description: ISO 8601 period after which entries automatically expire (e.g., 'P30D' for 30 days)
+          example: P30D
+      required:
+      - name
+      - type
+    WatchlistEntryUsageDto:
+      type: object
+      description: Usage statistics for entries within a specific watchlist
+      properties:
+        maxAllowedEntries:
+          type: integer
+          format: int32
+          description: Maximum number of entries allowed in this watchlist
+          example: 1000
+        totalEntries:
+          type: integer
+          format: int32
+          description: Total number of entries in this watchlist
+          example: 24
+        remainingEntries:
+          type: integer
+          format: int32
+          description: Number of entries remaining
+          example: 976
+    PhoneNumberWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Comma-separated phone numbers to search. When the watchlist query `normalize` query param is true (default), each is normalized before lookup.
+            example: +14155550100,+3531234567
+            minLength: 1
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum matches per query value
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for phone number watchlists with exact matching on stored value
+      required:
+      - type
+      - value
+    LargestWatchlistsResponseDto:
+      type: object
+      description: Response containing the largest watchlists by entry count
+      properties:
+        watchlists:
+          type: array
+          description: List of watchlists sorted by entry count (descending), with tie-breaking by most recently updated
+          example:
+          - id: 01HZ...
+            name: Large Watchlist
+            type: documentNumber
+            numMembers: 100
+          items:
+            $ref: '#/components/schemas/LargestWatchlistSummaryDto'
+        totalReturned:
+          type: integer
+          format: int32
+          description: Number of watchlists returned
+          example: 10
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the statistics were last updated
+          example: {}
+    LargestWatchlistSummaryDto:
+      type: object
+      description: Simplified watchlist information for largest watchlists by size
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the watchlist
+          example: 01HZ123456789ABCDEFGHIJKLMN
+        name:
+          type: string
+          description: Human-readable name for the watchlist
+          example: High Risk Documents
+        type:
+          type: string
+          description: Type of entries stored in this watchlist
+          enum:
+          - facev6
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - phoneNumber
+          - email
+          example: documentNumber
+        status:
+          type: string
+          description: Current status of the watchlist
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DELETING
+          example: ACTIVE
+        numMembers:
+          type: integer
+          format: int32
+          description: Current number of entries in the watchlist
+          example: 150
+        maxSize:
+          type: integer
+          format: int32
+          description: Maximum number of entries allowed in this watchlist
+          example: 10000
+    AbstractWatchlistQueryResponseDto:
+      type: object
+      description: Base class for watchlist query responses with type-specific matching results
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: Type of query response (matches the watchlist type)
+          enum:
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - facev6
+          - phoneNumber
+          - email
+          example: documentNumber
+        value:
+          type: string
+          description: Original query value that was searched
+          example: 123456789,987654321
+        queries:
+          type: array
+          description: Array of query results, one for each value in the original query
+          items:
+            $ref: '#/components/schemas/QueryResultDto'
+      required:
+      - queries
+      - type
+    DocumentNumberWatchlistQueryDto:
+      allOf:
+      - $ref: '#/components/schemas/AbstractWatchlistQueryDto'
+      - type: object
+        properties:
+          value:
+            type: string
+            description: Document number(s) to search for. Can be a comma-separated list of document numbers.
+            example: ABC123456789,DEF987654321
+            minLength: 1
+          documentType:
+            type: string
+            description: 'Optional document type filter (e.g., ''Austria - Id Card (2021)'', ''Serbia - Id Card (2009-2014) #1''). If omitted, the query searches across all document types.'
+            example: Austria - Id Card (2021)
+          algorithm:
+            $ref: '#/components/schemas/AlgorithmDto'
+            description: Matching algorithm configuration
+          maxMatchResultsPerQuery:
+            type: integer
+            format: int32
+            default: 10
+            description: Maximum number of matches per query to return. If not specified, defaults to 10. Capped at 100.
+            example: 10
+            maximum: 100
+            minimum: 1
+      description: Query for document number watchlists with fuzzy matching capabilities
+      required:
+      - type
+      - value
+    WatchlistTypeUsageDto:
+      type: object
+      description: Usage statistics for a specific watchlist type
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: Total number of watchlists of this type
+          example: 8
+    QueryResultDto:
+      type: object
+      description: Result of a single query within the overall query request
+      properties:
+        query:
+          type: string
+          description: The specific value that was queried
+          example: '123456789'
+        WatchlistQueryMatch:
+          type: array
+          description: Array of matching entries found for this query
+          items:
+            $ref: '#/components/schemas/MatchDto'
+      required:
+      - WatchlistQueryMatch
+    WatchlistV2Dto:
+      type: object
+      description: A watchlist containing entries of a specific type for monitoring and matching purposes
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the watchlist
+          example: 01HZ123456789ABCDEFGHIJKLMN
+        name:
+          type: string
+          description: Human-readable name for the watchlist
+          example: High Risk Documents
+        description:
+          type: string
+          description: Optional description of the watchlist purpose
+          example: Documents flagged for enhanced verification
+        type:
+          type: string
+          description: Type of entries stored in this watchlist
+          enum:
+          - facev6
+          - documentNumber
+          - ipv4Address
+          - visitorID
+          - phoneNumber
+          - email
+          example: documentNumber
+        status:
+          type: string
+          description: Current status of the watchlist
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DELETING
+          example: ACTIVE
+        maxSize:
+          type: integer
+          format: int32
+          description: Maximum number of entries allowed in this watchlist
+          example: 10000
+          readOnly: true
+        entryExpirationPeriod:
+          type: string
+          description: ISO 8601 period after which entries expire (e.g., 'P30D' for 30 days)
+          example: P30D
+        createdDtm:
+          type: string
+          format: date-time
+          description: Timestamp when the watchlist was created
+          example: {}
+          readOnly: true
+        createdBy:
+          type: string
+          description: User who created the watchlist
+          example: admin@company.com
+          readOnly: true
+        lastUpdatedDtm:
+          type: string
+          format: date-time
+          description: Timestamp when the watchlist was last updated
+          example: {}
+          readOnly: true
+        lastUpdatedBy:
+          type: string
+          description: User who last updated the watchlist
+          example: admin@company.com
+          readOnly: true
+    MatchDto:
+      type: object
+      description: A single match found in the watchlist
+      properties:
+        entryId:
+          type: string
+          description: Unique identifier of the matching entry
+          example: 01HZ123456789ABCDEFGHIJKLMN
+        value:
+          type: string
+          description: The value of the matching entry
+          example: '123456789'
+        originalValue:
+          type: string
+          description: Original caller-supplied value for phoneNumber and email entry matches (when present)
+          example: User@Example.com
+        fullName:
+          type: string
+          description: Full name associated with the matching entry (FaceV6 queries only)
+          example: Jane Doe
+        score:
+          type: number
+          format: double
+          description: Match score for fuzzy matching algorithms (0.0 to 1.0)
+          example: '0.95'
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      description: Access to the APIs is restricted by bearer auth
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      description: An API key is required to create a token
+      name: X-Api-Key
+      in: header
+x-refined-from:
+- daon-trustx-openapi.yml
+- daon-trustx-openapi.yml
