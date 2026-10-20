@@ -12,3 +12,97 @@
   source: edge
   status: pending-partner-spec
   arazzo: null
+- slug: daon-openid-foundation-certification
+  label: OpenID Foundation certification
+  partner_name: OpenID Foundation certification
+  type: contract
+  channel: network-directory
+  evidence: https://openid.net/developers/certified-openid-connect-implementations/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: OpenID Foundation certified implementations
+    spec_file: null
+    role: certified-op
+    registered_name: Daon
+    products:
+    - Daon Digital Onboarding Web Application 1.13
+    matched_domain: daon.com
+    api_families:
+    - FAPI2MsgSigningID2 OpenID ConnectID OP
+    - australia-fapi-2-0-op-connectid-final
+    - australia-fapi-2-0-op-connectid-implementers-draft
+    api_families_basis: conformance profiles / certification levels passed
+    detected_by: sweep-identity.py
+    detected: '2026-10-19'
+  status: not-a-workflow
+  arazzo: null
+- slug: daon-aws-marketplace
+  label: AWS Marketplace
+  partner: amazon-web-services
+  partner_name: AWS Marketplace
+  type: marketplace
+  marketplace: aws-marketplace
+  channel: distribution
+  evidence: https://aws.amazon.com/marketplace/seller-profile?id=1b645ed6-7514-451f-abc4-b23159e9e395
+  source: edge
+  relationship: distribution-channel
+  status: not-a-workflow
+  arazzo: null
+- slug: daon-uk-dvs-register-dsit
+  label: UK DVS register (DSIT)
+  partner_name: UK DVS register (DSIT)
+  category: Digital identity verification
+  type: register
+  channel: regulator-register
+  evidence: https://www.access-dvs-register.service.gov.uk/register/service-details?serviceId=220
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: UK digital verification services register (DIATF; access-dvs-register.service.gov.uk)
+    spec_file: null
+    standard: UK DIATF (digital verification services)
+    role: dvs-registered
+    registered_name: DAON (UK) LTD
+    trading_name: DAON
+    register_id: DAON (UK) LTD
+    website: https://www.daon.com/
+    matched_domain: daon.com
+    matched_by: domain
+    certified_products:
+    - product: Attribute service
+      newest_expiry: '2028-10-29'
+      lapsed: false
+    - product: Component service
+      newest_expiry: '2028-10-29'
+      lapsed: false
+    - product: Identity service
+      newest_expiry: '2028-10-29'
+      lapsed: false
+    - product: Orchestration service
+      newest_expiry: '2028-10-29'
+      lapsed: false
+    dvs_services:
+    - Identity X
+    - Trust X
+    conformity_assessment_bodies:
+    - Kantara
+    signal_note: certified_products = one entry per ROLE certified (identity / attribute / orchestration...), lapsed
+      when every certificate for the role has expired; services and schemes are context
+    detected_by: sweep-regtech-aml.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: daon-genesys-own
+  label: Genesys (own)
+  partner: genesys
+  partner_name: Genesys (own)
+  category: businessOptimization
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appfoundry.genesys.com/filter/genesyscloud/listing/3bfa5bbb-3b1e-459a-83bb-2916841160a9
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
