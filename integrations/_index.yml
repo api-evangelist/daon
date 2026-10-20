@@ -141,3 +141,73 @@
     detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
+- slug: daon-nist-frte-fate-face-recognition-technology-evaluation
+  label: NIST FRTE/FATE (face recognition technology evaluation)
+  partner_name: NIST FRTE/FATE (face recognition technology evaluation)
+  category: biometric algorithm evaluation
+  type: register
+  channel: standard-directory
+  evidence: https://pages.nist.gov/frvt/html/frvt11.html
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: 'NIST FRTE / FATE (pages.nist.gov/frvt: 1:1, 1:N, age estimation, paperless travel, twins)'
+    standard: NIST FRTE/FATE
+    spec_file: null
+    role: nist-frte-participant
+    registered_name: Daon
+    registered_country: IE
+    register_id: https://pages.nist.gov/frvt/html/frvt11.html
+    matched_domain: daon.com
+    matched_by: domain+verified
+    identity: 'hand-verified: Daon (IE), the biometric identity vendor; Wikidata''s ''Daon'' hit is a French commune,
+      not the company'
+    identity_source: hand-verified (LOCAL_VERIFIED)
+    tracks:
+    - fate-age-estimation
+    - frte-1to1
+    - frte-1toN
+    signals:
+      best_1to1_rank: 50
+      top10_1to1: false
+    signal_note: 'participation only: NIST evaluates, it does not certify. A top-tier rank is a signal recorded
+      for context, never certified_products, and algorithm / track counts are never counted'
+    detected_by: sweep-biometrics-testing.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
+- slug: daon-ibeta-iso-iec-30107-3-presentation-attack-detection
+  label: iBeta (ISO/IEC 30107-3 presentation attack detection)
+  partner_name: iBeta (ISO/IEC 30107-3 presentation attack detection)
+  category: biometric conformance (PAD)
+  type: register
+  channel: standard-directory
+  evidence: https://www.ibeta.com/iso-30107-3-presentation-attack-detection-confirmation-letters/
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: iBeta ISO/IEC 30107-3 PAD confirmation letters (ibeta.com, NIST NVLAP-accredited lab)
+    standard: ISO/IEC 30107-3 (iBeta PAD)
+    spec_file: null
+    role: ibeta-pad-confirmed
+    registered_name: Daon
+    register_id: https://www.ibeta.com/wp-content/uploads/2022/07/20220719-Daon-PAD-Level-2-Confirmation-Letter.pdf
+    matched_domain: daon.com
+    matched_by: domain+verified
+    identity: 'hand-verified: Daon, the biometric identity vendor (xProof / IdentityX)'
+    identity_source: hand-verified (LOCAL_VERIFIED)
+    certified_products:
+    - product: ISO/IEC 30107-3 PAD (face)
+      modality: face
+      partner_tier: Level 2
+      lapsed: false
+      latest_letter: '2022-07-19'
+      products_tested:
+      - DaonFace
+    signal_note: certified_products = ONE entry per PAD product type (modality), highest level confirmed in partner_tier;
+      letters and versions are never counted. iBeta letters carry no expiry, so lapsed is false and the latest letter
+      date is recorded
+    detected_by: sweep-biometrics-testing.py
+    detected: '2026-10-20'
+  status: not-a-workflow
+  arazzo: null
