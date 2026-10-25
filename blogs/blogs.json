@@ -1,0 +1,14 @@
+{
+  "repo": "daon",
+  "feeds": [
+    {
+      "source": "https://www.daon.com/type/article/",
+      "feed_url": "https://www.daon.com/type/article/feed/",
+      "title": "",
+      "saved": 1,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 1,
+  "fetched": "2026-10-24T12:29:31Z"
+}
